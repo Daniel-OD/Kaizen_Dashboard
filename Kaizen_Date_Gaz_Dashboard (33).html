@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Kaizen Date Gaz — Dashboard Strategic Corelare GIS ↔ SAP PM</title>
+<style>
+:root {
+  /* Brand — SAP blue + GIS green (din retea_distributie_iasi) */
+  --navy: #1a5fa8;--blue: #2563a8;--lblue: #daeaf8;--llblue: #eef6fc;
+  --bg: #f5f4f0;--bg2: #ffffff;--bg3: #f0eeea;--border: rgba(0,0,0,.09);
+  --text: #1a1916;--muted: #6b6860;
+  --green: #2d7a4f;--green-bg: #d4eddf;--red: #c0392b;--red-bg: #fde8e6;
+  --yellow: #e8a000;--yellow-bg: #fef6e4;--accent: #1a5fa8;--purple: #7c3aed;
+  --mono: 'DM Mono', 'IBM Plex Mono', monospace;
+  --sans: 'DM Sans', 'IBM Plex Sans', sans-serif;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+  --r: 14px;--rsm: 8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.mono{font-family:var(--mono);}.text-accent{color:var(--accent);}.text-green{color:var(--green);}.text-red{color:var(--red);}.text-yellow{color:var(--yellow);}.text-muted{color:var(--muted);}
+.header{background:#fff;border-bottom:1px solid var(--border);padding:16px 24px 14px;box-shadow:var(--shadow-sm);}
+.header-badge{font-family:var(--mono);font-size:10px;color:var(--navy);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;background:var(--lblue);display:inline-block;padding:2px 8px;border-radius:4px;}
+.header h1{font-size:19px;font-weight:700;letter-spacing:-0.4px;color:var(--text);}
+.header-sub{color:var(--muted);font-size:11px;margin-top:3px;line-height:1.5;}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.stats{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
+.stat{background:var(--llblue);border:1px solid rgba(26,95,168,.15);border-radius:var(--rsm);padding:8px 14px;text-align:center;min-width:85px;}
+.stat .v{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--navy);display:block;}
+.stat .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:#fff;padding:0 24px;overflow-x:auto;gap:4px;box-shadow:var(--shadow-sm);}
+.tab{padding:9px 15px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap;letter-spacing:.01em;}
+.tab:hover{color:var(--text);}.tab.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:600;}
+.content{display:none;}.content.active{display:block;animation:fadeIn .2s ease;}.pad{padding:18px 24px;}@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.note{background:var(--llblue);border:1px solid rgba(26,95,168,.2);border-left:3px solid var(--navy);border-radius:0 var(--rsm) var(--rsm) 0;padding:9px 13px;font-size:11px;color:#0d3d6b;margin-bottom:14px;display:flex;gap:8px;}
+.note::before{content:'ℹ';font-size:12px;flex-shrink:0;}
+.tw{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);}
+table{width:100%;border-collapse:collapse;font-size:11.5px;background:#fff;}
+th{background:var(--bg3);color:var(--muted);padding:7px 10px;text-align:left;font-weight:600;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:none;border-bottom:2px solid var(--border);}
+th.c,td.c{text-align:center;}
+td{padding:7px 10px;border:none;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:nth-child(even) td{background:var(--bg3);}tr:nth-child(odd) td{background:#fff;}tr:hover td{background:var(--llblue)!important;transition:background .12s;}
+tr.merged td{background:rgba(26,95,168,.05)!important;}
+tr.tot td{background:var(--navy)!important;color:#fff;font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:.02em;}
+tr.heatmap-critical td{background:#fde8e6!important;border-left:3px solid var(--red)!important;}
+tr.heatmap-warning td{background:#fef6e4!important;border-left:3px solid var(--yellow)!important;}
+tr.heatmap-ok td{background:#d4eddf!important;border-left:3px solid var(--green)!important;}
+td.n{font-family:var(--mono);text-align:right;}
+.pb{display:flex;align-items:center;gap:5px;}
+.pb-bg{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:45px;}
+.pb-fill{height:100%;border-radius:3px;transition:width .4s;}
+.pb-txt{font-family:var(--mono);font-size:10px;width:44px;text-align:right;}
+.badge{display:inline-block;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;font-family:var(--mono);}
+.bm{background:var(--llblue);color:var(--navy);border:1px solid rgba(26,95,168,.2);font-weight:600;}.bs{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.role-pill{display:inline-block;font-size:8px;font-weight:600;padding:1px 5px;border-radius:3px;font-family:var(--mono);}
+.rp-gis{background:var(--llblue);color:var(--navy);border:1px solid rgba(26,95,168,.2);}
+.rp-rasr{background:#fef6e4;color:#7a4f00;border:1px solid rgba(232,160,0,.2);}
+.rp-fol{background:var(--green-bg);color:#1a5f35;border:1px solid rgba(45,122,79,.2);}
+.rp-fol-0{background:var(--bg3);color:var(--muted);border:1px solid var(--border);opacity:.6;}
+.rb{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+.rok{background:#d4eddf;color:#1a5f35;border:1px solid rgba(45,122,79,.25);font-weight:600;}
+.rno{background:#fde8e6;color:#8b1f17;border:1px solid rgba(192,57,43,.25);font-weight:600;}
+.upload-bar{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--border);padding:10px 24px;flex-wrap:wrap;}
+.upload-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;border:1px solid var(--navy);border-radius:var(--rsm);padding:7px 14px;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:var(--transition);white-space:nowrap;box-shadow:0 1px 4px rgba(26,95,168,.3);}
+.upload-btn:hover{background:#154f8c;}.upload-btn input{display:none;}
+.upload-status{font-family:var(--mono);font-size:11px;flex:1;}
+.upload-status.ok{color:var(--green);}.upload-status.err{color:var(--red);}.upload-status.idle{color:var(--muted);}
+.upload-info{font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
+.upload-info span{background:var(--llblue);border:1px solid rgba(26,95,168,.15);border-radius:4px;padding:2px 8px;font-family:var(--mono);color:var(--navy);}
+.kpi-bar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:2px solid var(--border);display:flex;align-items:stretch;gap:0;box-shadow:var(--shadow-md);}
+.kpi-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;border-right:1px solid var(--border);min-width:0;transition:var(--transition);cursor:default;}
+.kpi-item:last-child{border-right:none;}.kpi-item:hover{background:var(--llblue);}
+.kpi-val{font-family:var(--mono);font-size:17px;font-weight:600;line-height:1;white-space:nowrap;}
+.kpi-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;text-align:center;}
+.blockers-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin:12px 24px 0 24px;padding:14px 18px;box-shadow:var(--shadow-sm);}
+.blockers-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.blockers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.blocker-item{background:var(--bg3);border-radius:var(--rsm);padding:10px 12px;border-left:3px solid;transition:var(--transition);cursor:pointer;}
+.blocker-item:hover{transform:translateY(-2px);background:var(--llblue);}
+.blocker-rank{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1;}
+.blocker-name{font-weight:600;font-size:12px;margin:4px 0 2px;}
+.blocker-detail{font-size:9px;color:var(--muted);font-family:var(--mono);}
+.blocker-critical{border-left-color:var(--red);}.blocker-warning{border-left-color:var(--yellow);}.blocker-ok{border-left-color:var(--green);}
+.probability-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin:12px 24px 0 24px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;box-shadow:var(--shadow-sm);}
+.probability-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.probability-bar-container{flex:2;min-width:200px;}
+.probability-bar-bg{height:24px;background:var(--bg3);border-radius:12px;overflow:hidden;position:relative;border:1px solid var(--border);}
+.probability-bar-fill{height:100%;border-radius:12px;transition:width .5s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;}
+.probability-value{font-family:var(--mono);font-size:24px;font-weight:700;min-width:80px;text-align:center;}
+.probability-risk{font-size:10px;padding:4px 10px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);}
+.executive-toggle{display:flex;align-items:center;gap:10px;background:var(--bg3);padding:8px 24px;border-bottom:1px solid var(--border);}
+.toggle-switch{position:relative;display:inline-block;width:44px;height:22px;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--bg3);border-radius:22px;transition:.3s;}
+.toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:2px;bottom:2px;background-color:var(--accent);border-radius:50%;transition:.3s;}
+input:checked+.toggle-slider:before{transform:translateX(22px);}
+.toggle-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.executive-mode .content .tw,.executive-mode .content table,.executive-mode .plan-grid,.executive-mode .tl-wrap,.executive-mode #tProj,.executive-mode .note{display:none!important;}
+.executive-mode .content.pad{padding:12px 24px;}
+.executive-mode .pg{display:grid;grid-template-columns:repeat(4,1fr);}
+.whatif-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin:12px 24px;padding:14px 18px;box-shadow:var(--shadow-sm);}
+.whatif-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.whatif-controls{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;}
+.whatif-group{flex:1;min-width:150px;}
+.whatif-group label{font-size:9px;color:var(--muted);display:block;margin-bottom:4px;}
+.whatif-select{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-family:var(--sans);font-size:11px;padding:6px 8px;width:100%;outline:none;}
+.whatif-slider{width:100%;background:var(--bg3);height:4px;border-radius:2px;-webkit-appearance:none;}
+.whatif-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;}
+.whatif-value{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);margin-top:4px;}
+.whatif-result{background:var(--llblue);border-radius:0 var(--rsm) var(--rsm) 0;padding:10px 14px;margin-top:12px;font-size:11px;border-left:3px solid var(--navy);color:#0d3d6b;}
+.whatif-impact{color:var(--green);font-weight:600;}
+.alert-strip{background:var(--bg3);border-bottom:1px solid var(--border);padding:6px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.alert-strip-lbl{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.ag{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:4px;cursor:pointer;transition:var(--transition);}
+.ag:hover{opacity:.8;transform:translateY(-1px);}
+.ag-ok{background:#d4eddf;color:#1a5f35;border:1px solid rgba(45,122,79,.25);}
+.ag-warn{background:#fef6e4;color:#7a4f00;border:1px solid rgba(232,160,0,.25);}
+.ag-nok{background:#fde8e6;color:#8b1f17;border:1px solid rgba(192,57,43,.25);}
+.ag-dot{width:6px;height:6px;border-radius:50%;}
+.prog-wrap{padding:10px 24px 0;background:#fff;border-bottom:1px solid var(--border);}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.prog-label{font-size:10px;color:var(--muted);width:160px;flex-shrink:0;}
+.prog-outer{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;position:relative;min-width:120px;border:1px solid var(--border);}
+.prog-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.prog-plan-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);border-radius:1px;}
+.prog-pct{font-family:var(--mono);font-size:10px;width:42px;text-align:right;}
+.prog-eta{font-family:var(--mono);font-size:9px;color:var(--muted);width:140px;}
+.toolbar{display:flex;align-items:center;gap:10px;padding:8px 24px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.tb-group{display:flex;align-items:center;gap:6px;}
+.tb-lbl{font-size:10px;color:var(--muted);}
+.tb-date{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);color:var(--navy);font-family:var(--mono);font-size:11px;padding:4px 8px;outline:none;}
+.tb-date:focus{border-color:var(--accent);}
+.tb-sep{width:1px;height:20px;background:var(--border);}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);border-radius:var(--rsm);color:var(--text);font-size:11px;font-weight:500;padding:5px 11px;cursor:pointer;transition:var(--transition);white-space:nowrap;font-family:var(--sans);}
+.tb-btn:hover{background:var(--llblue);border-color:var(--navy);color:var(--navy);}
+.tb-btn svg{flex-shrink:0;}.tb-spacer{flex:1;}
+.days-counter{font-family:var(--mono);font-size:11px;}
+.notif-panel{display:none;position:fixed;top:0;right:0;bottom:0;width:350px;max-width:90vw;background:#fff;border-left:1px solid var(--border);z-index:200;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.15);}
+.notif-panel.open{display:flex;}
+.notif-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+.notif-hdr h3{font-size:12px;font-weight:600;letter-spacing:.5px;}
+.notif-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;}
+.notif-close:hover{color:var(--text);}
+.notif-list{flex:1;overflow-y:auto;padding:12px;}
+.notif-item{background:var(--bg3);border-radius:var(--rsm);padding:10px 12px;margin-bottom:8px;border-left:3px solid;}
+.notif-item.err{border-color:var(--red);}.notif-item.warn{border-color:var(--yellow);}.notif-item.ok{border-color:var(--green);}
+.notif-item .ni-title{font-size:11px;font-weight:600;margin-bottom:3px;}
+.notif-item .ni-msg{font-size:10px;color:var(--muted);line-height:1.4;}
+.notif-badge{background:var(--red);color:#fff;font-family:var(--mono);font-size:9px;font-weight:600;border-radius:99px;padding:1px 5px;margin-left:4px;transition:var(--transition);}
+.plan-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;}
+@media(max-width:900px){.plan-grid{grid-template-columns:1fr;}}
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);}
+.panel h3{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);margin-bottom:11px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+.pr{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:8px;flex-wrap:nowrap;}
+.pl{color:var(--muted);font-size:11px;flex:1;}
+.pi{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);color:var(--navy);font-family:var(--mono);font-size:13px;font-weight:600;padding:4px 8px;width:76px;min-width:60px;text-align:right;outline:none;flex-shrink:0;}
+.pi:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,95,168,.12);}
+.pu{color:var(--muted);font-size:10px;width:48px;flex-shrink:0;}
+.tgt{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 11px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.td2{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.tl2{flex:1;font-size:10px;color:var(--muted);}
+.ti{background:var(--bg);border:1px solid var(--border);border-radius:var(--rsm);color:var(--navy);font-family:var(--mono);font-size:13px;font-weight:600;padding:3px 7px;width:56px;text-align:center;outline:none;}
+.ti:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,95,168,.12);}
+.tu{font-size:9px;color:var(--muted);width:28px;}
+.gc{margin-top:13px;}
+.gc h4{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.gr{display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid var(--border);min-width:0;}
+.gr:last-child{border-bottom:none;}
+.gn{flex:1;font-size:10px;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gin{background:var(--bg3);border:1px solid var(--border);border-radius:5px;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 4px;width:33px;text-align:center;outline:none;}
+.gin.gis{color:#58a6ff;}.gin.gis:focus{border-color:#58a6ff;}
+.gin.rasr{color:#f0c060;}.gin.rasr:focus{border-color:#f0c060;}
+.gin.fol{color:#3fb950;}.gin.fol:focus{border-color:#3fb950;}
+.gl{font-size:8px;color:var(--muted);text-align:center;line-height:1.2;}
+.comp-hdr{display:flex;gap:4px;justify-content:flex-end;padding-bottom:4px;margin-bottom:1px;}
+.comp-hdr span{font-size:8px;font-weight:600;width:33px;text-align:center;letter-spacing:.5px;text-transform:uppercase;}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px;}
+@media(max-width:700px){.pg{grid-template-columns:repeat(2,1fr);}}
+.pc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center;transition:var(--transition);box-shadow:var(--shadow-sm);}
+.pc:hover{transform:translateY(-2px);border-color:var(--navy);box-shadow:0 6px 20px rgba(26,95,168,.15);}
+.pc .pv{font-family:var(--mono);font-size:24px;font-weight:600;line-height:1;margin-bottom:3px;}
+.pc .pla{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.pc .pd{font-size:11px;margin-top:5px;color:var(--muted);}
+.tl-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:18px;box-shadow:var(--shadow-sm);}
+.tl-wrap h3{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+.tlr{display:flex;align-items:center;gap:6px;margin-bottom:9px;flex-wrap:nowrap;}
+.tll{font-size:10px;color:var(--text);width:190px;flex-shrink:0;}
+.tlbw{flex:1;position:relative;height:18px;min-width:120px;}
+.tlbb{position:absolute;inset:0;background:var(--bg3);border-radius:3px;border:1px solid var(--border);}
+.tlbf{position:absolute;left:0;top:0;bottom:0;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-family:var(--mono);font-size:9px;font-weight:600;color:#fff;overflow:hidden;white-space:nowrap;}
+.tltl{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);border-radius:1px;}
+.tlta{position:absolute;top:-14px;font-size:8px;color:var(--yellow);transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);}
+.tly{font-family:var(--mono);font-size:10px;color:var(--muted);width:48px;text-align:right;}
+.sec{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:16px 0 11px;display:flex;align-items:center;gap:7px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.reset-btn{background:#fde8e6;border-color:rgba(192,57,43,.3);color:#8b1f17;}
+.reset-btn:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* ── EXECUTIVE TAB ── */
+.exec-wrap{padding:24px;max-width:1100px;margin:0 auto;}
+.exec-hero{background:linear-gradient(135deg,var(--navy) 0%,#2563a8 60%,#1a4f8c 100%);border:none;border-radius:var(--r);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(26,95,168,.35);}
+.exec-hero-left h2{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;}
+.exec-hero-left p{font-size:12px;color:rgba(255,255,255,.8);}
+.exec-hero-date{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.75);margin-top:8px;}
+.exec-verdict{text-align:center;padding:16px 28px;background:rgba(255,255,255,.03);border-radius:10px;min-width:200px;}
+.exec-verdict-val{font-family:var(--mono);font-size:48px;font-weight:700;line-height:1;}
+.exec-verdict-lbl{font-size:10px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;}
+.exec-verdict-sub{font-size:11px;margin-top:6px;color:rgba(255,255,255,.7);}
+
+.exec-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:700px){.exec-kpi-row{grid-template-columns:repeat(2,1fr);}}
+.exec-kpi{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;text-align:center;position:relative;overflow:hidden;transition:var(--transition);box-shadow:var(--shadow-sm);}
+.exec-kpi:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,95,168,.15);}
+.exec-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
+.exec-kpi.green::before{background:var(--green);}
+.exec-kpi.yellow::before{background:var(--yellow);}
+.exec-kpi.red::before{background:var(--red);}
+.exec-kpi.blue::before{background:var(--accent);}
+.exec-kpi-val{font-family:var(--mono);font-size:32px;font-weight:700;line-height:1;margin-bottom:4px;}
+.exec-kpi-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.exec-kpi-sub{font-size:10px;margin-top:5px;font-family:var(--mono);}
+
+.exec-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:700px){.exec-two-col{grid-template-columns:1fr;}}
+
+.exec-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow-sm);}
+.exec-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.exec-card h3 span{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+.exec-group-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.exec-group-item:last-child{border-bottom:none;}
+.exec-group-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.exec-group-name{font-size:11px;font-weight:600;flex:1;}
+.exec-group-bar-wrap{flex:2;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.exec-group-bar{height:100%;border-radius:3px;transition:width .5s;}
+.exec-group-pct{font-family:var(--mono);font-size:10px;width:40px;text-align:right;}
+.exec-group-eta{font-family:var(--mono);font-size:9px;width:70px;text-align:right;}
+
+.exec-action-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.exec-action-item:last-child{border-bottom:none;}
+.exec-action-icon{font-size:16px;flex-shrink:0;line-height:1.2;}
+.exec-action-text{flex:1;}
+.exec-action-title{font-size:11px;font-weight:600;margin-bottom:2px;}
+.exec-action-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+.exec-action-badge{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.exec-action-badge.urgent{background:#fde8e6;color:#8b1f17;border:1px solid rgba(192,57,43,.25);}
+.exec-action-badge.watch{background:#fef6e4;color:#7a4f00;border:1px solid rgba(232,160,0,.25);}
+.exec-action-badge.good{background:#d4eddf;color:#1a5f35;border:1px solid rgba(45,122,79,.25);}
+
+.exec-progress-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
+.exec-progress-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:7px;}
+.exec-prog-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.exec-prog-label{font-size:11px;color:var(--text);width:180px;flex-shrink:0;font-weight:500;}
+.exec-prog-outer{flex:1;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;position:relative;border:1px solid var(--border);}
+.exec-prog-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.exec-prog-target{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);}
+.exec-prog-pct{font-family:var(--mono);font-size:11px;font-weight:600;width:48px;text-align:right;}
+.exec-prog-eta{font-family:var(--mono);font-size:10px;color:var(--muted);width:120px;text-align:right;}
+
+.exec-footer{text-align:center;padding:16px;font-size:10px;color:var(--muted);font-family:var(--mono);}
+
+
+/* ── RANKING ── */
+.ranking-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);}
+.ranking-item:last-child{border-bottom:none;}
+.ranking-pos{font-family:var(--mono);font-size:13px;width:24px;text-align:center;flex-shrink:0;}
+.ranking-name{font-size:11px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ranking-bar{flex:2;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;border:1px solid var(--border);}
+.ranking-fill{height:100%;border-radius:3px;transition:width .5s;}
+.ranking-value{font-family:var(--mono);font-size:9px;color:var(--muted);width:80px;text-align:right;flex-shrink:0;}
+.ranking-avg-line{border-top:1px dashed var(--border);margin:8px 0 4px;padding-top:6px;font-size:9px;color:var(--muted);display:flex;justify-content:space-between;}
+
+/* ── EXEC PRINT BUTTON ── */
+.exec-print-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:var(--rsm);padding:8px 16px;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:var(--transition);margin-top:4px;backdrop-filter:blur(4px);}
+.exec-print-btn:hover{background:rgba(255,255,255,.3);}
+
+/* ── KPI TARGET HINT ── */
+.kpi-target{font-size:8px;color:var(--muted);margin-top:2px;font-family:var(--mono);}
+
+/* ── EXEC PRINT MODE ── */
+@media print{
+  .exec-print-mode *{display:none!important;}
+  .exec-print-mode #tab-executive{display:block!important;}
+  .exec-print-mode #tab-executive *{display:revert!important;}
+  .exec-print-mode .exec-wrap{display:block!important;}
+}
+@media print{
+  .kpi-bar,.alert-strip,.toolbar,.upload-bar,.tabs,.notif-panel,.prog-wrap,.blockers-card,.probability-card,.whatif-card,.executive-toggle{display:none!important;}
+  body{background:#fff!important;color:#000!important;}
+  table{font-size:10px!important;}
+  th{background:#1F4E79!important;-webkit-print-color-adjust:exact;}
+  .content{display:block!important;}
+  td{border:1px solid #ccc!important;}
+}
+/* Print only executive tab when exec-print-mode active */
+body.exec-print-mode .header,
+body.exec-print-mode .upload-bar,
+body.exec-print-mode .executive-toggle,
+body.exec-print-mode .kpi-bar,
+body.exec-print-mode .blockers-card,
+body.exec-print-mode .probability-card,
+body.exec-print-mode .whatif-card,
+body.exec-print-mode .toolbar,
+body.exec-print-mode .alert-strip,
+body.exec-print-mode .prog-wrap,
+body.exec-print-mode .tabs,
+body.exec-print-mode #tab-retea,
+body.exec-print-mode #tab-grupuri,
+body.exec-print-mode #tab-planificare,
+body.exec-print-mode #tab-proiectie,
+body.exec-print-mode .notif-panel{display:none!important;}
+body.exec-print-mode{background:#fff!important;color:var(--text)!important;}
+body.exec-print-mode #tab-executive{display:block!important;}
+body.exec-print-mode .exec-wrap{padding:16px;}
+body.exec-print-mode .exec-hero{background:#e8f0f8!important;}
+body.exec-print-mode .exec-card{border:1px solid #ccc!important;}
+body.exec-print-mode .exec-print-btn{display:none!important;}
+@media(max-width:600px){
+  .kpi-val{font-size:13px;}.kpi-lbl{font-size:7px;}
+  .prog-label{width:100px;font-size:9px;}
+  .toolbar{padding:6px 12px;}.pad{padding:12px;}
+  .tll{width:140px;}.blockers-grid{grid-template-columns:1fr;}
+}
+
+/* ===============================
+   WOW BOARD LIGHT — SAFE OVERRIDE
+=============================== */
+:root{
+  --bg:#f8fbff;--bg2:#ffffff;--bg3:#f1f5f9;
+  --text:#0f172a;--muted:#64748b;
+  --navy:#1d4ed8;--blue:#2563eb;--accent:#2563eb;
+  --green:#16a34a;--green-bg:#dcfce7;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --yellow:#d97706;--yellow-bg:#fef3c7;
+  --border:rgba(0,0,0,0.06);
+  --shadow-sm:0 4px 12px rgba(0,0,0,0.05);
+  --shadow-md:0 10px 30px rgba(0,0,0,0.08);
+  --r:16px;--rsm:10px;
+}
+body{background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)!important;-webkit-font-smoothing:antialiased;}
+.header{background:linear-gradient(135deg,#2563eb,#1d4ed8,#3b82f6)!important;border-bottom:none!important;box-shadow:0 12px 32px rgba(37,99,235,.25)!important;}
+.header h1{font-size:22px!important;letter-spacing:-0.4px;}
+.header-sub{opacity:.85;}
+.header-badge{background:rgba(255,255,255,.2)!important;color:#fff!important;}
+.stat{background:rgba(255,255,255,.15)!important;border-color:rgba(255,255,255,.2)!important;}
+.stat .v{color:#fff!important;}.stat .l{color:rgba(255,255,255,.75)!important;}
+.kpi-bar{box-shadow:var(--shadow-md)!important;border-radius:0 0 var(--r) var(--r);overflow:hidden;}
+.kpi-item{background:#fff!important;transition:.25s;}
+.kpi-item:hover{transform:translateY(-2px);background:#f1f5ff!important;}
+.kpi-val{font-size:18px!important;font-weight:700!important;}
+.blockers-card,.probability-card,.whatif-card,.panel,.exec-card,.exec-progress-card,.pc,.tl-wrap{background:#fff!important;border:none!important;border-radius:var(--r)!important;box-shadow:var(--shadow-md)!important;}
+.blocker-item:hover,.exec-kpi:hover,.pc:hover{transform:translateY(-3px);}
+.exec-kpi{background:#fff!important;border:none!important;box-shadow:var(--shadow-md)!important;}
+th{background:#f1f5f9!important;color:#64748b!important;font-size:10px!important;letter-spacing:.08em;}
+td{padding:8px 10px!important;}
+tr:hover td{background:#eef4ff!important;}
+.tw{border:none!important;box-shadow:var(--shadow-md)!important;}
+.pb-fill,.prog-fill,.exec-prog-fill{box-shadow:0 0 8px rgba(37,99,235,.25);}
+.tb-btn{background:#fff!important;border:1px solid rgba(37,99,235,.2)!important;color:#1d4ed8!important;}
+.tb-btn:hover{background:#eff6ff!important;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.15)!important;}
+.upload-btn{background:linear-gradient(135deg,#2563eb,#3b82f6)!important;border:none!important;box-shadow:0 6px 16px rgba(37,99,235,.25)!important;}
+.upload-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(37,99,235,.35)!important;}
+.reset-btn{background:#fee2e2!important;border:1px solid rgba(220,38,38,.2)!important;color:#dc2626!important;}
+.exec-hero{background:linear-gradient(135deg,#2563eb,#1e40af,#3b82f6)!important;box-shadow:0 14px 34px rgba(37,99,235,.35)!important;}
+.alert-strip{background:#f8fafc!important;}
+.upload-bar,.toolbar,.executive-toggle{background:#fff!important;}
+.tabs{background:#fff!important;box-shadow:var(--shadow-sm)!important;}
+.tab{border-radius:8px 8px 0 0;}
+.tab.active{background:#fff!important;border-bottom:2px solid #2563eb!important;color:#1d4ed8!important;font-weight:600!important;}
+.note{background:#eff6ff!important;border-left-color:#2563eb!important;color:#1e3a8a!important;}
+.prog-outer,.exec-prog-outer,.tlbb,.pb-bg,.ranking-bar,.exec-group-bar-wrap{background:#f1f5f9!important;border:1px solid rgba(0,0,0,.05)!important;}
+.notif-panel{background:#fff!important;box-shadow:-4px 0 24px rgba(0,0,0,.1)!important;}
+.notif-item{background:#f8fafc!important;border-radius:var(--rsm)!important;}
+.whatif-result{background:#eff6ff!important;border-left-color:#2563eb!important;color:#1e3a8a!important;}
+.exec-print-btn{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.4)!important;}
+.rok{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
+.rno{background:#fee2e2!important;color:#b91c1c!important;border-color:rgba(220,38,38,.2)!important;}
+.ag-ok{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
+.ag-warn{background:#fef3c7!important;color:#92400e!important;border-color:rgba(217,119,6,.2)!important;}
+.ag-nok{background:#fee2e2!important;color:#b91c1c!important;border-color:rgba(220,38,38,.2)!important;}
+.rp-gis{background:#eff6ff!important;color:#1d4ed8!important;border-color:rgba(37,99,235,.2)!important;}
+.rp-rasr{background:#fef3c7!important;color:#92400e!important;border-color:rgba(217,119,6,.2)!important;}
+.rp-fol{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
+
+
+.exec-hero .exec-hero-left h2{color:#fff!important;}
+.exec-hero .exec-hero-left p{color:rgba(255,255,255,.8)!important;}
+.exec-hero .exec-hero-date{color:rgba(255,255,255,.75)!important;}
+.exec-hero .exec-verdict-lbl{color:rgba(255,255,255,.85)!important;}
+.exec-hero .exec-verdict-sub{color:rgba(255,255,255,.7)!important;}
+.exec-hero .exec-verdict-val{filter:drop-shadow(0 0 8px rgba(255,255,255,.3));}
+
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — Mobile & Tablet
+═══════════════════════════════════════ */
+@media(max-width:1024px){
+  .blockers-grid{grid-template-columns:1fr 1fr;}
+  .exec-kpi-row{grid-template-columns:repeat(2,1fr);}
+  .exec-two-col{grid-template-columns:1fr;}
+  .pg{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:768px){
+  .pad{padding:12px 14px;}
+  .header{padding:12px 14px 10px;}
+  .header-top{flex-direction:column;gap:10px;}
+  .stats{gap:7px;}
+  .stat{min-width:70px;padding:6px 10px;}
+  .stat .v{font-size:14px;}
+  .kpi-val{font-size:14px!important;}
+  .kpi-lbl{font-size:7px;}
+  .kpi-item{padding:7px 4px;}
+  .blockers-grid{grid-template-columns:1fr;}
+  .blockers-card,.probability-card,.whatif-card{margin:8px 14px 0;}
+  .probability-card{flex-direction:column;align-items:flex-start;}
+  .probability-bar-container{width:100%;}
+  .plan-grid{grid-template-columns:1fr;}
+  .pg{grid-template-columns:repeat(2,1fr);}
+  .exec-kpi-row{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .exec-two-col{grid-template-columns:1fr;gap:12px;}
+  .exec-hero{padding:18px 16px;}
+  .exec-hero-left h2{font-size:17px!important;}
+  .exec-wrap{padding:12px 14px;}
+  .toolbar{padding:6px 14px;gap:6px;}
+  .tb-lbl{display:none;}
+  .tb-sep{display:none;}
+  .tll{width:110px;font-size:9px;}
+  .tly{width:80px;font-size:9px;}
+  .tlr{flex-wrap:nowrap;gap:5px;}
+  .prog-label{width:110px;font-size:9px;}
+  .prog-eta{width:100px;font-size:9px;}
+  .upload-bar{padding:8px 14px;gap:8px;}
+  .upload-status{font-size:10px;}
+  .tabs{padding:0 8px;}
+  .tab{padding:8px 10px;font-size:11px;}
+  .alert-strip{padding:5px 14px;}
+  .whatif-controls{flex-direction:column;gap:12px;}
+  .whatif-group{min-width:100%;}
+}
+@media(max-width:480px){
+  .kpi-bar{overflow-x:auto;flex-wrap:nowrap;}
+  .kpi-item{min-width:70px;}
+  .pg{grid-template-columns:1fr 1fr;}
+  .exec-kpi-row{grid-template-columns:1fr 1fr;}
+  .blockers-grid{grid-template-columns:1fr;}
+  .stats{flex-wrap:wrap;}
+  .header h1{font-size:16px!important;}
+  .tlr{gap:4px;}
+}
+
+
+/* ── LOGIN SCREEN ── */
+#loginOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#0f1f35 0%,#1a3a5c 50%,#0d2137 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'DM Sans','IBM Plex Sans',sans-serif;
+}
+#loginOverlay.hidden{display:none;}
+.login-card{
+  background:#fff;border-radius:16px;padding:40px 48px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  max-width:420px;width:90%;text-align:center;
+}
+.login-logo{
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;
+}
+.login-divider{height:1px;background:#e8e6e0;margin-bottom:24px;}
+.login-title{font-size:15px;font-weight:600;color:#1a1916;margin-bottom:4px;}
+.login-sub{font-size:12px;color:#6b6860;margin-bottom:24px;}
+.login-input-wrap{position:relative;margin-bottom:16px;}
+.login-input{
+  width:100%;padding:12px 44px 12px 16px;
+  border:1.5px solid #e0ddd8;border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  color:#1a1916;background:#fafaf8;outline:none;
+  transition:border-color .2s;box-sizing:border-box;
+}
+.login-input:focus{border-color:#1d4ed8;background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.1);}
+.login-eye{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  cursor:pointer;color:#9a9890;font-size:16px;user-select:none;
+}
+.login-btn{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#1d4ed8,#2563eb);
+  color:#fff;border:none;border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 14px rgba(29,78,216,.3);
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,78,216,.4);}
+.login-btn:active{transform:translateY(0);}
+.login-error{
+  color:#dc2626;font-size:12px;margin-top:10px;
+  background:#fee2e2;border-radius:7px;padding:8px 12px;
+  display:none;
+}
+.login-error.show{display:block;}
+.login-footer{margin-top:24px;font-size:10px;color:#9a9890;}
+.login-footer strong{color:#6b6860;}
+
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="data:image/png;base64,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" alt="Delgaz Grid" style="height:56px;object-fit:contain;">
+    </div>
+    <div class="login-divider"></div>
+    <div class="login-title">Dashboard Kaizen Date Gaz</div>
+    <div class="login-sub">Corelare Date Rețea GIS ↔ SAP PM</div>
+    <div class="login-input-wrap">
+      <input class="login-input" type="password" id="loginPwd"
+        placeholder="Parolă de acces"
+        onkeydown="if(event.key==='Enter')doLogin()">
+      <span class="login-eye" onclick="togglePwd()" id="eyeIcon">👁</span>
+    </div>
+    <div class="login-error" id="loginError">Parolă incorectă. Încearcă din nou.</div>
+    <button class="login-btn" onclick="doLogin()">Accesează Dashboard →</button>
+    <div class="login-footer">
+      Acces restricționat · <strong>Uz intern E.ON/Delgaz Grid</strong><br>
+      Kaizen Date Gaz · GIS ↔ SAP PM · 2026
+    </div>
+  </div>
+</div>
+
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-badge">KAIZEN DATE GAZ · DELGAZ GRID S.A.</div>
+      <h1>Dashboard Strategic Corelare Date Rețea GIS ↔ SAP PM</h1>
+      <div class="header-sub">Filtre: StareUtiliz=ACT/PIF · Stare GIS=Executat/În Exploatare · xdm_status=2/3 · Rată corelare = km procesați/oră/pers. din birou · Dif Totală = |Dif_BR|+|Dif_TR|</div>
+    </div>
+    <div class="stats" id="hStats"></div>
+  </div>
+</div>
+
+<div class="upload-bar">
+  <label class="upload-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Încarcă Excel (.xlsx)
+    <input type="file" id="xlsxFile" accept=".xlsx,.xls">
+  </label>
+  <span class="upload-status idle" id="uploadStatus">Niciun fișier încărcat — datele hardcodate sunt active</span>
+  <div class="upload-info" id="uploadInfo"></div>
+  <button class="tb-btn reset-btn" id="resetDataBtn" style="margin-left:auto">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Reset date implicite
+  </button>
+</div>
+
+<div class="executive-toggle">
+  <label class="toggle-switch">
+    <input type="checkbox" id="executiveModeToggle">
+    <span class="toggle-slider"></span>
+  </label>
+  <span class="toggle-label">🎯 EXECUTIVE MODE</span>
+  <span class="text-muted" style="font-size:9px;margin-left:auto">Ascunde tabelele · Arată doar esențialul</span>
+</div>
+
+<div class="kpi-bar" id="kpiBar"></div>
+
+<div class="blockers-card" id="blockersCard">
+  <div class="blockers-title">🔥 TOP 3 BLOCKERS</div>
+  <div class="blockers-grid" id="blockersGrid"></div>
+</div>
+
+<div class="probability-card" id="probabilityCard">
+  <div class="probability-title">🎯 PROBABILITATE DE SUCCES</div>
+  <div class="probability-bar-container">
+    <div class="probability-bar-bg">
+      <div class="probability-bar-fill" id="probabilityFill">0%</div>
+    </div>
+  </div>
+  <div class="probability-value" id="probabilityValue">0%</div>
+  <div class="probability-risk" id="probabilityRisk">Risc necunoscut</div>
+</div>
+
+<div class="whatif-card" id="whatifCard">
+  <div class="whatif-title">⚡ SIMULATOR — Impact decizii în timp real</div>
+  <div class="whatif-controls">
+    <div class="whatif-group"><label>Grup afectat</label><select class="whatif-select" id="whatifGroup"></select></div>
+    <div class="whatif-group">
+      <label>➕ Persoane adăugate (GIS+RASR, din 2 în 2)</label>
+      <input type="range" class="whatif-slider" id="whatifPeople" min="0" max="10" step="2" value="0">
+      <div class="whatif-value" id="whatifPeopleValue">+0 persoane</div>
+    </div>
+    <div class="whatif-group">
+      <label>⚡ Rată corelare absolută (km/h)</label>
+      <input type="range" class="whatif-slider" id="whatifRate" min="0.5" max="8" step="0.25" value="2.25">
+      <div class="whatif-value" id="whatifRateValue">2.25 km/h</div>
+    </div>
+  </div>
+  <div class="whatif-result" id="whatifResult">💡 Selectează un grup și ajustează parametrii pentru a vedea impactul</div>
+</div>
+
+<div class="toolbar">
+  <div class="tb-group">
+    <span class="tb-lbl">Data start activitate:</span>
+    <input type="date" class="tb-date" id="startDate" value="2026-04-01">
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-group" id="daysInfo" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></div>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" id="exportCsvBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export CSV
+  </button>
+  <button class="tb-btn" id="printBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print / PDF
+  </button>
+  <button class="tb-btn" id="notifBtn" style="position:relative">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    Alerte <span class="notif-badge" id="notifCount">0</span>
+  </button>
+</div>
+
+<div class="alert-strip">
+  <span class="alert-strip-lbl">Status grupuri:</span>
+  <div id="alertStrip"></div>
+</div>
+
+<div class="prog-wrap" id="progWrap"></div>
+
+<div class="tabs">
+  <div class="tab" data-tab="executive" style="color:var(--accent);font-weight:600">⭐ Executive</div>
+  <div class="tab active" data-tab="retea">Date Rețea CORG</div>
+  <div class="tab" data-tab="grupuri">Centre Operaționale</div>
+  <div class="tab" data-tab="planificare">Planificare FTE</div>
+  <div class="tab" data-tab="proiectie">Proiecție Finalizare</div>
+</div>
+
+
+<div class="content pad" id="tab-executive">
+  <div class="exec-wrap" id="execWrap">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<div class="content active pad" id="tab-retea">
+  <div class="note">Date individuale per CORG istoric (12 CORG) · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · % Corelat = Rețea_GIS/Rețea_PM · ⚡ Tab „Centre Operaționale" arată cele 8 CORG conform reorganizare</div>
+  <div class="tw"><table id="tRetea"></table></div>
+</div>
+
+<div class="content pad" id="tab-grupuri">
+  <div class="note">8 Centre Operaționale după reorganizare · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · Formula corectă — NU include Dif Rețea</div>
+  <div class="tw"><table id="tGrup"></table></div>
+</div>
+
+<div class="content pad" id="tab-planificare">
+  <div class="plan-grid">
+    <div class="panel">
+      <h3>⚙ Parametri Globali</h3>
+      <div class="pr"><span class="pl">Rată minimă corelare (km/h·pers)</span><input class="pi" id="vMin" type="number" value="1.5" step="0.1" min="0.1" max="20"><span class="pu">km/h</span></div>
+      <div class="pr"><span class="pl">Rată maximă corelare (km/h·pers)</span><input class="pi" id="vMax" type="number" value="3.0" step="0.1" min="0.1" max="20"><span class="pu">km/h</span></div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px 10px;margin-bottom:9px;font-size:10px;color:var(--muted);line-height:1.5">
+        <span style="color:var(--accent);font-weight:600">Rată corelare</span> = km de echipamente GIS procesați și verificați față de SAP PM într-o oră, per persoană, <strong style="color:var(--text)">activitate de birou</strong>.<br>
+        Ex: 1.5 km/h = caz complex · 3 km/h = caz simplu<br>
+        Ore productive/pers/an: <span id="rataMedie" style="color:var(--accent);font-family:var(--mono);font-weight:600">2.25 km/h</span>
+      </div>
+      <div class="pr"><span class="pl">Ore/săptămână dedicate corelării</span><input class="pi" id="oreSapt" type="number" value="4" step="0.5" min="0.5" max="40"><span class="pu">h/săpt</span></div>
+      <div class="pr"><span class="pl">Săptămâni active/an</span><input class="pi" id="saptAn" type="number" value="47" step="1" min="10" max="52"><span class="pu">săpt/an</span></div>
+      <div style="background:var(--llblue);border-left:3px solid var(--navy);border-radius:0 var(--rsm) var(--rsm) 0;padding:8px 10px;margin-bottom:9px;font-size:10px;color:#0d3d6b;line-height:1.5">
+        Ex: <strong>4 ore/săpt</strong> = 2h luni + 2h joi, sau 4h miercuri.<br>
+        47 săpt/an = an calendaristic minus 5 săpt (concedii+sărbători).<br>
+        Total ore/an/pers: <span id="totalOreAn" style="font-family:var(--mono);font-weight:600">188 h</span>
+      </div>
+      <h3 style="margin-top:14px">🎯 Targeturi</h3>
+      <div class="tgt"><div class="td2" style="background:var(--red)"></div><span class="tl2">Diferențe rezolvate în</span><input class="ti" id="tDif" type="number" value="6" step="1" min="1" max="120"><span class="tu">luni</span></div>
+      <div class="tgt"><div class="td2" style="background:var(--blue)"></div><span class="tl2">Rețea PM→GIS corelată în</span><input class="ti" id="tPM" type="number" value="36" step="1" min="1" max="240"><span class="tu">luni</span></div>
+      <div class="gc">
+        <h4>Compoziție echipă per grup CORG</h4>
+        <div class="pr" style="margin-bottom:6px">
+          <span class="pl">% timp FOL alocat corelării</span>
+          <input class="pi" id="pctFOL" type="number" value="0" step="5" min="0" max="100">
+          <span class="pu">%</span>
+        </div>
+        <div class="comp-hdr">
+          <span style="color:#58a6ff">GIS</span>
+          <span style="color:#f0c060">RASR</span>
+          <span style="color:#3fb950">FOL</span>
+        </div>
+        <div id="gInputs"></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:6px;line-height:1.4">
+          GIS + RASR = personal de bază · FOL = suport opțional<br>
+          FOL contribuie la ore/an doar dacă % timp &gt; 0
+        </div>
+      </div>
+      <div class="pr" style="margin-top:12px">
+        <button class="tb-btn" id="saveTeamConfigBtn" style="background:var(--bg);">💾 Salvează configurația echipei</button>
+      </div>
+    </div>
+    <div>
+      <div class="sec">Rezultate per Grup</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-size:10px;align-items:center">
+        <span style="color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Legendă celule:</span>
+        <span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600">■ În target</span>
+        <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-weight:600">■ Aproape (sub 150%)</span>
+        <span style="background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-weight:600">■ Depășit</span>
+        <span style="color:var(--muted);margin-left:4px">· Bordura stânga = status general grup</span>
+      </div>
+      <div class="tw"><table id="tPlan"></table></div>
+    </div>
+  </div>
+</div>
+
+<div class="content pad" id="tab-proiectie">
+  <div class="pg" id="pCards"></div>
+  <div class="tl-wrap">
+    <h3>⏱ Timeline — Finalizare Diferențe per Grup (la rata medie de corelare)</h3>
+    <div id="tlDif"></div>
+    <div class="sec" style="margin-top:14px">Rețea PM totală per Grup</div>
+    <div id="tlPM"></div>
+  </div>
+  <div class="sec">Tabel Detaliat Proiecție</div>
+  <div class="tw"><table id="tProj"></table></div>
+</div>
+
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-hdr">
+    <h3>🔔 Alerte & Status</h3>
+    <button class="notif-close" id="notifCloseBtn">✕</button>
+  </div>
+  <div class="notif-list"></div>
+</div>
+
+<script>
+(function(){
+const CORG_DEFAULT=[
+  {n:"MURES",rPM:3998286,rGIS:3861400,dR:136886,bPM:720953,bGIS:635000,dB:85953,tPM:3277333,tGIS:3226400,dT:50933},
+  {n:"TIMISOARA",rPM:3370927,rGIS:3359163,dR:11765,bPM:811152,bGIS:764261,dB:46891,tPM:2559775,tGIS:2594901,dT:-35126},
+  {n:"BAIA MARE",rPM:2712332,rGIS:2673389,dR:38943,bPM:468358,bGIS:436761,dB:31597,tPM:2243974,tGIS:2236628,dT:7346},
+  {n:"SIBIU",rPM:2458599,rGIS:2457251,dR:1348,bPM:523015,bGIS:482970,dB:40045,tPM:1935584,tGIS:1974281,dT:-38698},
+  {n:"CLUJ",rPM:2438193,rGIS:2396568,dR:41626,bPM:469965,bGIS:426552,dB:43413,tPM:1968228,tGIS:1970016,dT:-1788},
+  {n:"BISTRITA",rPM:1951381,rGIS:1896538,dR:54843,bPM:273460,bGIS:246223,dB:27236,tPM:1677921,tGIS:1650315,dT:27606},
+  {n:"BACAU",rPM:1872936,rGIS:1792400,dR:80536,bPM:331859,bGIS:273779,dB:58080,tPM:1541077,tGIS:1518621,dT:22456},
+  {n:"DEVA",rPM:1858439,rGIS:1788899,dR:69540,bPM:334704,bGIS:296210,dB:38494,tPM:1523735,tGIS:1492689,dT:31046},
+  {n:"IASI",rPM:1854555,rGIS:1820004,dR:34551,bPM:322240,bGIS:269446,dB:52794,tPM:1532314,tGIS:1550558,dT:-18244},
+  {n:"ALBA",rPM:1778060,rGIS:1697037,dR:81023,bPM:352330,bGIS:304705,dB:47626,tPM:1425729,tGIS:1392332,dT:33397},
+  {n:"SUCEAVA",rPM:1265119,rGIS:1231492,dR:33627,bPM:206554,bGIS:184810,dB:21743,tPM:1058566,tGIS:1046682,dT:11883},
+  {n:"PIATRA NEAMT",rPM:726875,rGIS:709553,dR:17322,bPM:173230,bGIS:110333,dB:62896,tPM:553646,tGIS:599220,dT:-45575}
+];
+const GROUPS_DEFAULT=[
+  {name:"MURES",corg:["MURES"],color:"#58a6ff",merged:false},
+  {name:"TIMISOARA",corg:["TIMISOARA"],color:"#58a6ff",merged:false},
+  {name:"BAIA MARE",corg:["BAIA MARE"],color:"#58a6ff",merged:false},
+  {name:"SIBIU",corg:["SIBIU"],color:"#58a6ff",merged:false},
+  {name:"CLUJ + BISTRITA",corg:["CLUJ","BISTRITA"],color:"#a371f7",merged:true},
+  {name:"BACAU + PIATRA NEAMT",corg:["BACAU","PIATRA NEAMT"],color:"#a371f7",merged:true},
+  {name:"DEVA + ALBA",corg:["DEVA","ALBA"],color:"#a371f7",merged:true},
+  {name:"SUCEAVA + IASI",corg:["SUCEAVA","IASI"],color:"#a371f7",merged:true}
+];
+let CORG=[],GROUPS=[],GD=[];
+const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,comp:{}};
+let updateScheduled=false,isLoadingExcel=false;
+const fmt=n=>Number(n).toLocaleString('ro-RO');
+const difTot=r=>(Math.abs(r.dB)+Math.abs(r.dT))/1000; // |dB|+|dT| = tot ce trebuie rezolvat
+const pmKm=r=>r.rPM/1000;
+const pctC=r=>r.rGIS/r.rPM;
+const vm=()=>(params.vMin+params.vMax)/2;
+const persAn=g=>{const c=params.comp[g]||{gis:2,rasr:2,fol:0};return c.gis+c.rasr+c.fol*(params.pctFOL/100);};
+const oreAn=g=>params.oreSapt*params.saptAn*persAn(g);
+const persTotal=g=>{const c=params.comp[g]||{gis:2,rasr:2,fol:0};return c.gis+c.rasr+c.fol;};
+function buildGroupsFromCORG(){
+  const names=CORG.map(c=>c.n),ng=[];
+  CORG.forEach(c=>ng.push({name:c.n,corg:[c.n],color:"#58a6ff",merged:false}));
+  [{names:["CLUJ","BISTRITA"],name:"CLUJ + BISTRITA"},{names:["BACAU","PIATRA NEAMT"],name:"BACAU + PIATRA NEAMT"},{names:["DEVA","ALBA"],name:"DEVA + ALBA"},{names:["SUCEAVA","IASI"],name:"SUCEAVA + IASI"}].forEach(p=>{
+    if(p.names.every(n=>names.includes(n))&&!ng.some(g=>g.name===p.name))ng.push({name:p.name,corg:p.names,color:"#a371f7",merged:true});
+  });
+  return ng;
+}
+function computeGD(groups,corg){
+  return groups.map(g=>{
+    const rows=corg.filter(c=>g.corg.includes(c.n));
+    const s=f=>rows.reduce((a,r)=>a+r[f],0);
+    const o={rPM:s('rPM'),rGIS:s('rGIS'),dR:s('dR'),bPM:s('bPM'),bGIS:s('bGIS'),dB:s('dB'),tPM:s('tPM'),tGIS:s('tGIS'),dT:s('dT')};
+    o.pmKm=o.rPM/1000;o.difKm=(Math.abs(o.dB)+Math.abs(o.dT))/1000;o.pct=o.rPM>0?o.rGIS/o.rPM:0;
+    return {...g,...o};
+  });
+}
+function fmtLuni(luni){
+  if(luni < 1){
+    const zile = Math.round(luni * (params.saptAn*5/12));
+    return zile <= 0 ? '< 1 zi' : zile + ' zile lucr.';
+  } else if(luni < 12){
+    const l = Math.floor(luni);
+    const zile = Math.round((luni - l) * (params.saptAn*5/12));
+    return l + (l===1?' lună':' luni') + (zile>0?' și '+zile+' zile':'');
+  } else {
+    const ani = Math.floor(luni/12);
+    const luniRest = Math.round(luni % 12);
+    return ani + (ani===1?' an':' ani') + (luniRest>0?' și '+luniRest+(luniRest===1?' lună':' luni'):'');
+  }
+}
+
+function getOpGroups(){
+  // Returneaza intotdeauna exact 8 grupuri operative
+  // (4 singure neincluse in unificate + 4 unificate)
+  const mergedSet=new Set(GD.filter(g=>g.merged).flatMap(g=>g.corg));
+  return GD.filter(g=>g.merged||(g.corg.length===1&&!mergedSet.has(g.corg[0])));
+}
+
+function fmtZileLucr(ani, zileAnParam){
+  const zAn = zileAnParam || (params.saptAn*5) || 235;
+  const zileTot = Math.round(ani * zAn);
+  if(zileTot <= 0) return '< 1 zi lucr.';
+  if(zileTot < zAn/12){
+    // sub o luna
+    return zileTot + ' zile lucr.';
+  } else if(ani < 1){
+    const luni = Math.round(ani*12*10)/10;
+    return luni.toFixed(1) + ' luni (' + zileTot + ' zile lucr.)';
+  } else {
+    const aniInt = Math.floor(ani);
+    const luniRest = Math.round((ani - aniInt)*12);
+    return (aniInt > 0 ? aniInt + ' ani ' : '') + (luniRest > 0 ? luniRest + ' luni' : '') + ' (' + zileTot + ' zile lucr.)';
+  }
+}
+
+function initDefault(){
+  CORG=JSON.parse(JSON.stringify(CORG_DEFAULT));
+  GROUPS=JSON.parse(JSON.stringify(GROUPS_DEFAULT));
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+  GD=computeGD(GROUPS,CORG);
+}
+function saveState(){
+  try{
+    localStorage.setItem('kaizen_comp',JSON.stringify(params.comp));
+    localStorage.setItem('kaizen_params',JSON.stringify({vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL}));
+    localStorage.setItem('kaizen_corg',JSON.stringify(CORG));
+  }catch(e){}
+}
+function loadState(){
+  // Întotdeauna pornim cu date implicite — garantat non-NaN
+  initDefault();
+  try{
+    const sc=localStorage.getItem('kaizen_comp');
+    if(sc) params.comp=JSON.parse(sc);
+    const sp=localStorage.getItem('kaizen_params');
+    if(sp){
+      const p=JSON.parse(sp);
+      // Validare: dacă parametrii sunt numerici și reali
+      if(p.vMin>0 && p.saptAn>0){
+        Object.assign(params,p);
+        ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL'].forEach(k=>{
+          const el=document.getElementById(k);if(el)el.value=params[k];
+        });
+      }
+    }
+    const sc2=localStorage.getItem('kaizen_corg');
+    if(sc2){
+      const savedCORG=JSON.parse(sc2);
+      // Validare: trebuie să avem minim 8 CORG cu date reale
+      if(Array.isArray(savedCORG) && savedCORG.length>=8 && savedCORG[0].rPM>0){
+        CORG=savedCORG;
+        GROUPS=buildGroupsFromCORG();
+        GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+        GD=computeGD(GROUPS,CORG);
+      }
+      // altfel rămânem cu initDefault()
+    }
+  }catch(e){
+    initDefault(); // fallback sigur
+  }
+  // Validare finală — dacă ceva a mers prost, resetăm
+  if(!CORG||!CORG.length||!GD||!GD.length||isNaN(CORG[0].rPM)){
+    initDefault();
+  }
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+}
+function saveState(){
+  try{
+    localStorage.setItem('kaizen_comp',JSON.stringify(params.comp));
+    localStorage.setItem('kaizen_params',JSON.stringify({vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL}));
+    localStorage.setItem('kaizen_corg',JSON.stringify(CORG));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const sc=localStorage.getItem('kaizen_comp');if(sc)params.comp=JSON.parse(sc);
+    const sp=localStorage.getItem('kaizen_params');
+    if(sp){const p=JSON.parse(sp);Object.assign(params,p);['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL'].forEach(k=>{const el=document.getElementById(k);if(el)el.value=params[k];});}
+    const sc2=localStorage.getItem('kaizen_corg');
+    if(sc2){CORG=JSON.parse(sc2);GROUPS=buildGroupsFromCORG();GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});GD=computeGD(GROUPS,CORG);}
+  }catch(e){initDefault();}
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+}
+const hmc=ad=>''; // replaced by cell-level coloring in rPlanificare
+const pctColor=p=>p>0.9995?'var(--green)':p>0.97?'var(--accent)':p>0.95?'var(--yellow)':'var(--red)';
+function rHeader(){
+  const og=getOpGroups();
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  document.getElementById('hStats').innerHTML=[{v:tPM.toFixed(0)+' km',l:'Rețea SAP PM'},{v:tDif.toFixed(1)+' km',l:'Dif. de rezolvat'},{v:(tPct*100).toFixed(2)+'%',l:'% Corelat'},{v:og.length+'',l:'Centre Operaționale'}].map(s=>`<div class="stat"><span class="v">${s.v}</span><span class="l">${s.l}</span></div>`).join('');
+}
+function rRetea(){
+  const H=['CORG','Rețea PM (m)','Rețea GIS (m)','Dif Rețea (m)','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','PM Total (km)','Dif Totală (km)','% Corelat'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const r of CORG){const dk=difTot(r),pk=pmKm(r),pc=pctC(r),pc_c=pctColor(pc);
+    h+=`<tr><td style="font-weight:600">${r.n}</td><td class="n">${fmt(r.rPM)}</td><td class="n">${fmt(r.rGIS)}</td><td class="n">${fmt(r.dR)}</td><td class="n">${fmt(r.bPM)}</td><td class="n">${fmt(r.bGIS)}</td><td class="n">${fmt(r.dB)}</td><td class="n">${fmt(r.tPM)}</td><td class="n">${fmt(r.tGIS)}</td><td class="n">${fmt(r.dT)}</td><td class="n" style="color:var(--accent)">${pk.toFixed(1)}</td><td class="n">${dk.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(pc*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(pc*100).toFixed(2)}%</span></div></td></tr>`;
+  }
+  const tR=CORG.reduce((a,r)=>a+r.rPM,0),tG=CORG.reduce((a,r)=>a+r.rGIS,0);
+  h+=`<tr class="tot"><td>TOTAL DEGR</td><td class="n">${fmt(tR)}</td><td class="n">${fmt(tG)}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dR,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dB,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dT,0))}</td><td class="n">${(tR/1000).toFixed(1)}</td><td class="n">${CORG.reduce((a,r)=>a+difTot(r),0).toFixed(1)}</td><td class="n">${(tG/tR*100).toFixed(2)}%</td></tr></tbody>`;
+  document.getElementById('tRetea').innerHTML=h;
+}
+function rGrupuri(){
+  const og=getOpGroups();
+  const H=['Grup CORG','PM Total (km)','Dif Totală (km)','% Corelat Rețea','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','CORG componente'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){const pc_c=pctColor(g.pct);
+    h+=`<tr class="merged"><td style="font-weight:700;color:${g.color}">${g.name}</td><td class="n" style="color:var(--accent)">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${g.difKm>150?'var(--red)':g.difKm>80?'var(--yellow)':'var(--green)'}">${g.difKm.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(g.pct*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(g.pct*100).toFixed(2)}%</span></div></td><td class="n">${fmt(g.bPM)}</td><td class="n">${fmt(g.bGIS)}</td><td class="n">${fmt(g.dB)}</td><td class="n">${fmt(g.tPM)}</td><td class="n">${fmt(g.tGIS)}</td><td class="n">${fmt(g.dT)}</td><td style="font-size:9.5px;color:var(--muted)">${g.corg.join(' + ')}</td></tr>`;
+  }
+  const tPK=og.reduce((a,g)=>a+g.pmKm,0),tDK=og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  h+=`<tr class="tot"><td>TOTAL DEGR</td><td class="n">${tPK.toFixed(1)}</td><td class="n">${tDK.toFixed(1)}</td><td class="n">${(tPct*100).toFixed(2)}%</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dB,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dT,0))}</td><td></td></tr></tbody>`;
+  document.getElementById('tGrup').innerHTML=h;
+}
+function rGroupInputs(){
+  document.getElementById('gInputs').innerHTML=getOpGroups().map(g=>{
+    const c=params.comp[g.name]||{gis:2,rasr:2,fol:0};
+    return `<div class="gr"><span class="gn" style="color:${g.merged?'#a371f7':'var(--text)'}" title="${g.name}">${g.name.replace(' + ','+')}</span><input class="gin gis" type="number" min="0" max="20" value="${c.gis}" data-group="${g.name}" data-role="gis"><input class="gin rasr" type="number" min="0" max="20" value="${c.rasr}" data-group="${g.name}" data-role="rasr"><input class="gin fol" type="number" min="0" max="20" value="${c.fol}" data-group="${g.name}" data-role="fol"></div>`;
+  }).join('');
+  document.querySelectorAll('#gInputs .gin').forEach(inp=>{
+    inp.removeEventListener('change',hTeamChange);inp.addEventListener('change',hTeamChange);
+  });
+}
+function hTeamChange(e){
+  const g=e.target.dataset.group,r=e.target.dataset.role,v=parseInt(e.target.value)||0;
+  if(!params.comp[g])params.comp[g]={gis:2,rasr:2,fol:0};
+  params.comp[g][r]=v;scheduleUpdate();
+}
+function rPlanificare(){
+  const v=vm();
+  const og=getOpGroups();
+  const H=['Grup CORG','GIS','RASR','FOL','Pers. efect.','Ore/an','Dif (km)','Ore nec.','Luni Dif','✓ Dif?','PM (km)','Ore nec.','Luni PM','✓ PM?'];
+  let h=`<thead><tr>${H.map(x=>`<th class="c">${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){
+    const c=params.comp[g.name]||{gis:2,rasr:2,fol:0};
+    const oa=oreAn(g.name),pa=persAn(g.name);
+    const ond=g.difKm/v,onp=g.pmKm/v;
+    const ad=oa>0?ond/oa:Infinity,ap=oa>0?onp/oa:Infinity;
+    const od=ad<=params.tDif/12,op=ap<=params.tPM/12;
+    const fl=c.fol>0?(params.pctFOL>0?`<span class="role-pill rp-fol">${c.fol}</span>`:`<span class="role-pill rp-fol-0">${c.fol}</span>`):`<span style="color:var(--muted)">—</span>`;
+    // Cell-level dynamic coloring
+    const adLuni=ad*12, apLuni=ap*12;
+    const tDif=params.tDif, tPM=params.tPM;
+    const bgDif=od?'#dcfce7':adLuni<tDif*1.5?'#fef3c7':'#fee2e2';
+    const fgDif=od?'#15803d':adLuni<tDif*1.5?'#92400e':'#b91c1c';
+    const bgPM=op?'#dcfce7':apLuni<tPM*1.5?'#fef3c7':'#fee2e2';
+    const fgPM=op?'#15803d':apLuni<tPM*1.5?'#92400e':'#b91c1c';
+    const oreMin=g.difKm/v;
+    const bgOre=oa>=oreMin?'#f1f5f9':'#fee2e2';
+    const fgOre=oa>=oreMin?'var(--text)':'#b91c1c';
+    const bgPers=c.fol>0&&params.pctFOL>0?'#fef3c7':'#f1f5f9';
+    const borderCol=od&&op?'#16a34a':od?'#d97706':'#dc2626';
+    h+=`<tr class="${g.merged?'merged':''}">
+      <td style="font-weight:700;color:${g.color};border-left:4px solid ${borderCol}">${g.name}</td>
+      <td class="c"><span class="role-pill rp-gis">${c.gis}</span></td>
+      <td class="c"><span class="role-pill rp-rasr">${c.rasr}</span></td>
+      <td class="c">${fl}</td>
+      <td class="n" style="background:${bgPers};color:#92400e;font-weight:600">${pa.toFixed(1)}</td>
+      <td class="n" style="background:${bgOre};color:${fgOre}">${oa.toFixed(0)}</td>
+      <td class="n" style="color:${g.difKm>150?'#dc2626':g.difKm>80?'#d97706':'#15803d'};font-weight:600">${g.difKm.toFixed(1)}</td>
+      <td class="n" style="color:var(--muted)">${ond.toFixed(0)}</td>
+      <td class="n" style="background:${bgDif};color:${fgDif};font-weight:700"><span title="${adLuni.toFixed(1)} luni">${fmtZileLucr(ad)}</span></td>
+      <td class="c"><span class="rb ${od?'rok':'rno'}">${od?'✓ DA':'✗ NU'}</span></td>
+      <td class="n" style="color:var(--muted)">${g.pmKm.toFixed(1)}</td>
+      <td class="n" style="color:var(--muted)">${onp.toFixed(0)}</td>
+      <td class="n" style="background:${bgPM};color:${fgPM};font-weight:700"><span title="${apLuni.toFixed(1)} luni">${fmtZileLucr(ap)}</span></td>
+      <td class="c"><span class="rb ${op?'rok':'rno'}">${op?'✓ DA':'✗ NU'}</span></td>
+    </tr>`;
+  }
+  const vc=vm(),tOA=og.reduce((a,g)=>a+oreAn(g.name),0),tDK=og.reduce((a,g)=>a+g.difKm,0),tPK=og.reduce((a,g)=>a+g.pmKm,0);
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vc/oa:Infinity;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/vc/oa:Infinity;}));
+  const tGIS=og.reduce((a,g)=>a+(params.comp[g.name]||{gis:2}).gis,0);
+  const tRASR=og.reduce((a,g)=>a+(params.comp[g.name]||{rasr:2}).rasr,0);
+  const tFOL=og.reduce((a,g)=>a+(params.comp[g.name]||{fol:0}).fol,0);
+  const tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
+  h+=`<tr class="tot"><td>TOTAL/MAX</td><td class="c">${tGIS}</td><td class="c">${tRASR}</td><td class="c">${tFOL>0?tFOL:'—'}</td><td class="n">${tPeff.toFixed(1)}</td><td class="n">${tOA.toFixed(0)}</td><td class="n">${tDK.toFixed(1)}</td><td class="n">${(tDK/vc).toFixed(0)}</td><td class="n">${isFinite(maxAD)?maxAD.toFixed(3):'∞'}</td><td class="c"><span class="rb ${isFinite(maxAD)&&maxAD<=params.tDif/12?'rok':'rno'}">${isFinite(maxAD)&&maxAD<=params.tDif/12?'✓':'✗'}</span></td><td class="n">${tPK.toFixed(1)}</td><td class="n">${(tPK/vc).toFixed(0)}</td><td class="n">${isFinite(maxAP)?maxAP.toFixed(2):'∞'}</td><td class="c"><span class="rb ${isFinite(maxAP)&&maxAP<=params.tPM/12?'rok':'rno'}">${isFinite(maxAP)&&maxAP<=params.tPM/12?'✓':'✗'}</span></td></tr></tbody>`;
+  document.getElementById('tPlan').innerHTML=h;
+}
+const addM=(d,m)=>{const r=new Date(d);r.setMonth(r.getMonth()+Math.round(m*12));return r;};
+const getStartDate=()=>{const el=document.getElementById('startDate');return el?el.value||'2026-04-01':'2026-04-01';};
+const fmtD=d=>d.toLocaleDateString('ro-RO',{month:'short',year:'numeric'});
+function rProiectie(){
+  const v=vm(),now=new Date();
+  const og=getOpGroups();
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v/oa:0;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v/oa:0;}));
+  const tDK=og.reduce((a,g)=>a+g.difKm,0),tP=og.reduce((a,g)=>a+persTotal(g.name),0),tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
+  document.getElementById('pCards').innerHTML=[
+    {v:`${(maxAD*12).toFixed(1)} luni`,l:'Finalizare Diferențe (max grup)',d:fmtD(addM(now,maxAD)),c:'var(--red)'},
+    {v:`${(maxAP*12).toFixed(0)} luni`,l:'Finalizare Rețea PM (max grup)',d:fmtD(addM(now,maxAP)),c:'var(--blue)'},
+    {v:`${tP}`,l:'Persoane implicate DEGR',d:`${tPeff.toFixed(1)} pers. efective/an`,c:'#a371f7'},
+    {v:`${tDK.toFixed(1)} km`,l:'Diferențe totale grupuri',d:`din ${GD.reduce((a,g)=>a+g.pmKm,0).toFixed(1)} km PM total`,c:'var(--yellow)'}
+  ].map(c=>`<div class="pc"><div class="pv" style="color:${c.c}">${c.v}</div><div class="pla">${c.l}</div><div class="pd">${c.d}</div></div>`).join('');
+  function buildTL(cid,data,maxV,tgt,unit){
+    const scale=Math.max(maxV,tgt)*1.15,tp=(tgt/scale)*100;
+    document.getElementById(cid).innerHTML=data.map(({name,val})=>{
+      const p2=Math.min(val/scale*100,100),ok=val<=tgt;
+      const col=ok?'var(--green)':val<tgt*1.5?'var(--yellow)':'var(--red)';
+      const lbl=fmtLuni(val);
+      const barTxt=p2>20?lbl:'';
+      return `<div class="tlr">
+        <span class="tll">${name}</span>
+        <div class="tlbw"><div class="tlbb"></div>
+          <div class="tlbf" style="width:${p2}%;background:${col}">${barTxt}</div>
+          <div class="tltl" style="left:${tp}%"><span class="tlta">target ${fmtLuni(tgt)}</span></div>
+        </div>
+        <span class="tly" style="color:${col}">${lbl}</span>
+      </div>`;
+    }).join('');
+  }
+  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v/oa*12:0};}),maxAD*12,params.tDif,' luni');
+  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v/oa*12:0};}),maxAP*12,params.tPM,' luni');
+  const H=['Grup CORG','Dif (km)','Timp Diferențe','Data fin. Dif','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){
+    const oa=oreAn(g.name),ad=oa>0?g.difKm/v/oa:0,ap=oa>0?g.pmKm/v/oa:0;
+    const adMin=oa>0?g.difKm/params.vMin/oa:0,adMax=oa>0?g.difKm/params.vMax/oa:0;
+    const cc=params.comp[g.name]||{gis:2,rasr:2,fol:0};
+    h+=`<tr class="${g.merged?'merged':''}"><td style="font-weight:600;color:${g.color}">${g.name}</td><td class="n">${g.difKm.toFixed(1)}</td><td class="n" style="color:${ad<=params.tDif/12?'var(--green)':'var(--red)'}"><span title="${(ad*12).toFixed(1)} luni">${fmtZileLucr(ad)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ad))}</td><td class="n">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${ap<=params.tPM/12?'var(--green)':'var(--red)'}"><span title="${(ap*12).toFixed(1)} luni">${fmtZileLucr(ap)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ap))}</td><td class="c"><span class="role-pill rp-gis">${cc.gis}G</span><span class="role-pill rp-rasr">${cc.rasr}R</span>${cc.fol>0?`<span class="role-pill rp-fol">${cc.fol}F</span>`:''}</td><td class="n" style="color:var(--muted)"><span title="${params.vMin} km/h">${fmtZileLucr(adMin)}</span></td><td class="n" style="color:var(--muted)"><span title="${params.vMax} km/h">${fmtZileLucr(adMax)}</span></td></tr>`;
+  }
+  document.getElementById('tProj').innerHTML=h+'</tbody>';
+}
+function rBlockers(){
+  const v=vm();
+  const bl=getOpGroups().map(g=>{const oa=oreAn(g.name);const ad=oa>0?g.difKm/v/oa:Infinity;return{name:g.name,ad,over:Math.max(0,ad-params.tDif/12),dk:g.difKm};}).sort((a,b)=>b.over-a.over);
+  const top3=bl.slice(0,3);
+  const gc=g=>g>params.tDif/12*1.5?'blocker-critical':g>params.tDif/12?'blocker-warning':'blocker-ok';
+  const gs=g=>g>params.tDif/12*1.5?'🔴 critical':g>params.tDif/12?'🟡 warning':'🟢 ok';
+  const grid=document.getElementById('blockersGrid');
+  if(top3[0]&&top3[0].over<=0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--green);padding:20px;">✅ Niciun blocaj major! Toate grupurile sunt în target.</div>';return;}
+  grid.innerHTML=top3.map((b,i)=>`<div class="blocker-item ${gc(b.ad)}" data-group="${b.name}"><div class="blocker-rank">#${i+1}</div><div class="blocker-name">${b.name}</div><div class="blocker-detail">${b.over.toFixed(2)} ani peste target · ${b.dk.toFixed(1)} km</div><div class="blocker-detail" style="margin-top:4px">${gs(b.ad)}</div></div>`).join('');
+  document.querySelectorAll('#blockersGrid .blocker-item').forEach(el=>{
+    el.addEventListener('click',()=>{swTab('planificare');setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(el.dataset.group)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);});
+  });
+}
+function rProbability(){
+  const _og=getOpGroups();
+  const wAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/params.vMin/oa:Infinity;}));
+  const bAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/params.vMax/oa:Infinity;}));
+  const tgt=params.tDif/12;
+  let prob=0,fc='var(--red)';
+  if(bAD<=tgt){prob=Math.min(95,Math.max(5,Math.round((1-(wAD-tgt)/(wAD-bAD+0.01))*100)));fc=prob>=80?'var(--green)':prob>=50?'var(--yellow)':'var(--red)';}
+  else{prob=Math.max(5,Math.round((tgt/wAD)*40));}
+  document.getElementById('probabilityFill').style.width=`${prob}%`;
+  document.getElementById('probabilityFill').style.background=fc;
+  document.getElementById('probabilityFill').textContent=`${prob}%`;
+  document.getElementById('probabilityValue').textContent=`${prob}%`;
+  document.getElementById('probabilityValue').style.color=fc;
+  document.getElementById('probabilityRisk').textContent=`📊 ${prob>=80?'Risc scăzut':prob>=50?'Risc mediu':'Risc ridicat'}`;
+}
+function rKPI(){
+  const _og=getOpGroups();
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=_og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  const v=vm(),maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v/oa:0;}));
+  const grpOk=_og.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;
+  const tPers=_og.reduce((a,g)=>a+persTotal(g.name),0);
+  const startD=new Date(getStartDate());
+  const tDifDate=addM(startD,params.tDif/12),daysLeft=Math.round((tDifDate-new Date())/86400000);
+  const kpis=[
+    {val:(tPct*100).toFixed(2)+'%',lbl:'% Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'},
+    {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'},
+    {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)'},
+    {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)'},
+    {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===GD.length?'var(--green)':grpOk>=GD.length*.75?'var(--yellow)':'var(--red)'},
+    {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)'}
+  ];
+  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item"><div class="kpi-val" style="color:${k.c}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
+}
+function rAlerts(){
+  const v=vm(),alerts=[];
+  const strip=getOpGroups().map(g=>{
+    const oa=oreAn(g.name),ad=oa>0?g.difKm/v/oa:Infinity,ap=oa>0?g.pmKm/v/oa:Infinity;
+    const okD=ad<=params.tDif/12,okP=ap<=params.tPM/12;
+    let cls='ag-ok',dot='var(--green)',st='✓';
+    if(!okD){cls='ag-nok';dot='var(--red)';st='✗';}else if(!okP){cls='ag-warn';dot='var(--yellow)';st='!';}
+    if(!okD)alerts.push({type:'err',title:g.name+' — target diferențe DEPĂȘIT',msg:`Timp estimat: ${fmtLuni(ad*12)} > target ${params.tDif} luni.`});
+    else if(!okP)alerts.push({type:'warn',title:g.name+' — target rețea PM în risc',msg:`Timp estimat: ${fmtLuni(ap*12)} > target ${params.tPM} luni.`});
+    else alerts.push({type:'ok',title:g.name+' — ambele targeturi atinse',msg:`Dif: ${ad.toFixed(3)} ani · PM: ${ap.toFixed(2)} ani`});
+    return `<span class="ag ${cls}" data-group="${g.name}"><span class="ag-dot" style="background:${dot}"></span>${g.name.split(' ')[0]}&nbsp;${st}</span>`;
+  });
+  document.getElementById('alertStrip').innerHTML=strip.join('');
+  const ec=alerts.filter(a=>a.type==='err').length,wc=alerts.filter(a=>a.type==='warn').length,tot=ec+wc;
+  const nb=document.getElementById('notifCount');
+  nb.textContent=tot;nb.style.background=ec>0?'var(--red)':wc>0?'var(--yellow)':'var(--green)';nb.style.color=wc>0&&ec===0?'#000':'#fff';
+  const pl=document.querySelector('#notifPanel .notif-list');
+  if(pl)pl.innerHTML=alerts.map(a=>`<div class="notif-item ${a.type}"><div class="ni-title">${a.type==='err'?'🔴':a.type==='warn'?'🟡':'🟢'} ${a.title}</div><div class="ni-msg">${a.msg}</div></div>`).join('');
+  document.querySelectorAll('#alertStrip .ag').forEach(el=>{
+    el.removeEventListener('click',hAlertClick);el.addEventListener('click',hAlertClick);
+  });
+}
+function hAlertClick(e){
+  const gn=e.currentTarget.dataset.group;if(!gn)return;
+  swTab('planificare');
+  setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(gn)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);
+}
+function rProgress(){
+  const startD=new Date(getStartDate()),now=new Date(),v=vm();
+  const _og=getOpGroups();
+  const maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v/oa:0;}));
+  const maxAP=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v/oa:0;}));
+  function mkBar(lbl,tgtY,eta){
+    const el=Math.max((now-startD)/365.25/86400000,0),pp=Math.min(el/tgtY*100,100);
+    const etaD=addM(startD,eta),ep=Math.min(eta/tgtY*100,100),behind=eta>tgtY;
+    return `<div class="prog-row"><span class="prog-label">${lbl}</span><div class="prog-outer"><div class="prog-fill" style="width:${pp}%;background:${behind?'var(--red)':'var(--accent)'}"></div><div class="prog-plan-line" style="left:${Math.min(ep,99)}%"></div></div><span class="prog-pct" style="color:${behind?'var(--red)':'var(--green)'}">${pp.toFixed(0)}%</span><span class="prog-eta" style="color:${behind?'var(--red)':'var(--muted)'}">ETA: ${fmtD(etaD)} ${behind?'⚠ ÎNTÂRZIERE':''}</span></div>`;
+  }
+  document.getElementById('progWrap').innerHTML=`<div style="padding:0 0 8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><span style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Progres față de target · Start: ${fmtD(startD)}</span><span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Bara albastră = timp scurs · Linie galbenă = ETA estimat</span></div>${mkBar('Dif. Totală GIS vs SAP PM',params.tDif/12,maxAD)}${mkBar('Corelare Rețea PM totală',params.tPM/12,maxAP)}`;
+}
+function rDaysInfo(){
+  const startD=new Date(getStartDate()),now=new Date(),d=Math.round((now-startD)/86400000);
+  document.getElementById('daysInfo').innerHTML=d>=0?`<span style="color:var(--green)">▶ Activ</span> · <span style="color:var(--accent)">${d}</span> zile de la start`:`<span style="color:var(--yellow)">⏳ Start în</span> <span style="color:var(--accent)">${Math.abs(d)}</span> zile`;
+}
+function initWhatIf(){
+  const gs=document.getElementById('whatifGroup'),ps=document.getElementById('whatifPeople'),rs=document.getElementById('whatifRate');
+  const pv=document.getElementById('whatifPeopleValue'),rv=document.getElementById('whatifRateValue'),rd=document.getElementById('whatifResult');
+  rs.value=vm().toFixed(2);rv.textContent=vm().toFixed(2)+' km/h';
+  gs.innerHTML=getOpGroups().map(g=>`<option value="${g.name}">${g.name}</option>`).join('');
+  function upd(){
+    const gn=gs.value;if(!gn)return;
+    const g=GD.find(x=>x.name===gn);if(!g)return;
+    const ep=parseInt(ps.value),newR=parseFloat(rs.value)||vm();
+    const c=params.comp[gn]||{gis:2,rasr:2,fol:0};
+    const newP=c.gis+c.rasr+ep;
+    const oaO=oreAn(gn),oaN=params.oZi*params.zAn*(newP+c.fol*(params.pctFOL/100));
+    const adO=oaO>0?g.difKm/vm()/oaO:Infinity,adN=oaN>0?g.difKm/newR/oaN:Infinity;
+    const imp=adO-adN,pct=(imp/adO)*100;
+    const rDiff=newR-vm();
+    rd.innerHTML=`<strong>📊 Impact simulare pentru ${gn}</strong><br>${ep>0?`➕ +${ep} pers (${ep/2} echipe) · `:''}⚡ Rată: ${newR.toFixed(2)} km/h ${rDiff>=0?'(+'+rDiff.toFixed(2):rDiff.toFixed(2)} vs medie ${vm().toFixed(2)}) · <span class="whatif-impact">${imp>0?`⏱ Reducere cu ${imp.toFixed(3)} ani (${pct.toFixed(1)}%)`:imp<0?`⚠️ Creștere cu ${Math.abs(imp).toFixed(3)} ani`:'📌 Nicio schimbare'}</span><br><span class="text-muted">🎯 ETA nou: ${adN.toFixed(3)} ani (de la ${adO.toFixed(3)} ani) · Target: ${params.tDif} ani</span>`;
+  }
+  ps.addEventListener('input',()=>{pv.textContent=`+${ps.value} pers (${parseInt(ps.value)/2} echipe)`;upd();});
+  rs.addEventListener('input',()=>{rv.textContent=`${parseFloat(rs.value).toFixed(2)} km/h`;upd();});
+  gs.addEventListener('change',upd);upd();
+}
+
+function rExec(){
+  const v=vm(),now=new Date();
+  // ── opGroups MUST be defined first ──
+  const mergedCORGs=new Set(GD.filter(g=>g.merged).flatMap(g=>g.corg));
+  const opGroups=GD.filter(g=>g.merged||(g.corg.length===1&&!mergedCORGs.has(g.corg[0])));
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000;
+  const tDif=opGroups.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  const maxAD=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v/oa:0;}));
+  const maxAP=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v/oa:0;}));
+  const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;
+  const tPers=opGroups.reduce((a,g)=>a+persTotal(g.name),0);
+  const startD=new Date(getStartDate());
+  const tDifDate=addM(startD,params.tDif/12);
+  const daysLeft=Math.round((tDifDate-now)/86400000);
+  const elapsedYears=Math.max((now-startD)/365.25/86400000,0);
+  const planPctDif=Math.min(elapsedYears/params.tDif*100,100);
+  const planPctPM=Math.min(elapsedYears/params.tPM*100,100);
+  const behindDif=maxAD>params.tDif/12, behindPM=maxAP>params.tPM/12;
+
+  // ── Verdict extins (fix ChatGPT #1) — include si behindPM
+  const allOk=grpOk===opGroups.length&&!behindDif&&!behindPM;
+  const nearOk=grpOk===opGroups.length&&!behindDif&&behindPM; // dif ok, PM intarzie
+  const someOk=grpOk>opGroups.length/2;
+  let verdictColor=allOk?'var(--green)':nearOk?'var(--accent)':someOk?'var(--yellow)':'var(--red)';
+  let verdictIcon=allOk?'✅':nearOk?'📋':someOk?'⚠️':'🚨';
+  let verdictText=allOk?'PE PLAN':nearOk?'APROAPE DE TARGET':someOk?'ATENȚIE NECESARĂ':'INTERVENȚIE URGENTĂ';
+  let verdictSub=allOk?`Toate ${opGroups.length} grupurile respectă ambele targeturi`:
+    nearOk?`Diferențele în target · Rețea PM: ETA ${fmtLuni(maxAP*12)} vs target ${params.tPM} luni`:
+    someOk?`${opGroups.length-grpOk} din ${opGroups.length} grupuri depășesc targetul diferențe`:
+    `${opGroups.length-grpOk} grupuri necesită intervenție urgentă`;
+
+  // ── KPI zile depășite (fix ChatGPT #3)
+  const daysDisplay=daysLeft>0?daysLeft+' zile':(daysLeft===0?'AZI':'+'+ Math.abs(daysLeft)+' zile dep.');
+  const daysColor=daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':daysLeft>0?'var(--red)':'var(--red)';
+
+  // ── Eficienta per grup (DeepSeek formula)
+  // eficienta = difKm / oreAn = km de diferente per ora totala de lucru a echipei
+  const groupEff=opGroups.map(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    const eff=oa>0?g.difKm/oa:0; // km / ora_echipa
+    return{name:g.name,eff,ad,color:g.color,merged:g.merged};
+  }).sort((a,b)=>b.eff-a.eff);
+  const bestEff=groupEff[0]?.eff||1;
+  const avgAD=groupEff.reduce((s,g)=>s+(isFinite(g.ad)?g.ad:0),0)/groupEff.length;
+
+  // ── Clasament (DeepSeek)
+  const rankingHtml=groupEff.map((g,i)=>{
+    const pct=bestEff>0?(g.eff/bestEff*100):0;
+    const dot=g.ad<=params.tDif?'var(--green)':g.ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'';
+    return `<div class="ranking-item">
+      <div class="ranking-pos">${medal}</div>
+      <div class="ranking-name" style="color:${g.color}">${g.name}</div>
+      <div class="ranking-bar"><div class="ranking-fill" style="width:${pct.toFixed(1)}%;background:${dot}"></div></div>
+      <div class="ranking-value" style="color:${dot}">${g.eff.toFixed(4)} km/h/pers</div>
+    </div>`;
+  }).join('') + `<div class="ranking-avg-line"><span>Medie DEGR</span><span>${(groupEff.reduce((s,g)=>s+g.eff,0)/groupEff.length).toFixed(4)} km/h/pers</span></div>`;
+
+  // ── Comparatie vs medie si vs target (DeepSeek)
+  const groupCompareHtml=opGroups.map(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    const dot=ad<=params.tDif?'var(--green)':ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
+    const vsAvg=isFinite(ad)?(ad-avgAD):0;
+    const pctBar=Math.min((params.tDif/Math.max(ad,0.001))*100,100);
+    return `<div class="exec-group-item">
+      <div class="exec-group-dot" style="background:${dot}"></div>
+      <span class="exec-group-name" style="color:${g.color}">${g.name}</span>
+      <div class="exec-group-bar-wrap"><div class="exec-group-bar" style="width:${pctBar.toFixed(1)}%;background:${dot}"></div></div>
+      <span class="exec-group-pct" style="color:${dot}">${isFinite(ad)?ad.toFixed(2):'∞'} ani</span>
+      <span class="exec-group-eta" style="color:${vsAvg<=0?'var(--green)':'var(--red)'};font-size:8px">${vsAvg>0?'+':''}${vsAvg.toFixed(2)} vs med</span>
+    </div>`;
+  }).join('');
+
+  // ── Actiuni recomandate (ChatGPT #2 — include si rate advice)
+  const actions=[];
+  opGroups.forEach(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    if(!isFinite(ad))return;
+    if(ad>params.tDif/12*1.5){
+      actions.push({icon:'🚨',title:`Alocare urgentă — ${g.name}`,desc:`ETA ${fmtLuni(ad*12)} vs target ${params.tDif} luni. Adaugă GIS+RASR imediat.`,badge:'urgent'});
+    } else if(ad>params.tDif/12){
+      // fix ChatGPT #2 — sugereaza rata daca e mica
+      if(v<2.0&&ad<params.tDif/12*1.2){
+        actions.push({icon:'⚡',title:`Îmbunătățește rata — ${g.name}`,desc:`ETA la ${fmtLuni(ad*12)}, ușor peste target. Rata medie ${v.toFixed(2)} km/h sub 2.0 km/h. Optimizarea procesului de corelare poate fi suficientă.`,badge:'watch'});
+      } else {
+        actions.push({icon:'⚠️',title:`Monitorizare — ${g.name}`,desc:`ETA ${fmtLuni(ad*12)} > target ${params.tDif} luni. Verifică ritmul săptămânal.`,badge:'watch'});
+      }
+    }
+  });
+  if(behindPM&&!behindDif){
+    actions.push({icon:'📋',title:'Rețea PM — planificare pe termen lung',desc:`ETA rețea PM: ${fmtLuni(maxAP*12)} vs target ${params.tPM} luni. Diferențele sunt în target — concentrare pe calitate date PM.`,badge:'watch'});
+  }
+  if(actions.length===0){
+    actions.push({icon:'✅',title:'Toate grupurile în target',desc:`ETA max diferențe: ${fmtLuni(maxAD*12)} · ETA rețea PM: ${fmtLuni(maxAP*12)}.`,badge:'good'});
+  }
+  actions.push({icon:'📊',title:'Monitorizare lunară activă',desc:`${tPers} persoane · ${GD.length} grupuri · Rată medie: ${v.toFixed(2)} km/h/pers.`,badge:'good'});
+
+  // ── TARGET INTERN (ChatGPT #5 — 98% configurabil via param)
+  const targetPct=98;
+  const pctDisplay=`${(tPct*100).toFixed(1)}%`;
+  const pctTarget=`target intern: ${targetPct}%`;
+  const pctGap=((tPct*100)-targetPct).toFixed(1);
+  const pctGapText=pctGap>=0?`✓ +${pctGap}pp față de target`:`${pctGap}pp sub target`;
+  const pctGapColor=pctGap>=0?'var(--green)':'var(--red)';
+
+  document.getElementById('execWrap').innerHTML=`
+    <div class="exec-hero">
+      <div class="exec-hero-left">
+        <h2>Kaizen Date Gaz — Status Corelare GIS ↔ SAP PM</h2>
+        <p>Delgaz Grid S.A. · ${GD.length} grupuri operative · ${tPers} persoane implicate</p>
+        <div class="exec-hero-date">📅 ${now.toLocaleDateString('ro-RO',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · Start: ${fmtD(startD)}</div>
+        <button class="exec-print-btn" onclick="execPrint()">🖨 Export PDF Executive</button>
+      </div>
+      <div class="exec-verdict">
+        <div class="exec-verdict-val" style="color:${verdictColor}">${verdictIcon}</div>
+        <div class="exec-verdict-lbl" style="color:${verdictColor}">${verdictText}</div>
+        <div class="exec-verdict-sub" style="color:var(--muted)">${verdictSub}</div>
+      </div>
+    </div>
+
+    <div class="exec-kpi-row">
+      <div class="exec-kpi ${tPct>.97?'green':tPct>.95?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'}">${pctDisplay}</div>
+        <div class="exec-kpi-lbl">Lungime Rețea Corelată</div>
+        <div class="kpi-target">${(CORG.reduce((a,r)=>a+r.rGIS,0)/1000).toFixed(0)} km GIS / ${(CORG.reduce((a,r)=>a+r.rPM,0)/1000).toFixed(0)} km PM</div>
+        <div class="exec-kpi-sub" style="color:${pctGapColor};font-size:9px">${pctGapText}</div>
+      </div>
+      <div class="exec-kpi ${tDif<500?'green':tDif<1000?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'}">${tDif.toFixed(0)} km</div>
+        <div class="exec-kpi-lbl">De Corelat</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">din ${tPM.toFixed(0)} km total</div>
+      </div>
+      <div class="exec-kpi ${grpOk===GD.length?'green':grpOk>GD.length/2?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${grpOk===GD.length?'var(--green)':grpOk>GD.length/2?'var(--yellow)':'var(--red)'}">${grpOk}/${GD.length}</div>
+        <div class="exec-kpi-lbl">Grupuri în Target</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">target: ${params.tDif} luni diferențe</div>
+      </div>
+      <div class="exec-kpi ${daysLeft>90?'green':daysLeft>30?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${daysColor}">${daysDisplay}</div>
+        <div class="exec-kpi-lbl">${daysLeft>0?'Zile Rămase':'Deadline Depășit'}</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">${fmtD(tDifDate)}</div>
+      </div>
+    </div>
+
+    <div class="exec-progress-card">
+      <h3><span></span>Progres față de Targeturi</h3>
+      <div class="exec-prog-row">
+        <span class="exec-prog-label">🔴 Diferențe GIS vs PM</span>
+        <div class="exec-prog-outer">
+          <div class="exec-prog-fill" style="width:${planPctDif.toFixed(1)}%;background:${behindDif?'var(--red)':'var(--accent)'}"></div>
+          <div class="exec-prog-target" style="left:${Math.min((maxAD/params.tDif)*100,99).toFixed(1)}%"></div>
+        </div>
+        <span class="exec-prog-pct" style="color:${behindDif?'var(--red)':'var(--green)'}">${planPctDif.toFixed(0)}%</span>
+        <span class="exec-prog-eta" style="color:${behindDif?'var(--red)':'var(--muted)'}">ETA: ${fmtD(addM(startD,maxAD))} ${behindDif?'⚠':''}</span>
+      </div>
+      <div class="exec-prog-row">
+        <span class="exec-prog-label">🔵 Rețea PM totală</span>
+        <div class="exec-prog-outer">
+          <div class="exec-prog-fill" style="width:${planPctPM.toFixed(1)}%;background:${behindPM?'var(--yellow)':'var(--blue)'}"></div>
+          <div class="exec-prog-target" style="left:${Math.min((maxAP/params.tPM)*100,99).toFixed(1)}%"></div>
+        </div>
+        <span class="exec-prog-pct" style="color:${behindPM?'var(--yellow)':'var(--green)'}">${planPctPM.toFixed(0)}%</span>
+        <span class="exec-prog-eta" style="color:var(--muted)">ETA: ${fmtD(addM(startD,maxAP))}</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:4px;font-family:var(--mono)">Bara = timp scurs din target · Linie galbenă = ETA estimat</div>
+    </div>
+
+    <div class="exec-two-col">
+      <div class="exec-card">
+        <h3><span></span>🏆 Clasament Eficiență Corelare</h3>
+        ${rankingHtml}
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Eficiență = km diferențe / ore totale echipă · Mai mare = mai eficient</div>
+      </div>
+      <div class="exec-card">
+        <h3><span></span>📊 Status & Comparație vs Medie</h3>
+        ${groupCompareHtml}
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Bara = % din target atins · Verde sub medie = performanță bună</div>
+      </div>
+    </div>
+
+    <div class="exec-card" style="margin-top:16px">
+      <h3><span></span>💼 Acțiuni Recomandate</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${actions.map(a=>`<div class="exec-action-item">
+          <div class="exec-action-icon">${a.icon}</div>
+          <div class="exec-action-text">
+            <div class="exec-action-title">${a.title}</div>
+            <div class="exec-action-desc">${a.desc}</div>
+          </div>
+          <span class="exec-action-badge ${a.badge}">${a.badge==='urgent'?'URGENT':a.badge==='watch'?'ATENȚIE':'OK'}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="exec-footer">
+      Kaizen Date Gaz · Delgaz Grid S.A. · Date Power BI · Rată: ${params.vMin}–${params.vMax} km/h/pers (medie ${v.toFixed(2)}) · ${params.oreSapt}h/săpt · ${params.saptAn} săpt/an · ${now.toLocaleString('ro-RO')}
+    </div>
+  `;
+}
+
+function execPrint(){
+  // Save current active tab
+  const curTab=document.querySelector('.content.active')?.id;
+  // Activate exec tab
+  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-executive').classList.add('active');
+  document.querySelector('.tab[data-tab="executive"]').classList.add('active');
+  rExec();
+  // Add print class
+  document.body.classList.add('exec-print-mode');
+  // Use timeout to let DOM render
+  setTimeout(()=>{
+    window.print();
+    // Restore after print dialog closes
+    setTimeout(()=>{
+      document.body.classList.remove('exec-print-mode');
+      if(curTab){
+        document.getElementById(curTab).classList.add('active');
+        const tabId=curTab.replace('tab-','');
+        const tabEl=document.querySelector(`.tab[data-tab="${tabId}"]`);
+        if(tabEl)tabEl.classList.add('active');
+      }
+    },500);
+  },150);
+}
+
+function fullUpdate(){
+  rHeader();rRetea();rGrupuri();rGroupInputs();rPlanificare();rProiectie();
+  rKPI();rAlerts();rProgress();rDaysInfo();rBlockers();rProbability();initWhatIf();
+  document.getElementById('rataMedie').textContent=vm().toFixed(2)+' km/h';
+  rExec();
+}
+function scheduleUpdate(){
+  if(updateScheduled)return;updateScheduled=true;
+  requestAnimationFrame(()=>{fullUpdate();saveState();updateScheduled=false;});
+}
+function updParams(){
+  let vMin=parseFloat(document.getElementById('vMin').value);
+  let vMax=parseFloat(document.getElementById('vMax').value);
+  if(vMin>=vMax)vMax=vMin+0.5;
+  params.vMin=vMin;params.vMax=vMax;
+  params.oreSapt=parseFloat(document.getElementById('oreSapt').value)||4;
+  params.saptAn=parseInt(document.getElementById('saptAn').value)||47;
+  params.tDif=parseFloat(document.getElementById('tDif').value)||6;
+  params.tPM=parseFloat(document.getElementById('tPM').value)||36;
+  params.pctFOL=parseFloat(document.getElementById('pctFOL').value)||0;
+  scheduleUpdate();
+}
+const SHEET_NAME="Date Rețea Grup";
+async function loadExcel(file){
+  if(!file||isLoadingExcel)return;isLoadingExcel=true;
+  const st=document.getElementById('uploadStatus'),inf=document.getElementById('uploadInfo');
+  st.className='upload-status idle';st.innerHTML='<span class="spinner"></span> Se încarcă...';
+  try{
+    const data=await file.arrayBuffer();
+    const wb=XLSX.read(data,{type:'array'});
+    let sn=wb.SheetNames.find(n=>n===SHEET_NAME)||wb.SheetNames.find(n=>n.toLowerCase().includes('grup'))||wb.SheetNames.find(n=>n.toLowerCase().includes('retea'));
+    if(!sn)throw new Error(`Foaia "${SHEET_NAME}" nu a fost găsită. Foi: ${wb.SheetNames.join(', ')}`);
+    const ws=wb.Sheets[sn];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:0});
+    let hi=rows.findIndex(r=>r.some(c=>String(c).toLowerCase().includes('corg')||String(c).toLowerCase().includes('grup')));
+    if(hi<0)hi=2;
+    const dr=rows.slice(hi+1).filter(r=>{const n=String(r[0]||'').trim();return n&&!n.toLowerCase().includes('total')&&n.length>1;});
+    if(!dr.length)throw new Error(`Nu s-au găsit rânduri de date în foaia "${sn}"`);
+    const pn=v=>{ if(typeof v==='number') return v; if(typeof v==='string'&&v.startsWith('=')) return 0; return parseFloat(String(v).replace(/[\s]/g,'').replace(',','.'))||0; };
+    const newCORG=dr.map(r=>{
+        const rPM=pn(r[1]),rGIS=pn(r[2]);
+        const bPM=pn(r[4]),bGIS=pn(r[5]);
+        const tPM=pn(r[7]),tGIS=pn(r[8]);
+        // Diferentele pot fi formule Excel (=B2-C2) — calculam direct din PM-GIS
+        const dR=(typeof r[3]==='number'&&r[3]!==0)?r[3]:rPM-rGIS;
+        const dB=(typeof r[6]==='number'&&r[6]!==0)?r[6]:bPM-bGIS;
+        const dT=(typeof r[9]==='number'&&r[9]!==0)?r[9]:tPM-tGIS;
+        return {n:String(r[0]||'').trim(),rPM,rGIS,dR,bPM,bGIS,dB,tPM,tGIS,dT};
+      });
+    CORG=newCORG;GROUPS=buildGroupsFromCORG();
+    GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+    GD=computeGD(GROUPS,CORG);
+    const tPM=(CORG.reduce((a,g)=>a+g.rPM,0)/1000).toFixed(1),tDif=GD.reduce((a,g)=>a+g.difKm,0).toFixed(1);
+    st.className='upload-status ok';st.textContent=`✓ ${file.name} — foaia "${sn}" — ${newCORG.length} grupuri încărcate`;
+    inf.innerHTML=`<span>PM Total: ${tPM} km</span><span>Dif Totală: ${tDif} km</span><span>Grupuri: ${newCORG.length}</span><span style="color:var(--green)">Actualizat: ${new Date().toLocaleTimeString('ro-RO')}</span>`;
+    fullUpdate();saveState();
+  }catch(err){st.className='upload-status err';st.textContent=`✗ ${err.message}`;inf.innerHTML='';}
+  finally{isLoadingExcel=false;}
+}
+function resetDefault(){
+  initDefault();fullUpdate();saveState();
+  const st=document.getElementById('uploadStatus');
+  st.className='upload-status idle';st.textContent='Datele implicite au fost restaurate';
+  document.getElementById('uploadInfo').innerHTML='';
+  setTimeout(()=>{if(st.textContent==='Datele implicite au fost restaurate')st.textContent='Niciun fișier încărcat — datele hardcodate sunt active';},3000);
+}
+function exportCSV(){
+  const v=vm();
+  const rows=[['Grup CORG','PM Total (km)','Dif Totala (km)','% Corelat','Ore necesare Dif','Ani Dif','Ani PM','GIS','RASR','FOL','Target Dif OK','Target PM OK']];
+  GD.forEach(g=>{
+    const oa=oreAn(g.name),ad=oa>0?g.difKm/v/oa:0,ap=oa>0?g.pmKm/v/oa:0;
+    const c=params.comp[g.name]||{gis:2,rasr:2,fol:0};
+    rows.push([g.name,g.pmKm.toFixed(2),g.difKm.toFixed(2),(g.pct*100).toFixed(2)+'%',(g.difKm/v).toFixed(0),ad.toFixed(3),ap.toFixed(3),c.gis,c.rasr,c.fol,ad<=params.tDif?'DA':'NU',ap<=params.tPM?'DA':'NU']);
+  });
+  const csv=rows.map(r=>r.join(';')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`Kaizen_Date_Gaz_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+function saveTeamCfg(){
+  localStorage.setItem('kaizen_team_config',JSON.stringify(params.comp));
+  const pl=document.querySelector('#notifPanel .notif-list');
+  const d=document.createElement('div');d.className='notif-item ok';
+  d.innerHTML='<div class="ni-title">✅ Configurație salvată</div><div class="ni-msg">Componența echipelor a fost salvată în browser.</div>';
+  pl.prepend(d);setTimeout(()=>d.remove(),3000);
+  document.getElementById('notifPanel').classList.add('open');
+  setTimeout(()=>document.getElementById('notifPanel').classList.remove('open'),2500);
+}
+function loadTeamCfg(){
+  const saved=localStorage.getItem('kaizen_team_config');
+  if(!saved){alert('Nu există o configurație salvată anterior.');return;}
+  params.comp=JSON.parse(saved);
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:2,rasr:2,fol:0};});
+  fullUpdate();
+}
+function swTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
+  document.getElementById(`tab-${id}`).classList.add('active');
+  if(id==='executive')rExec();
+}
+function bindEvents(){
+  ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL'].forEach(id=>document.getElementById(id).addEventListener('input',updParams));
+  document.getElementById('startDate').addEventListener('change',()=>{rProgress();rDaysInfo();rKPI();});
+  document.getElementById('xlsxFile').addEventListener('change',e=>{if(e.target.files[0])loadExcel(e.target.files[0]);});
+  document.getElementById('resetDataBtn').addEventListener('click',resetDefault);
+  document.getElementById('exportCsvBtn').addEventListener('click',exportCSV);
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('saveTeamConfigBtn').addEventListener('click',saveTeamCfg);
+  document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.toggle('open'));
+  document.getElementById('notifCloseBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.remove('open'));
+  document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>swTab(tab.dataset.tab)));
+  document.getElementById('executiveModeToggle').addEventListener('change',e=>document.body.classList.toggle('executive-mode',e.target.checked));
+}
+function init(){loadState();bindEvents();fullUpdate();}
+// DOMContentLoaded pentru siguranta in iframe SharePoint
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',init);
+} else {
+  init();
+}
+// Expune fullUpdate global pentru doLogin()
+window._kaizenUpdate = fullUpdate;
+})();
+
+
+// ── AUTENTIFICARE ──────────────────────────────────────────────
+const _PWD = atob('RGVsZ2F6LjIwMjY=');
+
+function doLogin(){
+  const input = document.getElementById('loginPwd').value;
+  const err = document.getElementById('loginError');
+  if(input === _PWD){
+    document.getElementById('loginOverlay').classList.add('hidden');
+    try{ sessionStorage.setItem('kz_auth','1'); }catch(e){}
+    // Re-render cu date corecte dupa login
+    try{
+      if(typeof window._kaizenUpdate==='function'){
+        // Stergem orice date corupte si reinitializam
+        if(localStorage.getItem('kaizen_corg')){
+          const d=JSON.parse(localStorage.getItem('kaizen_corg'));
+          if(!d||!d.length||!d[0].rPM||isNaN(d[0].rPM)){
+            localStorage.removeItem('kaizen_corg');
+            localStorage.removeItem('kaizen_params');
+          }
+        }
+        window._kaizenUpdate();
+      }
+    }catch(e){ console.log('render after login:',e); }
+  } else {
+    err.classList.add('show');
+    document.getElementById('loginPwd').value='';
+    document.getElementById('loginPwd').focus();
+    setTimeout(()=>err.classList.remove('show'), 3000);
+  }
+}
+
+function togglePwd(){
+  const inp = document.getElementById('loginPwd');
+  const eye = document.getElementById('eyeIcon');
+  if(inp.type==='password'){ inp.type='text'; eye.textContent='🙈'; }
+  else { inp.type='password'; eye.textContent='👁'; }
+}
+
+// Verifică dacă e deja autentificat în această sesiune
+(function(){
+  try{
+    if(sessionStorage.getItem('kz_auth')==='1'){
+      document.getElementById('loginOverlay').classList.add('hidden');
+    }
+  }catch(e){}
+})();
+
+</script>
+</body>
+</html>
