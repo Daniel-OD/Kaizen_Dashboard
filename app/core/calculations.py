@@ -57,7 +57,7 @@ def ore_necesare(km: float, rate: float) -> float:
     return safe_div(km, clamp_positive(rate), default=0.0)
 
 
-_BLOCKED_ETA: float = float("inf")
+_BLOCKED_ETA_INTERNAL: float = float("inf")
 
 # Sentinel used in JSON output: ``-1`` signals a blocked / non-achievable ETA.
 BLOCKED_ETA_JSON: float = -1
@@ -79,7 +79,7 @@ def luni_eta(ore_nec: float, ore_an_val: float, factor_c: float) -> float:
     Returns 0 when there is no work to do (ore_nec == 0).
     """
     if ore_an_val <= 0:
-        return _BLOCKED_ETA if ore_nec > 0 else 0.0
+        return _BLOCKED_ETA_INTERNAL if ore_nec > 0 else 0.0
     return safe_div(ore_nec, ore_an_val, default=0.0) * 12.0 * max(factor_c, 1.0)
 
 

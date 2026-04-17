@@ -40,9 +40,9 @@
         difKm: num(tds[6].textContent),
         pmKm: num(tds[10].textContent),
         comp: {
-          gis: num(tds[1].textContent)||0,
-          rasr: num(tds[2].textContent)||0,
-          fol: num(tds[3].textContent)||0
+          gis: num(tds[1].textContent),
+          rasr: num(tds[2].textContent),
+          fol: num(tds[3].textContent)
         }
       });
     });
@@ -116,7 +116,7 @@
 
   /** Format an ETA value — handles the blocked sentinel (-1). */
   function fmtEta(v){
-    if(v === -1 || v == null) return '∞';
+    if(v === -1 || v === null || v === undefined) return '∞';
     return v.toFixed(1);
   }
 
