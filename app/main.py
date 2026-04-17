@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from app.api.routes import router
 
-app = FastAPI(title="Kaizen Dashboard API", version="1.3")
+app = FastAPI(title="Kaizen Dashboard API", version="1.4")
 app.include_router(router, prefix="/api")
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +42,48 @@ def patch_broken_login_logo(html: str) -> str:
     return html
 
 
+def normalize_problematic_typography(html: str) -> str:
+    replacements = {
+        '–': '-',
+        '—': '-',
+        '‘': "'",
+        '’': "'",
+        '“': '"',
+        '”': '"',
+        '″': '"',
+        '′': "'",
+    }
+    for bad, good in replacements.items():
+        html = html.replace(bad, good)
+
+    html = html.replace('\n- { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }', '\n* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }')
+    return html
+
+
+def patch_dashboard_logic(html: str) -> str:
+    html = html.replace(
+        'const grpOk=_og.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;',
+        'const grpOk=_og.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v*(params.factorC||1.0)/oa<=params.tDif/12;}).length;',
+    )
+
+    html = html.replace(
+        'const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;',
+        'const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v*(params.factorC||1.0)/oa<=params.tDif/12;}).length;',
+    )
+
+    html = html.replace(
+        'const mAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vMed/oa:999;}));',
+        'const mAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vMed*(params.factorC||1.0)/oa:999;}));',
+    )
+
+    html = html.replace('grpOk===GD.length', 'grpOk===opGroups.length')
+    html = html.replace('grpOk>GD.length/2', 'grpOk>opGroups.length/2')
+    html = html.replace('${GD.length} grupuri operative', '${opGroups.length} grupuri operative')
+    html = html.replace('${tPers} persoane implicate · ${GD.length} grupuri ·', '${tPers} persoane implicate · ${opGroups.length} grupuri ·')
+
+    return html
+
+
 def render_dashboard_html() -> HTMLResponse:
     if not os.path.exists(INDEX_PATH):
         raise HTTPException(status_code=500, detail=f"index.html not found at {INDEX_PATH}")
@@ -50,6 +92,8 @@ def render_dashboard_html() -> HTMLResponse:
         html = f.read()
 
     html = patch_broken_login_logo(html)
+    html = normalize_problematic_typography(html)
+    html = patch_dashboard_logic(html)
 
     inject = '<script src="/static/bridge.js"></script>'
     if inject not in html:
