@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
@@ -203,303 +204,121 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 
 /* ── EXECUTIVE TAB ── */
 .exec-wrap{padding:24px;max-width:1100px;margin:0 auto;}
-.exec-hero{background:linear-gradient(135deg,var(--navy) 0%,#2563a8 60%,#1a4f8c 100%);border:none;border-radius:var(--r);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(26,95,168,.35);}
+.exec-hero{background:linear-gradient(135deg,var(–navy) 0%,#2563a8 60%,#1a4f8c 100%);border:none;border-radius:var(–r);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(26,95,168,.35);}
 .exec-hero-left h2{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;}
 .exec-hero-left p{font-size:12px;color:rgba(255,255,255,.8);}
-.exec-hero-date{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.75);margin-top:8px;}
+.exec-hero-date{font-family:var(–mono);font-size:11px;color:rgba(255,255,255,.75);margin-top:8px;}
 .exec-verdict{text-align:center;padding:16px 28px;background:rgba(255,255,255,.03);border-radius:10px;min-width:200px;}
-.exec-verdict-val{font-family:var(--mono);font-size:48px;font-weight:700;line-height:1;}
+.exec-verdict-val{font-family:var(–mono);font-size:48px;font-weight:700;line-height:1;}
 .exec-verdict-lbl{font-size:10px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;}
 .exec-verdict-sub{font-size:11px;margin-top:6px;color:rgba(255,255,255,.7);}
 
 .exec-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
 @media(max-width:700px){.exec-kpi-row{grid-template-columns:repeat(2,1fr);}}
-.exec-kpi{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;text-align:center;position:relative;overflow:hidden;transition:var(--transition);box-shadow:var(--shadow-sm);}
+.exec-kpi{background:#fff;border:1px solid var(–border);border-radius:var(–r);padding:18px 16px;text-align:center;position:relative;overflow:hidden;transition:var(–transition);box-shadow:var(–shadow-sm);}
 .exec-kpi:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,95,168,.15);}
-.exec-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
-.exec-kpi.green::before{background:var(--green);}
-.exec-kpi.yellow::before{background:var(--yellow);}
-.exec-kpi.red::before{background:var(--red);}
-.exec-kpi.blue::before{background:var(--accent);}
-.exec-kpi-val{font-family:var(--mono);font-size:32px;font-weight:700;line-height:1;margin-bottom:4px;}
-.exec-kpi-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-.exec-kpi-sub{font-size:10px;margin-top:5px;font-family:var(--mono);}
+.exec-kpi::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
+.exec-kpi.green::before{background:var(–green);}
+.exec-kpi.yellow::before{background:var(–yellow);}
+.exec-kpi.red::before{background:var(–red);}
+.exec-kpi.blue::before{background:var(–accent);}
+.exec-kpi-val{font-family:var(–mono);font-size:32px;font-weight:700;line-height:1;margin-bottom:4px;}
+.exec-kpi-lbl{font-size:10px;color:var(–muted);text-transform:uppercase;letter-spacing:1px;}
+.exec-kpi-sub{font-size:10px;margin-top:5px;font-family:var(–mono);}
 
 .exec-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
 @media(max-width:700px){.exec-two-col{grid-template-columns:1fr;}}
 
-.exec-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow-sm);}
-.exec-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
-.exec-card h3 span{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.exec-card{background:#fff;border:1px solid var(–border);border-radius:var(–r);padding:18px 20px;box-shadow:var(–shadow-sm);}
+.exec-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.exec-card h3 span{width:6px;height:6px;border-radius:50%;background:var(–accent);flex-shrink:0;}
 
-.exec-group-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.exec-group-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(–border);}
 .exec-group-item:last-child{border-bottom:none;}
 .exec-group-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .exec-group-name{font-size:11px;font-weight:600;flex:1;}
-.exec-group-bar-wrap{flex:2;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.exec-group-bar-wrap{flex:2;height:6px;background:var(–bg3);border-radius:3px;overflow:hidden;border:1px solid var(–border);}
 .exec-group-bar{height:100%;border-radius:3px;transition:width .5s;}
-.exec-group-pct{font-family:var(--mono);font-size:10px;width:40px;text-align:right;}
-.exec-group-eta{font-family:var(--mono);font-size:9px;width:70px;text-align:right;}
+.exec-group-pct{font-family:var(–mono);font-size:10px;width:40px;text-align:right;}
+.exec-group-eta{font-family:var(–mono);font-size:9px;width:70px;text-align:right;}
 
-.exec-action-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.exec-action-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(–border);}
 .exec-action-item:last-child{border-bottom:none;}
 .exec-action-icon{font-size:16px;flex-shrink:0;line-height:1.2;}
 .exec-action-text{flex:1;}
 .exec-action-title{font-size:11px;font-weight:600;margin-bottom:2px;}
-.exec-action-desc{font-size:10px;color:var(--muted);line-height:1.4;}
-.exec-action-badge{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.exec-action-desc{font-size:10px;color:var(–muted);line-height:1.4;}
+.exec-action-badge{font-family:var(–mono);font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
 .exec-action-badge.urgent{background:#fde8e6;color:#8b1f17;border:1px solid rgba(192,57,43,.25);}
 .exec-action-badge.watch{background:#fef6e4;color:#7a4f00;border:1px solid rgba(232,160,0,.25);}
 .exec-action-badge.good{background:#d4eddf;color:#1a5f35;border:1px solid rgba(45,122,79,.25);}
 
-.exec-progress-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
-.exec-progress-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:7px;}
+.exec-progress-card{background:#fff;border:1px solid var(–border);border-radius:var(–r);padding:18px 20px;margin-bottom:20px;box-shadow:var(–shadow-sm);}
+.exec-progress-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);margin-bottom:16px;display:flex;align-items:center;gap:7px;}
 .exec-prog-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.exec-prog-label{font-size:11px;color:var(--text);width:180px;flex-shrink:0;font-weight:500;}
-.exec-prog-outer{flex:1;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;position:relative;border:1px solid var(--border);}
+.exec-prog-label{font-size:11px;color:var(–text);width:180px;flex-shrink:0;font-weight:500;}
+.exec-prog-outer{flex:1;height:10px;background:var(–bg3);border-radius:5px;overflow:hidden;position:relative;border:1px solid var(–border);}
 .exec-prog-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1);}
 .exec-prog-target{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);}
-.exec-prog-pct{font-family:var(--mono);font-size:11px;font-weight:600;width:48px;text-align:right;}
-.exec-prog-eta{font-family:var(--mono);font-size:10px;color:var(--muted);width:120px;text-align:right;}
+.exec-prog-pct{font-family:var(–mono);font-size:11px;font-weight:600;width:48px;text-align:right;}
+.exec-prog-eta{font-family:var(–mono);font-size:10px;color:var(–muted);width:120px;text-align:right;}
 
-.exec-footer{text-align:center;padding:16px;font-size:10px;color:var(--muted);font-family:var(--mono);}
-
+.exec-footer{text-align:center;padding:16px;font-size:10px;color:var(–muted);font-family:var(–mono);}
 
 /* ── RANKING ── */
-.ranking-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);}
+.ranking-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(–border);}
 .ranking-item:last-child{border-bottom:none;}
-.ranking-pos{font-family:var(--mono);font-size:13px;width:24px;text-align:center;flex-shrink:0;}
+.ranking-pos{font-family:var(–mono);font-size:13px;width:24px;text-align:center;flex-shrink:0;}
 .ranking-name{font-size:11px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ranking-bar{flex:2;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;border:1px solid var(--border);}
+.ranking-bar{flex:2;height:6px;background:var(–bg3);border-radius:3px;overflow:hidden;min-width:60px;border:1px solid var(–border);}
 .ranking-fill{height:100%;border-radius:3px;transition:width .5s;}
-.ranking-value{font-family:var(--mono);font-size:9px;color:var(--muted);width:80px;text-align:right;flex-shrink:0;}
-.ranking-avg-line{border-top:1px dashed var(--border);margin:8px 0 4px;padding-top:6px;font-size:9px;color:var(--muted);display:flex;justify-content:space-between;}
+.ranking-value{font-family:var(–mono);font-size:9px;color:var(–muted);width:80px;text-align:right;flex-shrink:0;}
+.ranking-avg-line{border-top:1px dashed var(–border);margin:8px 0 4px;padding-top:6px;font-size:9px;color:var(–muted);display:flex;justify-content:space-between;}
 
 /* ── EXEC PRINT BUTTON ── */
-.exec-print-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:var(--rsm);padding:8px 16px;font-family:var(--sans);font-size:11px;font-weight:600;cursor:pointer;transition:var(--transition);margin-top:4px;backdrop-filter:blur(4px);}
+.exec-print-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:var(–rsm);padding:8px 16px;font-family:var(–sans);font-size:11px;font-weight:600;cursor:pointer;transition:var(–transition);margin-top:4px;backdrop-filter:blur(4px);}
 .exec-print-btn:hover{background:rgba(255,255,255,.3);}
 
 /* ── KPI TARGET HINT ── */
-.kpi-target{font-size:8px;color:var(--muted);margin-top:2px;font-family:var(--mono);}
+.kpi-target{font-size:8px;color:var(–muted);margin-top:2px;font-family:var(–mono);}
 
-/* ── EXEC PRINT MODE ── */
+/* ══ PRINT / PDF ══════════════════════════════════════════════ */
+@media print {
+/* Ascunde chrome-ul UI pentru orice tip de print */
+#kzLogin, .kpi-bar, .alert-strip, .prog-wrap,
+.toolbar, .upload-bar, .executive-toggle,
+.tabs, .notif-panel, .blockers-card,
+.probability-card, .whatif-card,
+.exec-print-btn, .tb-btn, .reset-btn,
+.upload-btn { display: none !important; }
 
-  .exec-print-mode #tab-executive{display:block!important;}
-  .exec-print-mode #tab-executive *{display:revert!important;}
-  .exec-print-mode .exec-wrap{display:block!important;}
-}
+/* Header simplificat */
+.header { box-shadow: none !important; border-bottom: 2px solid #1d4ed8 !important; }
 
-  body{background:#fff!important;color:#000!important;}
-  table{font-size:10px!important;}
-/* Print only executive tab when exec-print-mode active */
-body.exec-print-mode .header,
-body.exec-print-mode .upload-bar,
-body.exec-print-mode .executive-toggle,
-body.exec-print-mode .kpi-bar,
-body.exec-print-mode .blockers-card,
-body.exec-print-mode .probability-card,
-body.exec-print-mode .whatif-card,
-body.exec-print-mode .toolbar,
-body.exec-print-mode .alert-strip,
-body.exec-print-mode .prog-wrap,
-body.exec-print-mode .tabs,
+/* Fonturi și culori pentru print */
+body { background: #fff !important; color: #0f172a !important; font-size: 11px !important; }
+
+/* Culori păstrate */
+
+- { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+/* Evită tăierea cardurilor */
+.exec-kpi, .exec-card, .exec-progress-card, .panel, .tw { break-inside: avoid !important; }
+
+/* Tabele lizibile */
+table { font-size: 10px !important; }
+th { background: #1d4ed8 !important; color: #fff !important; }
+
+/* ── Mod executive: ascunde toate tab-urile mai puțin executive ── */
 body.exec-print-mode #tab-retea,
 body.exec-print-mode #tab-grupuri,
 body.exec-print-mode #tab-planificare,
-body.exec-print-mode #tab-proiectie,
-body.exec-print-mode .notif-panel{display:none!important;}
-body.exec-print-mode{background:#fff!important;color:var(--text)!important;}
-body.exec-print-mode #tab-executive{display:block!important;}
-body.exec-print-mode .exec-wrap{padding:16px;}
-body.exec-print-mode .exec-hero{background:#e8f0f8!important;}
-body.exec-print-mode .exec-card{border:1px solid #ccc!important;}
-body.exec-print-mode .exec-print-btn{display:none!important;}
-@media(max-width:600px){
-  .kpi-val{font-size:13px;}.kpi-lbl{font-size:7px;}
-  .prog-label{width:100px;font-size:9px;}
-  .toolbar{padding:6px 12px;}.pad{padding:12px;}
-  .tll{width:140px;}.blockers-grid{grid-template-columns:1fr;}
-}
+body.exec-print-mode #tab-proiectie { display: none !important; }
 
-/* ===============================
-   WOW BOARD LIGHT — SAFE OVERRIDE
-=============================== */
-:root{
-  --bg:#f8fbff;--bg2:#ffffff;--bg3:#f1f5f9;
-  --text:#0f172a;--muted:#64748b;
-  --navy:#1d4ed8;--blue:#2563eb;--accent:#2563eb;
-  --green:#16a34a;--green-bg:#dcfce7;
-  --red:#dc2626;--red-bg:#fee2e2;
-  --yellow:#d97706;--yellow-bg:#fef3c7;
-  --border:rgba(0,0,0,0.06);
-  --shadow-sm:0 4px 12px rgba(0,0,0,0.05);
-  --shadow-md:0 10px 30px rgba(0,0,0,0.08);
-  --r:16px;--rsm:10px;
-}
-body{background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)!important;-webkit-font-smoothing:antialiased;}
-.header{background:linear-gradient(135deg,#2563eb,#1d4ed8,#3b82f6)!important;border-bottom:none!important;box-shadow:0 12px 32px rgba(37,99,235,.25)!important;}
-.header h1{font-size:22px!important;letter-spacing:-0.4px;}
-.header-sub{opacity:.85;}
-.header-badge{background:rgba(255,255,255,.2)!important;color:#fff!important;}
-.stat{background:rgba(255,255,255,.15)!important;border-color:rgba(255,255,255,.2)!important;}
-.stat .v{color:#fff!important;}.stat .l{color:rgba(255,255,255,.75)!important;}
-.kpi-bar{box-shadow:var(--shadow-md)!important;border-radius:0 0 var(--r) var(--r);overflow:hidden;}
-.kpi-item{background:#fff!important;transition:.25s;}
-.kpi-item:hover{transform:translateY(-2px);background:#f1f5ff!important;}
-.kpi-val{font-size:18px!important;font-weight:700!important;}
-.blockers-card,.probability-card,.whatif-card,.panel,.exec-card,.exec-progress-card,.pc,.tl-wrap{background:#fff!important;border:none!important;border-radius:var(--r)!important;box-shadow:var(--shadow-md)!important;}
-.blocker-item:hover,.exec-kpi:hover,.pc:hover{transform:translateY(-3px);}
-.exec-kpi{background:#fff!important;border:none!important;box-shadow:var(--shadow-md)!important;}
-th{background:#f1f5f9!important;color:#64748b!important;font-size:10px!important;letter-spacing:.08em;}
-td{padding:8px 10px!important;}
-tr:hover td{background:#eef4ff!important;}
-.tw{border:none!important;box-shadow:var(--shadow-md)!important;}
-.pb-fill,.prog-fill,.exec-prog-fill{box-shadow:0 0 8px rgba(37,99,235,.25);}
-.tb-btn{background:#fff!important;border:1px solid rgba(37,99,235,.2)!important;color:#1d4ed8!important;}
-.tb-btn:hover{background:#eff6ff!important;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.15)!important;}
-.upload-btn{background:linear-gradient(135deg,#2563eb,#3b82f6)!important;border:none!important;box-shadow:0 6px 16px rgba(37,99,235,.25)!important;}
-.upload-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(37,99,235,.35)!important;}
-.reset-btn{background:#fee2e2!important;border:1px solid rgba(220,38,38,.2)!important;color:#dc2626!important;}
-.exec-hero{background:linear-gradient(135deg,#2563eb,#1e40af,#3b82f6)!important;box-shadow:0 14px 34px rgba(37,99,235,.35)!important;}
-.alert-strip{background:#f8fafc!important;}
-.upload-bar,.toolbar,.executive-toggle{background:#fff!important;}
-.tabs{background:#fff!important;box-shadow:var(--shadow-sm)!important;}
-.tab{border-radius:8px 8px 0 0;}
-.tab.active{background:#fff!important;border-bottom:2px solid #2563eb!important;color:#1d4ed8!important;font-weight:600!important;}
-.note{background:#eff6ff!important;border-left-color:#2563eb!important;color:#1e3a8a!important;}
-.prog-outer,.exec-prog-outer,.tlbb,.pb-bg,.ranking-bar,.exec-group-bar-wrap{background:#f1f5f9!important;border:1px solid rgba(0,0,0,.05)!important;}
-.notif-panel{background:#fff!important;box-shadow:-4px 0 24px rgba(0,0,0,.1)!important;}
-.notif-item{background:#f8fafc!important;border-radius:var(--rsm)!important;}
-.whatif-result{background:#eff6ff!important;border-left-color:#2563eb!important;color:#1e3a8a!important;}
-.exec-print-btn{background:rgba(255,255,255,.2)!important;border-color:rgba(255,255,255,.4)!important;}
-.rok{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
-.rno{background:#fee2e2!important;color:#b91c1c!important;border-color:rgba(220,38,38,.2)!important;}
-.ag-ok{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
-.ag-warn{background:#fef3c7!important;color:#92400e!important;border-color:rgba(217,119,6,.2)!important;}
-.ag-nok{background:#fee2e2!important;color:#b91c1c!important;border-color:rgba(220,38,38,.2)!important;}
-.rp-gis{background:#eff6ff!important;color:#1d4ed8!important;border-color:rgba(37,99,235,.2)!important;}
-.rp-rasr{background:#fef3c7!important;color:#92400e!important;border-color:rgba(217,119,6,.2)!important;}
-.rp-fol{background:#dcfce7!important;color:#15803d!important;border-color:rgba(22,163,74,.2)!important;}
+body.exec-print-mode #tab-executive { display: block !important; }
 
-
-.exec-hero .exec-hero-left h2{color:#fff!important;}
-.exec-hero .exec-hero-left p{color:rgba(255,255,255,.8)!important;}
-.exec-hero .exec-hero-date{color:rgba(255,255,255,.75)!important;}
-.exec-hero .exec-verdict-lbl{color:rgba(255,255,255,.85)!important;}
-.exec-hero .exec-verdict-sub{color:rgba(255,255,255,.7)!important;}
-.exec-hero .exec-verdict-val{filter:drop-shadow(0 0 8px rgba(255,255,255,.3));}
-
-
-/* ═══════════════════════════════════════
-   RESPONSIVE — Mobile & Tablet
-═══════════════════════════════════════ */
-@media(max-width:1024px){
-  .blockers-grid{grid-template-columns:1fr 1fr;}
-  .exec-kpi-row{grid-template-columns:repeat(2,1fr);}
-  .exec-two-col{grid-template-columns:1fr;}
-  .pg{grid-template-columns:repeat(2,1fr);}
+@page { margin: 12mm; size: A4; }
 }
-@media(max-width:768px){
-  .pad{padding:12px 14px;}
-  .header{padding:12px 14px 10px;}
-  .header-top{flex-direction:column;gap:10px;}
-  .stats{gap:7px;}
-  .stat{min-width:70px;padding:6px 10px;}
-  .stat .v{font-size:14px;}
-  .kpi-val{font-size:14px!important;}
-  .kpi-lbl{font-size:7px;}
-  .kpi-item{padding:7px 4px;}
-  .blockers-grid{grid-template-columns:1fr;}
-  .blockers-card,.probability-card,.whatif-card{margin:8px 14px 0;}
-  .probability-card{flex-direction:column;align-items:flex-start;}
-  .probability-bar-container{width:100%;}
-  .plan-grid{grid-template-columns:1fr;}
-  .pg{grid-template-columns:repeat(2,1fr);}
-  .exec-kpi-row{grid-template-columns:repeat(2,1fr);gap:8px;}
-  .exec-two-col{grid-template-columns:1fr;gap:12px;}
-  .exec-hero{padding:18px 16px;}
-  .exec-hero-left h2{font-size:17px!important;}
-  .exec-wrap{padding:12px 14px;}
-  .toolbar{padding:6px 14px;gap:6px;}
-  .tb-lbl{display:none;}
-  .tb-sep{display:none;}
-  .tll{width:110px;font-size:9px;}
-  .tly{width:80px;font-size:9px;}
-  .tlr{flex-wrap:nowrap;gap:5px;}
-  .prog-label{width:110px;font-size:9px;}
-  .prog-eta{width:100px;font-size:9px;}
-  .upload-bar{padding:8px 14px;gap:8px;}
-  .upload-status{font-size:10px;}
-  .tabs{padding:0 8px;}
-  .tab{padding:8px 10px;font-size:11px;}
-  .alert-strip{padding:5px 14px;}
-  .whatif-controls{flex-direction:column;gap:12px;}
-  .whatif-group{min-width:100%;}
-}
-@media(max-width:480px){
-  .kpi-bar{overflow-x:auto;flex-wrap:nowrap;}
-  .kpi-item{min-width:70px;}
-  .pg{grid-template-columns:1fr 1fr;}
-  .exec-kpi-row{grid-template-columns:1fr 1fr;}
-  .blockers-grid{grid-template-columns:1fr;}
-  .stats{flex-wrap:wrap;}
-  .header h1{font-size:16px!important;}
-  .tlr{gap:4px;}
-}
-
-
-/* ── LOGIN SCREEN ── */
-#loginOverlay{
-  position:fixed;inset:0;z-index:9999;
-  background:linear-gradient(135deg,#0f1f35 0%,#1a3a5c 50%,#0d2137 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-family:'DM Sans','IBM Plex Sans',sans-serif;
-}
-#loginOverlay.hidden{display:none;}
-.login-card{
-  background:#fff;border-radius:16px;padding:40px 48px;
-  box-shadow:0 20px 60px rgba(0,0,0,.4);
-  max-width:420px;width:90%;text-align:center;
-}
-.login-logo{
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:28px;
-}
-.login-divider{height:1px;background:#e8e6e0;margin-bottom:24px;}
-.login-title{font-size:15px;font-weight:600;color:#1a1916;margin-bottom:4px;}
-.login-sub{font-size:12px;color:#6b6860;margin-bottom:24px;}
-.login-input-wrap{position:relative;margin-bottom:16px;}
-.login-input{
-  width:100%;padding:12px 44px 12px 16px;
-  border:1.5px solid #e0ddd8;border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:14px;
-  color:#1a1916;background:#fafaf8;outline:none;
-  transition:border-color .2s;box-sizing:border-box;
-}
-.login-input:focus{border-color:#1d4ed8;background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.1);}
-.login-eye{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  cursor:pointer;color:#9a9890;font-size:16px;user-select:none;
-}
-.login-btn{
-  width:100%;padding:13px;
-  background:linear-gradient(135deg,#1d4ed8,#2563eb);
-  color:#fff;border:none;border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;transition:all .2s;
-  box-shadow:0 4px 14px rgba(29,78,216,.3);
-}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,78,216,.4);}
-.login-btn:active{transform:translateY(0);}
-.login-error{
-  color:#dc2626;font-size:12px;margin-top:10px;
-  background:#fee2e2;border-radius:7px;padding:8px 12px;
-  display:none;
-}
-.login-error.show{display:block;}
-.login-footer{margin-top:24px;font-size:10px;color:#9a9890;}
-.login-footer strong{color:#6b6860;}
-
 
 /* ── LOGIN SCREEN ── */
 #kzLogin{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f1f35 0%,#1a3a5c 60%,#0d2137 100%);}
@@ -511,54 +330,14 @@ tr:hover td{background:#eef4ff!important;}
 .kzTitle{font-size:14px;font-weight:600;color:#1a1916;margin-bottom:4px;}
 .kzDesc{font-size:11px;color:#6b6860;margin-bottom:20px;}
 .kzWrap{position:relative;margin-bottom:12px;}
-.kzInput{width:100%;padding:11px 40px 11px 14px;border:1.5px solid #e0ddd8;border-radius:10px;font-size:14px;color:#1a1916;background:#fafaf8;outline:none;box-sizing:border-box;font-family:'DM Sans',sans-serif;}
+.kzInput{width:100%;padding:11px 40px 11px 14px;border:1.5px solid #e0ddd8;border-radius:10px;font-size:14px;color:#1a1916;background:#fafaf8;outline:none;box-sizing:border-box;font-family:‘DM Sans’,sans-serif;}
 .kzInput:focus{border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff;}
 .kzEye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#9a9890;font-size:15px;user-select:none;}
-.kzBtn{width:100%;padding:12px;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(29,78,216,.3);transition:all .2s;}
+.kzBtn{width:100%;padding:12px;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:‘DM Sans’,sans-serif;box-shadow:0 4px 14px rgba(29,78,216,.3);transition:all .2s;}
 .kzBtn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(29,78,216,.4);}
 .kzErr{color:#dc2626;font-size:11px;margin-top:8px;background:#fee2e2;border-radius:7px;padding:7px 12px;display:none;}
 .kzErr.show{display:block;}
 .kzFoot{margin-top:20px;font-size:9px;color:#9a9890;}
-
-
-
-
-/* ══ PRINT / PDF ══════════════════════════════════════════════ */
-@media print {
-  /* Ascunde chrome-ul UI pentru orice tip de print */
-  #kzLogin, .kpi-bar, .alert-strip, .prog-wrap,
-  .toolbar, .upload-bar, .executive-toggle,
-  .tabs, .notif-panel, .blockers-card,
-  .probability-card, .whatif-card,
-  .exec-print-btn, .tb-btn, .reset-btn,
-  .upload-btn { display: none !important; }
-
-  /* Header simplificat */
-  .header { box-shadow: none !important; border-bottom: 2px solid #1d4ed8 !important; }
-
-  /* Fonturi și culori pentru print */
-  body { background: #fff !important; color: #0f172a !important; font-size: 11px !important; }
-
-  /* Culori păstrate */
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  /* Evită tăierea cardurilor */
-  .exec-kpi, .exec-card, .exec-progress-card, .panel, .tw { break-inside: avoid !important; }
-
-  /* Tabele lizibile */
-  table { font-size: 10px !important; }
-  th { background: #1d4ed8 !important; color: #fff !important; }
-
-  /* ── Mod executive: ascunde toate tab-urile mai puțin executive ── */
-  body.exec-print-mode #tab-retea,
-  body.exec-print-mode #tab-grupuri,
-  body.exec-print-mode #tab-planificare,
-  body.exec-print-mode #tab-proiectie { display: none !important; }
-
-  body.exec-print-mode #tab-executive { display: block !important; }
-
-  @page { margin: 12mm; size: A4; }
-}
 
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -567,6 +346,1049 @@ tr:hover td{background:#eef4ff!important;}
 <body>
 
 <!-- LOGIN -->
+
 <div id="kzLogin">
   <div class="kzCard">
-    <div class="kzLogo"><img src="data:image/png;base64,[truncated due to size]
+    <div class="kzLogo"><img src="data:image/png;base64,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" alt="Delgaz Grid"></div>
+    <div class="kzSub">Operational Data Management · GAS</div>
+    <div class="kzDiv"></div>
+    <div class="kzTitle">Dashboard Kaizen Date Gaz</div>
+    <div class="kzDesc">Corelare Date Rețea GIS ↔ SAP PM</div>
+    <div class="kzWrap">
+      <input class="kzInput" type="password" id="kzPwd" placeholder="Parolă de acces"
+        onkeydown="if(event.key==='Enter')kzLogin()">
+      <span class="kzEye" onclick="kzToggle()">👁</span>
+    </div>
+    <div class="kzErr" id="kzErr">Parolă incorectă. Încearcă din nou.</div>
+    <button class="kzBtn" onclick="kzLogin()">Accesează Dashboard →</button>
+    <div class="kzFoot">Acces intern · Delgaz Grid S.A. · 2026</div>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-badge">KAIZEN DATE GAZ · DELGAZ GRID S.A.</div>
+      <h1>Dashboard Strategic Corelare Date Rețea GIS ↔ SAP PM</h1>
+      <div class="header-sub">Filtre: StareUtiliz=ACT/PIF · Stare GIS=Executat/În Exploatare · xdm_status=2/3 · Rată corelare = km procesați/oră/pers. din birou · Dif Totală = |Dif_BR|+|Dif_TR|</div>
+    </div>
+    <div class="stats" id="hStats"></div>
+  </div>
+</div>
+
+<div class="upload-bar">
+  <label class="upload-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Încarcă Excel (.xlsx)
+    <input type="file" id="xlsxFile" accept=".xlsx,.xls">
+  </label>
+  <span class="upload-status idle" id="uploadStatus">Niciun fișier încărcat — datele hardcodate sunt active</span>
+  <div class="upload-info" id="uploadInfo"></div>
+  <button class="tb-btn reset-btn" id="resetDataBtn" style="margin-left:auto">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Reset date implicite
+  </button>
+</div>
+
+<div class="executive-toggle">
+  <label class="toggle-switch">
+    <input type="checkbox" id="executiveModeToggle">
+    <span class="toggle-slider"></span>
+  </label>
+  <span class="toggle-label">🎯 EXECUTIVE MODE</span>
+  <span class="text-muted" style="font-size:9px;margin-left:auto">Ascunde tabelele · Arată doar esențialul</span>
+</div>
+
+<div class="kpi-bar" id="kpiBar"></div>
+
+<div class="blockers-card" id="blockersCard">
+  <div class="blockers-title">🔥 TOP 3 BLOCKERS</div>
+  <div class="blockers-grid" id="blockersGrid"></div>
+</div>
+
+<div class="probability-card" id="probabilityCard">
+  <div class="probability-title">🎯 PROBABILITATE DE SUCCES</div>
+  <div class="probability-bar-container">
+    <div class="probability-bar-bg">
+      <div class="probability-bar-fill" id="probabilityFill">0%</div>
+    </div>
+  </div>
+  <div class="probability-value" id="probabilityValue">0%</div>
+  <div class="probability-risk" id="probabilityRisk">Risc necunoscut</div>
+</div>
+
+<div class="whatif-card" id="whatifCard">
+  <div class="whatif-title">⚡ SIMULATOR — Impact decizii în timp real</div>
+  <div class="whatif-controls">
+    <div class="whatif-group"><label>Grup afectat</label><select class="whatif-select" id="whatifGroup"></select></div>
+    <div class="whatif-group">
+      <label>➕ Persoane adăugate (GIS+RASR, din 2 în 2)</label>
+      <input type="range" class="whatif-slider" id="whatifPeople" min="0" max="10" step="2" value="0">
+      <div class="whatif-value" id="whatifPeopleValue">+0 persoane</div>
+    </div>
+    <div class="whatif-group">
+      <label>⚡ Rată corelare absolută (km/h)</label>
+      <input type="range" class="whatif-slider" id="whatifRate" min="0.5" max="8" step="0.25" value="2.25">
+      <div class="whatif-value" id="whatifRateValue">2.25 km/h</div>
+    </div>
+  </div>
+  <div class="whatif-result" id="whatifResult">💡 Selectează un grup și ajustează parametrii pentru a vedea impactul</div>
+</div>
+
+<div class="toolbar">
+  <div class="tb-group">
+    <span class="tb-lbl">Data start activitate:</span>
+    <input type="date" class="tb-date" id="startDate" value="2026-04-01">
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-group" id="daysInfo" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></div>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" id="exportCsvBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export CSV
+  </button>
+  <button class="tb-btn" id="printBtn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print / PDF
+  </button>
+  <button class="tb-btn" id="notifBtn" style="position:relative">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    Alerte <span class="notif-badge" id="notifCount">0</span>
+  </button>
+</div>
+
+<div class="alert-strip">
+  <span class="alert-strip-lbl">Status grupuri:</span>
+  <div id="alertStrip"></div>
+</div>
+
+<div class="prog-wrap" id="progWrap"></div>
+
+<div class="tabs">
+  <div class="tab" data-tab="executive" style="color:var(--accent);font-weight:600">⭐ Executive</div>
+  <div class="tab active" data-tab="retea">Date Rețea CORG</div>
+  <div class="tab" data-tab="grupuri">Centre Operaționale</div>
+  <div class="tab" data-tab="planificare">Planificare FTE</div>
+  <div class="tab" data-tab="proiectie">Proiecție Finalizare</div>
+</div>
+
+<div class="content pad" id="tab-executive">
+  <div class="exec-wrap" id="execWrap">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<div class="content active pad" id="tab-retea">
+  <div class="note">Date individuale per CORG istoric (12 CORG) · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · % Corelat = Rețea_GIS/Rețea_PM · ⚡ Tab „Centre Operaționale" arată cele 8 CORG conform reorganizare</div>
+  <div class="tw"><table id="tRetea"></table></div>
+</div>
+
+<div class="content pad" id="tab-grupuri">
+  <div class="note">8 Centre Operaționale după reorganizare · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · Formula corectă — NU include Dif Rețea</div>
+  <div class="tw"><table id="tGrup"></table></div>
+</div>
+
+<div class="content pad" id="tab-planificare">
+  <div class="plan-grid">
+    <div class="panel">
+      <h3>⚙ Parametri Globali</h3>
+      <div class="pr"><span class="pl">Rată minimă corelare (km/h·pers)</span><input class="pi" id="vMin" type="number" value="1.5" step="0.1" min="0.1" max="20"><span class="pu">km/h</span></div>
+      <div class="pr"><span class="pl">Rată maximă corelare (km/h·pers)</span><input class="pi" id="vMax" type="number" value="3.0" step="0.1" min="0.1" max="20"><span class="pu">km/h</span></div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px 10px;margin-bottom:9px;font-size:10px;color:var(--muted);line-height:1.5">
+        <span style="color:var(--accent);font-weight:600">Rată corelare</span> = km de echipamente GIS procesați și verificați față de SAP PM într-o oră, per persoană, <strong style="color:var(--text)">activitate de birou</strong>.<br>
+        Ex: 1.5 km/h = caz complex · 3 km/h = caz simplu<br>
+        Ore productive/pers/an: <span id="rataMedie" style="color:var(--accent);font-family:var(--mono);font-weight:600">2.25 km/h</span>
+      </div>
+      <div class="pr"><span class="pl">Ore/săptămână dedicate corelării</span><input class="pi" id="oreSapt" type="number" value="4" step="0.5" min="0.5" max="40"><span class="pu">h/săpt</span></div>
+      <div class="pr"><span class="pl">Săptămâni active/an</span><input class="pi" id="saptAn" type="number" value="47" step="1" min="10" max="52"><span class="pu">săpt/an</span></div>
+      <div style="background:var(--llblue);border-left:3px solid var(--navy);border-radius:0 var(--rsm) var(--rsm) 0;padding:8px 10px;margin-bottom:9px;font-size:10px;color:#0d3d6b;line-height:1.5">
+        Ex: <strong>4 ore/săpt</strong> = 2h luni + 2h joi, sau 4h miercuri.<br>
+        47 săpt/an = an calendaristic minus 5 săpt (concedii+sărbători).<br>
+        Total ore/an/pers: <span id="totalOreAn" style="font-family:var(--mono);font-weight:600">188 h</span>
+      </div>
+      <h3 style="margin-top:14px">🎯 Targeturi</h3>
+      <div class="tgt"><div class="td2" style="background:var(--red)"></div><span class="tl2">Diferențe rezolvate în</span><input class="ti" id="tDif" type="number" value="6" step="1" min="1" max="120"><span class="tu">luni</span></div>
+      <div class="tgt"><div class="td2" style="background:var(--blue)"></div><span class="tl2">Rețea PM→GIS corelată în</span><input class="ti" id="tPM" type="number" value="36" step="1" min="1" max="240"><span class="tu">luni</span></div>
+      <div class="gc">
+        <h4>Compoziție echipă per grup CORG</h4>
+        <div class="pr" style="margin-bottom:6px">
+          <span class="pl">% timp FOL alocat corelării</span>
+          <input class="pi" id="pctFOL" type="number" value="0" step="5" min="0" max="100">
+          <span class="pu">%</span>
+        </div>
+        <div style="height:1px;background:var(--border);margin:8px 0 10px"></div>
+        <div class="pr" style="align-items:flex-start;margin-bottom:4px">
+          <span class="pl" style="padding-top:5px">⚙ Factor complexitate</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <input class="pi" id="factorC" type="number" value="1.0" step="0.5" min="1.0" max="10.0" style="width:64px">
+            <span class="pu">× ETA</span>
+          </div>
+        </div>
+        <div style="background:var(--llblue);border-left:3px solid var(--navy);border-radius:0 6px 6px 0;padding:9px 12px;font-size:9.5px;color:#1e3a8a;line-height:1.8;margin-bottom:8px">
+          <strong>ETA real ≈ ETA_matematic × factor</strong><br>
+          <span style="color:#334155">
+            <b>1.0</b> = ideal (pur matematic, fără fricțiuni)<br>
+            <b>2.0</b> = fiecare caz necesită verificare birou<br>
+            <b>3.0</b> = mix simplu + teren <em>(recomandat)</em><br>
+            <b>5.0</b> = majoritate complexe (teren + reconciliere SAP)
+          </span>
+        </div>
+        <div class="comp-hdr">
+          <span style="color:#58a6ff">GIS</span>
+          <span style="color:#f0c060">RASR</span>
+          <span style="color:#3fb950">FOL</span>
+        </div>
+        <div id="gInputs"></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:6px;line-height:1.4">
+          GIS + RASR = personal de bază · FOL = suport opțional<br>
+          FOL contribuie la ore/an doar dacă % timp &gt; 0
+        </div>
+      </div>
+      <div class="pr" style="margin-top:12px">
+        <button class="tb-btn" id="saveTeamConfigBtn" style="background:var(--bg);">💾 Salvează configurația echipei</button>
+      </div>
+    </div>
+    <div>
+      <div class="sec">Rezultate per Grup</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;font-size:10px;align-items:center">
+        <span style="color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Legendă celule:</span>
+        <span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600">■ În target</span>
+        <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-weight:600">■ Aproape (sub 150%)</span>
+        <span style="background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-weight:600">■ Depășit</span>
+        <span style="color:var(--muted);margin-left:4px">· Bordura stânga = status general grup</span>
+      </div>
+      <div style="background:#eff6ff;border-left:3px solid var(--navy);border-radius:0 8px 8px 0;padding:8px 14px;margin-bottom:10px;font-size:10px;color:#1e3a8a;line-height:1.8">
+        <strong>Formule de calcul:</strong><br>
+        <span style="font-family:'DM Mono',monospace">Ore nec. (Dif)</span> = Dif (km) ÷ Rată medie &nbsp;|&nbsp;
+        <span style="font-family:'DM Mono',monospace">Ore nec. (PM)</span> = PM (km) ÷ Rată medie<br>
+        <span style="font-family:'DM Mono',monospace">Rată medie</span> = (vMin + vMax) / 2 &nbsp;|&nbsp;
+        <span style="font-family:'DM Mono',monospace">Ore/an echipă</span> = ore/săpt × săpt/an × nr.echipe &nbsp;|&nbsp;
+        <span style="font-family:'DM Mono',monospace">nr.echipe</span> = min(GIS, RASR)<br>
+        <span style="font-family:'DM Mono',monospace">Luni Dif</span> = (Ore nec. Dif ÷ Ore/an) × 12 × factorC &nbsp;|&nbsp;
+        <span style="font-family:'DM Mono',monospace">Luni PM</span> = (Ore nec. PM ÷ Ore/an) × 12 × factorC
+      </div>
+      <div class="tw"><table id="tPlan"></table></div>
+    </div>
+  </div>
+</div>
+
+<div class="content pad" id="tab-proiectie">
+  <div class="pg" id="pCards"></div>
+  <div class="tl-wrap">
+    <h3>⏱ Timeline — Finalizare Diferențe per Grup (la rata medie de corelare)</h3>
+    <div id="tlDif"></div>
+    <div class="sec" style="margin-top:14px">Rețea PM totală per Grup</div>
+    <div id="tlPM"></div>
+  </div>
+  <div class="sec">Tabel Detaliat Proiecție</div>
+  <div class="tw"><table id="tProj"></table></div>
+</div>
+
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-hdr">
+    <h3>🔔 Alerte & Status</h3>
+    <button class="notif-close" id="notifCloseBtn">✕</button>
+  </div>
+  <div class="notif-list"></div>
+</div>
+
+<script>
+(function(){
+const CORG_DEFAULT=[
+  {n:"MURES",rPM:3998286,rGIS:3861400,dR:136886,bPM:720953,bGIS:635000,dB:85953,tPM:3277333,tGIS:3226400,dT:50933},
+  {n:"TIMISOARA",rPM:3370927,rGIS:3359163,dR:11765,bPM:811152,bGIS:764261,dB:46891,tPM:2559775,tGIS:2594901,dT:-35126},
+  {n:"BAIA MARE",rPM:2712332,rGIS:2673389,dR:38943,bPM:468358,bGIS:436761,dB:31597,tPM:2243974,tGIS:2236628,dT:7346},
+  {n:"SIBIU",rPM:2458599,rGIS:2457251,dR:1348,bPM:523015,bGIS:482970,dB:40045,tPM:1935584,tGIS:1974281,dT:-38698},
+  {n:"CLUJ",rPM:2438193,rGIS:2396568,dR:41626,bPM:469965,bGIS:426552,dB:43413,tPM:1968228,tGIS:1970016,dT:-1788},
+  {n:"BISTRITA",rPM:1951381,rGIS:1896538,dR:54843,bPM:273460,bGIS:246223,dB:27236,tPM:1677921,tGIS:1650315,dT:27606},
+  {n:"BACAU",rPM:1872936,rGIS:1792400,dR:80536,bPM:331859,bGIS:273779,dB:58080,tPM:1541077,tGIS:1518621,dT:22456},
+  {n:"DEVA",rPM:1858439,rGIS:1788899,dR:69540,bPM:334704,bGIS:296210,dB:38494,tPM:1523735,tGIS:1492689,dT:31046},
+  {n:"IASI",rPM:1854555,rGIS:1820004,dR:34551,bPM:322240,bGIS:269446,dB:52794,tPM:1532314,tGIS:1550558,dT:-18244},
+  {n:"ALBA",rPM:1778060,rGIS:1697037,dR:81023,bPM:352330,bGIS:304705,dB:47626,tPM:1425729,tGIS:1392332,dT:33397},
+  {n:"SUCEAVA",rPM:1265119,rGIS:1231492,dR:33627,bPM:206554,bGIS:184810,dB:21743,tPM:1058566,tGIS:1046682,dT:11883},
+  {n:"PIATRA NEAMT",rPM:726875,rGIS:709553,dR:17322,bPM:173230,bGIS:110333,dB:62896,tPM:553646,tGIS:599220,dT:-45575}
+];
+const GROUPS_DEFAULT=[
+  {name:"MURES",corg:["MURES"],color:"#58a6ff",merged:false},
+  {name:"TIMISOARA",corg:["TIMISOARA"],color:"#58a6ff",merged:false},
+  {name:"BAIA MARE",corg:["BAIA MARE"],color:"#58a6ff",merged:false},
+  {name:"SIBIU",corg:["SIBIU"],color:"#58a6ff",merged:false},
+  {name:"CLUJ + BISTRITA",corg:["CLUJ","BISTRITA"],color:"#a371f7",merged:true},
+  {name:"BACAU + PIATRA NEAMT",corg:["BACAU","PIATRA NEAMT"],color:"#a371f7",merged:true},
+  {name:"DEVA + ALBA",corg:["DEVA","ALBA"],color:"#a371f7",merged:true},
+  {name:"SUCEAVA + IASI",corg:["SUCEAVA","IASI"],color:"#a371f7",merged:true}
+];
+let CORG=[],GROUPS=[],GD=[];
+const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorC:1.0,comp:{}};
+let updateScheduled=false,isLoadingExcel=false;
+const fmt=n=>Number(n).toLocaleString('ro-RO');
+const difTot=r=>(Math.abs(r.dB)+Math.abs(r.dT))/1000; // |dB|+|dT| = tot ce trebuie rezolvat
+const pmKm=r=>r.rPM/1000;
+const pctC=r=>r.rGIS/r.rPM;
+const vm=()=>(params.vMin+params.vMax)/2;
+const persAn=g=>{const c=params.comp[g]||{gis:1,rasr:1,fol:0};return c.gis+c.rasr+c.fol*(params.pctFOL/100);};
+// oreAn: Math.max(1,...) = anti-NaN fallback (dacă echipa e 0, se presupune minim 1 echipă)
+const oreAn=g=>{const c=params.comp[g]||{gis:1,rasr:1,fol:0};const nrEchipe=Math.max(1,Math.min(c.gis,c.rasr));const ore=params.oreSapt*params.saptAn*(nrEchipe+c.fol*(params.pctFOL/100));return isNaN(ore)||ore<=0?params.oreSapt*params.saptAn:ore;};
+const persTotal=g=>{const c=params.comp[g]||{gis:1,rasr:1,fol:0};return c.gis+c.rasr+c.fol;};
+function buildGroupsFromCORG(){
+  const names=CORG.map(c=>c.n),ng=[];
+  CORG.forEach(c=>ng.push({name:c.n,corg:[c.n],color:"#58a6ff",merged:false}));
+  [{names:["CLUJ","BISTRITA"],name:"CLUJ + BISTRITA"},{names:["BACAU","PIATRA NEAMT"],name:"BACAU + PIATRA NEAMT"},{names:["DEVA","ALBA"],name:"DEVA + ALBA"},{names:["SUCEAVA","IASI"],name:"SUCEAVA + IASI"}].forEach(p=>{
+    if(p.names.every(n=>names.includes(n))&&!ng.some(g=>g.name===p.name))ng.push({name:p.name,corg:p.names,color:"#a371f7",merged:true});
+  });
+  return ng;
+}
+function computeGD(groups,corg){
+  return groups.map(g=>{
+    const rows=corg.filter(c=>g.corg.includes(c.n));
+    const s=f=>rows.reduce((a,r)=>a+r[f],0);
+    const o={rPM:s('rPM'),rGIS:s('rGIS'),dR:s('dR'),bPM:s('bPM'),bGIS:s('bGIS'),dB:s('dB'),tPM:s('tPM'),tGIS:s('tGIS'),dT:s('dT')};
+    o.pmKm=o.rPM/1000;o.difKm=(Math.abs(o.dB)+Math.abs(o.dT))/1000;o.pct=o.rPM>0?o.rGIS/o.rPM:0;
+    return {...g,...o};
+  });
+}
+function fmtLuni(luni){
+  const saptLucru = luni * (params.saptAn / 12);
+  if(saptLucru < 0.5){
+    const ore = Math.round(saptLucru * params.oreSapt);
+    return ore <= 0 ? '< 1 oră' : '~' + ore + ' ore';
+  }
+  if(saptLucru < 2) return Math.round(saptLucru) + ' săpt. lucru';
+  if(luni < 2) return Math.round(saptLucru) + ' săpt. lucru';
+  if(luni < 12){
+    const l = Math.floor(luni);
+    const saptRest = Math.round((luni - l) * (params.saptAn / 12));
+    return l + (l===1?' lună':' luni') + (saptRest>0?' și '+saptRest+' săpt.':'');
+  }
+  const ani = Math.floor(luni/12), luniRest = Math.round(luni%12);
+  let s = ani + (ani===1?' an':' ani');
+  if(luniRest > 0) s += ' și ' + luniRest + ' luni';
+  s += ' (' + Math.round(saptLucru) + ' săpt.)';
+  return s;
+}
+
+function getOpGroups(){
+  // Returneaza intotdeauna exact 8 grupuri operative
+  // (4 singure neincluse in unificate + 4 unificate)
+  const mergedSet=new Set(GD.filter(g=>g.merged).flatMap(g=>g.corg));
+  return GD.filter(g=>g.merged||(g.corg.length===1&&!mergedSet.has(g.corg[0])));
+}
+
+function fmtZileLucr(ani, _u){
+  return fmtLuni(ani * 12);
+}
+
+function initDefault(){
+  CORG=JSON.parse(JSON.stringify(CORG_DEFAULT));
+  GROUPS=JSON.parse(JSON.stringify(GROUPS_DEFAULT));
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:1,rasr:1,fol:0};});
+  GD=computeGD(GROUPS,CORG);
+}
+function saveState(){
+  try{
+    localStorage.setItem('kaizen_comp',JSON.stringify(params.comp));
+    localStorage.setItem('kaizen_params',JSON.stringify({vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL,factorC:params.factorC}));
+    localStorage.setItem('kaizen_corg',JSON.stringify(CORG));
+  }catch(e){}
+}
+function loadState(){
+  initDefault();
+  try{
+    const sc=localStorage.getItem('kaizen_comp');
+    if(sc){ const p=JSON.parse(sc); if(typeof p==='object'&&p!==null) params.comp=p; }
+    const sp=localStorage.getItem('kaizen_params');
+    if(sp){
+      const p=JSON.parse(sp);
+      if(p&&typeof p.vMin==='number'&&p.vMin>0&&p.saptAn>0){
+        Object.assign(params,p);
+        ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorC'].forEach(k=>{
+          const el=document.getElementById(k);if(el)el.value=params[k];
+        });
+      }
+    }
+    const sc2=localStorage.getItem('kaizen_corg');
+    if(sc2){
+      const d=JSON.parse(sc2);
+      if(Array.isArray(d)&&d.length>=8&&d[0]&&typeof d[0].rPM==='number'&&d[0].rPM>0&&!isNaN(d[0].rPM)){
+        CORG=d;
+        GROUPS=buildGroupsFromCORG();
+        GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:1,rasr:1,fol:0};});
+        GD=computeGD(GROUPS,CORG);
+      }
+    }
+  }catch(e){
+    initDefault();
+  }
+  if(!CORG||!CORG.length||!GD||!GD.length||isNaN(CORG[0].rPM)||CORG[0].rPM<=0){
+    initDefault();
+  }
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:1,rasr:1,fol:0};});
+}
+const hmc=ad=>''; // replaced by cell-level coloring in rPlanificare
+const pctColor=p=>p>0.9995?'var(--green)':p>0.97?'var(--accent)':p>0.95?'var(--yellow)':'var(--red)';
+function rHeader(){
+  const og=getOpGroups();
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  document.getElementById('hStats').innerHTML=[{v:tPM.toFixed(0)+' km',l:'Rețea SAP PM'},{v:tDif.toFixed(1)+' km',l:'Dif. de rezolvat'},{v:(tPct*100).toFixed(2)+'%',l:'% Corelat'},{v:og.length+'',l:'Centre Operaționale'}].map(s=>`<div class="stat"><span class="v">${s.v}</span><span class="l">${s.l}</span></div>`).join('');
+}
+function rRetea(){
+  const H=['CORG','Rețea PM (m)','Rețea GIS (m)','Dif Rețea (m)','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','PM Total (km)','Dif Totală (km)','% Corelat'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const r of CORG){const dk=difTot(r),pk=pmKm(r),pc=pctC(r),pc_c=pctColor(pc);
+    h+=`<tr><td style="font-weight:600">${r.n}</td><td class="n">${fmt(r.rPM)}</td><td class="n">${fmt(r.rGIS)}</td><td class="n">${fmt(r.dR)}</td><td class="n">${fmt(r.bPM)}</td><td class="n">${fmt(r.bGIS)}</td><td class="n">${fmt(r.dB)}</td><td class="n">${fmt(r.tPM)}</td><td class="n">${fmt(r.tGIS)}</td><td class="n">${fmt(r.dT)}</td><td class="n" style="color:var(--accent)">${pk.toFixed(1)}</td><td class="n">${dk.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(pc*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(pc*100).toFixed(2)}%</span></div></td></tr>`;
+  }
+  const tR=CORG.reduce((a,r)=>a+r.rPM,0),tG=CORG.reduce((a,r)=>a+r.rGIS,0);
+  h+=`<tr class="tot"><td>TOTAL DEGR</td><td class="n">${fmt(tR)}</td><td class="n">${fmt(tG)}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dR,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dB,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dT,0))}</td><td class="n">${(tR/1000).toFixed(1)}</td><td class="n">${CORG.reduce((a,r)=>a+difTot(r),0).toFixed(1)}</td><td class="n">${(tG/tR*100).toFixed(2)}%</td></tr></tbody>`;
+  document.getElementById('tRetea').innerHTML=h;
+}
+function rGrupuri(){
+  const og=getOpGroups();
+  const H=['Grup CORG','PM Total (km)','Dif Totală (km)','% Corelat Rețea','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','CORG componente'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){const pc_c=pctColor(g.pct);
+    h+=`<tr class="merged"><td style="font-weight:700;color:${g.color}">${g.name}</td><td class="n" style="color:var(--accent)">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${g.difKm>150?'var(--red)':g.difKm>80?'var(--yellow)':'var(--green)'}">${g.difKm.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(g.pct*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(g.pct*100).toFixed(2)}%</span></div></td><td class="n">${fmt(g.bPM)}</td><td class="n">${fmt(g.bGIS)}</td><td class="n">${fmt(g.dB)}</td><td class="n">${fmt(g.tPM)}</td><td class="n">${fmt(g.tGIS)}</td><td class="n">${fmt(g.dT)}</td><td style="font-size:9.5px;color:var(--muted)">${g.corg.join(' + ')}</td></tr>`;
+  }
+  const tPK=og.reduce((a,g)=>a+g.pmKm,0),tDK=og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  h+=`<tr class="tot"><td>TOTAL DEGR</td><td class="n">${tPK.toFixed(1)}</td><td class="n">${tDK.toFixed(1)}</td><td class="n">${(tPct*100).toFixed(2)}%</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.bGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dB,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tPM,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.tGIS,0))}</td><td class="n">${fmt(CORG.reduce((a,r)=>a+r.dT,0))}</td><td></td></tr></tbody>`;
+  document.getElementById('tGrup').innerHTML=h;
+}
+function rGroupInputs(){
+  document.getElementById('gInputs').innerHTML=getOpGroups().map(g=>{
+    const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
+    return `<div class="gr"><span class="gn" style="color:${g.merged?'#a371f7':'var(--text)'}" title="${g.name}">${g.name.replace(' + ','+')}</span><input class="gin gis" type="number" min="0" max="20" value="${c.gis}" data-group="${g.name}" data-role="gis"><input class="gin rasr" type="number" min="0" max="20" value="${c.rasr}" data-group="${g.name}" data-role="rasr"><input class="gin fol" type="number" min="0" max="20" value="${c.fol}" data-group="${g.name}" data-role="fol"></div>`;
+  }).join('');
+  document.querySelectorAll('#gInputs .gin').forEach(inp=>{
+    inp.removeEventListener('change',hTeamChange);inp.addEventListener('change',hTeamChange);
+  });
+}
+function hTeamChange(e){
+  const g=e.target.dataset.group,r=e.target.dataset.role,v=parseInt(e.target.value)||0;
+  if(!params.comp[g])params.comp[g]={gis:1,rasr:1,fol:0};
+  params.comp[g][r]=v;scheduleUpdate();
+}
+function rPlanificare(){
+  const v=vm();
+  const og=getOpGroups();
+  const H=['Grup CORG','GIS','RASR','FOL','Pers. efect.','Ore/an','Dif (km)','Ore nec.','Luni Dif','✓ Dif?','PM (km)','Ore nec.','Luni PM','✓ PM?'];
+  let h=`<thead><tr>${H.map(x=>`<th class="c">${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){
+    const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
+    const oa=oreAn(g.name),pa=persAn(g.name);
+    const fc=params.factorC||1.0;
+    const ond=g.difKm/v*fc,onp=g.pmKm/v*fc;
+    const ad=oa>0?ond/oa:Infinity,ap=oa>0?onp/oa:Infinity;
+    const od=ad<=params.tDif/12,op=ap<=params.tPM/12;
+    const fl=c.fol>0?(params.pctFOL>0?`<span class="role-pill rp-fol">${c.fol}</span>`:`<span class="role-pill rp-fol-0">${c.fol}</span>`):`<span style="color:var(--muted)">—</span>`;
+    // Cell-level dynamic coloring
+    const adLuni=ad*12, apLuni=ap*12;
+    const tDif=params.tDif, tPM=params.tPM;
+    const bgDif=od?'#dcfce7':adLuni<tDif*1.5?'#fef3c7':'#fee2e2';
+    const fgDif=od?'#15803d':adLuni<tDif*1.5?'#92400e':'#b91c1c';
+    const bgPM=op?'#dcfce7':apLuni<tPM*1.5?'#fef3c7':'#fee2e2';
+    const fgPM=op?'#15803d':apLuni<tPM*1.5?'#92400e':'#b91c1c';
+    const oreMin=g.difKm/v;
+    const bgOre=oa>=oreMin?'#f1f5f9':'#fee2e2';
+    const fgOre=oa>=oreMin?'var(--text)':'#b91c1c';
+    const bgPers=c.fol>0&&params.pctFOL>0?'#fef3c7':'#f1f5f9';
+    const borderCol=od&&op?'#16a34a':od?'#d97706':'#dc2626';
+    h+=`<tr class="${g.merged?'merged':''}">
+      <td style="font-weight:700;color:${g.color};border-left:4px solid ${borderCol}">${g.name}</td>
+      <td class="c"><span class="role-pill rp-gis">${c.gis}</span></td>
+      <td class="c"><span class="role-pill rp-rasr">${c.rasr}</span></td>
+      <td class="c">${fl}</td>
+      <td class="n" style="background:${bgPers};color:#92400e;font-weight:600">${pa.toFixed(1)}</td>
+      <td class="n" style="background:${bgOre};color:${fgOre}">${oa.toFixed(0)}</td>
+      <td class="n" style="color:${g.difKm>150?'#dc2626':g.difKm>80?'#d97706':'#15803d'};font-weight:600">${g.difKm.toFixed(1)}</td>
+      <td class="n" style="color:var(--muted)">${ond.toFixed(0)}</td>
+      <td class="n" style="background:${bgDif};color:${fgDif};font-weight:700"><span title="${adLuni.toFixed(1)} luni">${fmtZileLucr(ad)}</span></td>
+      <td class="c"><span class="rb ${od?'rok':'rno'}">${od?'✓ DA':'✗ NU'}</span></td>
+      <td class="n" style="color:var(--muted)">${g.pmKm.toFixed(1)}</td>
+      <td class="n" style="color:var(--muted)">${onp.toFixed(0)}</td>
+      <td class="n" style="background:${bgPM};color:${fgPM};font-weight:700"><span title="${apLuni.toFixed(1)} luni">${fmtZileLucr(ap)}</span></td>
+      <td class="c"><span class="rb ${op?'rok':'rno'}">${op?'✓ DA':'✗ NU'}</span></td>
+    </tr>`;
+  }
+  const vc=vm(),tOA=og.reduce((a,g)=>a+oreAn(g.name),0),tDK=og.reduce((a,g)=>a+g.difKm,0),tPK=og.reduce((a,g)=>a+g.pmKm,0);
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vc/oa:Infinity;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/vc/oa:Infinity;}));
+  const tGIS=og.reduce((a,g)=>a+(params.comp[g.name]||{gis:2}).gis,0);
+  const tRASR=og.reduce((a,g)=>a+(params.comp[g.name]||{rasr:2}).rasr,0);
+  const tFOL=og.reduce((a,g)=>a+(params.comp[g.name]||{fol:0}).fol,0);
+  const tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
+  h+=`<tr class="tot"><td>TOTAL/MAX</td><td class="c">${tGIS}</td><td class="c">${tRASR}</td><td class="c">${tFOL>0?tFOL:'—'}</td><td class="n">${tPeff.toFixed(1)}</td><td class="n">${tOA.toFixed(0)}</td><td class="n">${tDK.toFixed(1)}</td><td class="n">${(tDK/vc).toFixed(0)}</td><td class="n">${isFinite(maxAD)?maxAD.toFixed(3):'∞'}</td><td class="c"><span class="rb ${isFinite(maxAD)&&maxAD<=params.tDif/12?'rok':'rno'}">${isFinite(maxAD)&&maxAD<=params.tDif/12?'✓':'✗'}</span></td><td class="n">${tPK.toFixed(1)}</td><td class="n">${(tPK/vc).toFixed(0)}</td><td class="n">${isFinite(maxAP)?maxAP.toFixed(2):'∞'}</td><td class="c"><span class="rb ${isFinite(maxAP)&&maxAP<=params.tPM/12?'rok':'rno'}">${isFinite(maxAP)&&maxAP<=params.tPM/12?'✓':'✗'}</span></td></tr></tbody>`;
+  document.getElementById('tPlan').innerHTML=h;
+}
+const addM=(d,m)=>{const r=new Date(d);r.setMonth(r.getMonth()+Math.round(m*12));return r;};
+const getStartDate=()=>{const el=document.getElementById('startDate');return el?el.value||'2026-04-01':'2026-04-01';};
+const fmtD=d=>d.toLocaleDateString('ro-RO',{month:'short',year:'numeric'});
+function rProiectie(){
+  const v=vm(),now=new Date();
+  const og=getOpGroups();
+  const _fce=params.factorC||1.0;
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fce/oa:0;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fce/oa:0;}));
+  const tDK=og.reduce((a,g)=>a+g.difKm,0),tP=og.reduce((a,g)=>a+persTotal(g.name),0),tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
+  document.getElementById('pCards').innerHTML=[
+    {v:`${(maxAD*12).toFixed(1)} luni`,l:'Finalizare Diferențe (max grup)',d:fmtD(addM(now,maxAD)),c:'var(--red)'},
+    {v:`${(maxAP*12).toFixed(0)} luni`,l:'Finalizare Rețea PM (max grup)',d:fmtD(addM(now,maxAP)),c:'var(--blue)'},
+    {v:`${tP}`,l:'Persoane implicate DEGR',d:`${tPeff.toFixed(1)} pers. efective/an`,c:'#a371f7'},
+    {v:`${tDK.toFixed(1)} km`,l:'Diferențe totale grupuri',d:`din ${GD.reduce((a,g)=>a+g.pmKm,0).toFixed(1)} km PM total`,c:'var(--yellow)'}
+  ].map(c=>`<div class="pc"><div class="pv" style="color:${c.c}">${c.v}</div><div class="pla">${c.l}</div><div class="pd">${c.d}</div></div>`).join('');
+  function buildTL(cid,data,maxV,tgt,unit){
+    const scale=Math.max(maxV,tgt)*1.15,tp=(tgt/scale)*100;
+    document.getElementById(cid).innerHTML=data.map(({name,val})=>{
+      const p2=Math.min(val/scale*100,100),ok=val<=tgt;
+      const col=ok?'var(--green)':val<tgt*1.5?'var(--yellow)':'var(--red)';
+      const lbl=fmtLuni(val);
+      const barTxt=p2>20?lbl:'';
+      return `<div class="tlr">
+        <span class="tll">${name}</span>
+        <div class="tlbw"><div class="tlbb"></div>
+          <div class="tlbf" style="width:${p2}%;background:${col}">${barTxt}</div>
+          <div class="tltl" style="left:${tp}%"><span class="tlta">target ${fmtLuni(tgt)}</span></div>
+        </div>
+        <span class="tly" style="color:${col}">${lbl}</span>
+      </div>`;
+    }).join('');
+  }
+  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorC/oa*12:0};}),maxAD*12,params.tDif,' luni');
+  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorC/oa*12:0};}),maxAP*12,params.tPM,' luni');
+  const H=['Grup CORG','Dif (km)','Timp Diferențe','Data fin. Dif','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
+  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  for(const g of og){
+    const oa=oreAn(g.name),_fcsv=params.factorC||1.0,ad=oa>0?g.difKm/v*_fcsv/oa:0,ap=oa>0?g.pmKm/v*_fcsv/oa:0;
+    const adMin=oa>0?g.difKm/params.vMin/oa:0,adMax=oa>0?g.difKm/params.vMax/oa:0;
+    const cc=params.comp[g.name]||{gis:1,rasr:1,fol:0};
+    h+=`<tr class="${g.merged?'merged':''}"><td style="font-weight:600;color:${g.color}">${g.name}</td><td class="n">${g.difKm.toFixed(1)}</td><td class="n" style="color:${ad<=params.tDif/12?'var(--green)':'var(--red)'}"><span title="${(ad*12).toFixed(1)} luni">${fmtZileLucr(ad)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ad))}</td><td class="n">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${ap<=params.tPM/12?'var(--green)':'var(--red)'}"><span title="${(ap*12).toFixed(1)} luni">${fmtZileLucr(ap)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ap))}</td><td class="c"><span class="role-pill rp-gis">${cc.gis}G</span><span class="role-pill rp-rasr">${cc.rasr}R</span>${cc.fol>0?`<span class="role-pill rp-fol">${cc.fol}F</span>`:''}</td><td class="n" style="color:var(--muted)"><span title="${params.vMin} km/h">${fmtZileLucr(adMin)}</span></td><td class="n" style="color:var(--muted)"><span title="${params.vMax} km/h">${fmtZileLucr(adMax)}</span></td></tr>`;
+  }
+  document.getElementById('tProj').innerHTML=h+'</tbody>';
+}
+function rBlockers(){
+  const v=vm();
+  const _fcb=params.factorC||1.0;
+  const bl=getOpGroups().map(g=>{const oa=oreAn(g.name);const ad=oa>0?g.difKm/v*_fcb/oa:Infinity;return{name:g.name,ad,over:Math.max(0,ad-params.tDif/12),dk:g.difKm};}).sort((a,b)=>b.over-a.over);
+  const top3=bl.slice(0,3);
+  const gc=g=>g>params.tDif/12*1.5?'blocker-critical':g>params.tDif/12?'blocker-warning':'blocker-ok';
+  const gs=g=>g>params.tDif/12*1.5?'🔴 critical':g>params.tDif/12?'🟡 warning':'🟢 ok';
+  const grid=document.getElementById('blockersGrid');
+  if(top3[0]&&top3[0].over<=0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--green);padding:20px;">✅ Niciun blocaj major! Toate grupurile sunt în target.</div>';return;}
+  grid.innerHTML=top3.map((b,i)=>`<div class="blocker-item ${gc(b.ad)}" data-group="${b.name}"><div class="blocker-rank">#${i+1}</div><div class="blocker-name">${b.name}</div><div class="blocker-detail">${b.over.toFixed(2)} ani peste target · ${b.dk.toFixed(1)} km</div><div class="blocker-detail" style="margin-top:4px">${gs(b.ad)}</div></div>`).join('');
+  document.querySelectorAll('#blockersGrid .blocker-item').forEach(el=>{
+    el.addEventListener('click',()=>{swTab('planificare');setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(el.dataset.group)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);});
+  });
+}
+function rProbability(){
+  const _og=getOpGroups();
+  if(!_og||!_og.length){return;}
+  const _fcp=params.factorC||1.0;
+
+  // ETA maxim (cel mai lent centru) la rata minimă și maximă
+  const wAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/params.vMin*_fcp/oa:999;}));
+  const bAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/params.vMax*_fcp/oa:999;}));
+  const tgt=params.tDif/12; // target în ani
+
+  // Calculul probabilității bazat pe raportul ETA / target
+  // prob = 100% dacă chiar și scenariul pesimist e în target
+  // prob = 50% dacă scenariul mediu e exact pe target
+  // prob = 5% dacă scenariul optimist depășește cu mult targetul
+
+  let prob, fc;
+  const vMed=(params.vMin+params.vMax)/2;
+  const mAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vMed/oa:999;}));
+
+  if(wAD<=tgt){
+    // Chiar scenariul pesimist e în target → probabilitate foarte mare
+    const margin=(tgt-wAD)/tgt; // cât % avem marjă
+    prob=Math.min(95, Math.round(75+margin*100));
+  } else if(bAD<=tgt){
+    // Scenariul optimist e în target, pesimistul nu
+    // Interpolăm liniar: la mAD=tgt → 50%, la bAD=tgt → 75%, la wAD=tgt → 25%
+    const ratio=(tgt-mAD)/(bAD-wAD+0.001);
+    prob=Math.min(74, Math.max(25, Math.round(50+ratio*25)));
+  } else {
+    // Nici scenariul optimist nu atinge targetul
+    prob=Math.max(5, Math.round((tgt/bAD)*20));
+  }
+
+  if(isNaN(prob)) prob=5;
+  fc=prob>=80?'var(--green)':prob>=50?'var(--yellow)':'var(--red)';
+
+  const pFill=document.getElementById('probabilityFill');
+  const pVal=document.getElementById('probabilityValue');
+  const pRisk=document.getElementById('probabilityRisk');
+  if(pFill){pFill.style.width=`${prob}%`;pFill.style.background=fc;pFill.textContent=`${prob}%`;}
+  if(pVal){pVal.textContent=`${prob}%`;pVal.style.color=fc;}
+  if(pRisk){pRisk.textContent=`📊 ${prob>=80?'Risc scăzut':prob>=50?'Risc mediu':'Risc ridicat'} · ETA worst: ${fmtLuni(wAD*12)} · best: ${fmtLuni(bAD*12)}`;}
+}
+function rKPI(){
+  const _og=getOpGroups();
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=_og.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  const v=vm(),_fc=params.factorC||1.0,maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
+  const grpOk=_og.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;
+  const tPers=_og.reduce((a,g)=>a+persTotal(g.name),0);
+  const startD=new Date(getStartDate());
+  const tDifDate=addM(startD,params.tDif/12),daysLeft=Math.round((tDifDate-new Date())/86400000);
+  const kpis=[
+    {val:(tPct*100).toFixed(2)+'%',lbl:'% Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'},
+    {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'},
+    {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)'},
+    {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)'},
+    {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===GD.length?'var(--green)':grpOk>=GD.length*.75?'var(--yellow)':'var(--red)'},
+    {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)'}
+  ];
+  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item"><div class="kpi-val" style="color:${k.c}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
+}
+function rAlerts(){
+  const v=vm(),alerts=[];
+  const strip=getOpGroups().map(g=>{
+    const oa=oreAn(g.name),_fca=params.factorC||1.0,ad=oa>0?g.difKm/v*_fca/oa:Infinity,ap=oa>0?g.pmKm/v*_fca/oa:Infinity;
+    const okD=ad<=params.tDif/12,okP=ap<=params.tPM/12;
+    let cls='ag-ok',dot='var(--green)',st='✓';
+    if(!okD){cls='ag-nok';dot='var(--red)';st='✗';}else if(!okP){cls='ag-warn';dot='var(--yellow)';st='!';}
+    if(!okD)alerts.push({type:'err',title:g.name+' — target diferențe DEPĂȘIT',msg:`Timp estimat: ${fmtLuni(ad*12)} > target ${params.tDif} luni.`});
+    else if(!okP)alerts.push({type:'warn',title:g.name+' — target rețea PM în risc',msg:`Timp estimat: ${fmtLuni(ap*12)} > target ${params.tPM} luni.`});
+    else alerts.push({type:'ok',title:g.name+' — ambele targeturi atinse',msg:`Dif: ${ad.toFixed(3)} ani · PM: ${ap.toFixed(2)} ani`});
+    return `<span class="ag ${cls}" data-group="${g.name}"><span class="ag-dot" style="background:${dot}"></span>${g.name.split(' ')[0]}&nbsp;${st}</span>`;
+  });
+  document.getElementById('alertStrip').innerHTML=strip.join('');
+  const ec=alerts.filter(a=>a.type==='err').length,wc=alerts.filter(a=>a.type==='warn').length,tot=ec+wc;
+  const nb=document.getElementById('notifCount');
+  nb.textContent=tot;nb.style.background=ec>0?'var(--red)':wc>0?'var(--yellow)':'var(--green)';nb.style.color=wc>0&&ec===0?'#000':'#fff';
+  const pl=document.querySelector('#notifPanel .notif-list');
+  if(pl)pl.innerHTML=alerts.map(a=>`<div class="notif-item ${a.type}"><div class="ni-title">${a.type==='err'?'🔴':a.type==='warn'?'🟡':'🟢'} ${a.title}</div><div class="ni-msg">${a.msg}</div></div>`).join('');
+  document.querySelectorAll('#alertStrip .ag').forEach(el=>{
+    el.removeEventListener('click',hAlertClick);el.addEventListener('click',hAlertClick);
+  });
+}
+function hAlertClick(e){
+  const gn=e.currentTarget.dataset.group;if(!gn)return;
+  swTab('planificare');
+  setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(gn)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);
+}
+function rProgress(){
+  const startD=new Date(getStartDate()),now=new Date(),v=vm(),_fc=params.factorC||1.0;
+  const _og=getOpGroups();
+  const maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
+  const maxAP=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fc/oa:0;}));
+  function mkBar(lbl,tgtY,eta){
+    const el=Math.max((now-startD)/365.25/86400000,0),pp=Math.min(el/tgtY*100,100);
+    const etaD=addM(startD,eta),ep=Math.min(eta/tgtY*100,100),behind=eta>tgtY;
+    return `<div class="prog-row"><span class="prog-label">${lbl}</span><div class="prog-outer"><div class="prog-fill" style="width:${pp}%;background:${behind?'var(--red)':'var(--accent)'}"></div><div class="prog-plan-line" style="left:${Math.min(ep,99)}%"></div></div><span class="prog-pct" style="color:${behind?'var(--red)':'var(--green)'}">${pp.toFixed(0)}%</span><span class="prog-eta" style="color:${behind?'var(--red)':'var(--muted)'}">ETA: ${fmtD(etaD)} ${behind?'⚠ ÎNTÂRZIERE':''}</span></div>`;
+  }
+  document.getElementById('progWrap').innerHTML=`<div style="padding:0 0 8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><span style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Progres față de target · Start: ${fmtD(startD)}</span><span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Bara albastră = timp scurs · Linie galbenă = ETA estimat</span></div>${mkBar('Dif. Totală GIS vs SAP PM',params.tDif/12,maxAD)}${mkBar('Corelare Rețea PM totală',params.tPM/12,maxAP)}`;
+}
+function rDaysInfo(){
+  const startD=new Date(getStartDate()),now=new Date(),d=Math.round((now-startD)/86400000);
+  document.getElementById('daysInfo').innerHTML=d>=0?`<span style="color:var(--green)">▶ Activ</span> · <span style="color:var(--accent)">${d}</span> zile de la start`:`<span style="color:var(--yellow)">⏳ Start în</span> <span style="color:var(--accent)">${Math.abs(d)}</span> zile`;
+}
+function initWhatIf(){
+  const gs=document.getElementById('whatifGroup'),ps=document.getElementById('whatifPeople'),rs=document.getElementById('whatifRate');
+  const pv=document.getElementById('whatifPeopleValue'),rv=document.getElementById('whatifRateValue'),rd=document.getElementById('whatifResult');
+  rs.value=vm().toFixed(2);rv.textContent=vm().toFixed(2)+' km/h';
+  gs.innerHTML=getOpGroups().map(g=>`<option value="${g.name}">${g.name}</option>`).join('');
+  function upd(){
+    const gn=gs.value;if(!gn)return;
+    const g=GD.find(x=>x.name===gn);if(!g)return;
+    const ep=parseInt(ps.value),newR=parseFloat(rs.value)||vm();
+    const c=params.comp[gn]||{gis:1,rasr:1,fol:0};
+    const nrEchipeOld=Math.min(c.gis,c.rasr);
+    const nrEchipeNew=Math.max(1,nrEchipeOld+Math.round(ep/2));
+    const oaO=oreAn(gn),oaN=params.oreSapt*params.saptAn*(nrEchipeNew+c.fol*(params.pctFOL/100));
+    const adO=oaO>0?g.difKm/vm()/oaO:Infinity,adN=oaN>0?g.difKm/newR/oaN:Infinity;
+    const imp=adO-adN,pct=(imp/adO)*100;
+    const rDiff=newR-vm();
+    rd.innerHTML=`<strong>📊 Impact simulare pentru ${gn}</strong><br>${ep>0?`➕ +${ep} pers (${ep/2} echipe) · `:''}⚡ Rată: ${newR.toFixed(2)} km/h ${rDiff>=0?'(+'+rDiff.toFixed(2):rDiff.toFixed(2)} vs medie ${vm().toFixed(2)}) · <span class="whatif-impact">${imp>0?`⏱ Reducere cu ${imp.toFixed(3)} ani (${pct.toFixed(1)}%)`:imp<0?`⚠️ Creștere cu ${Math.abs(imp).toFixed(3)} ani`:'📌 Nicio schimbare'}</span><br><span class="text-muted">🎯 ETA nou: ${adN.toFixed(3)} ani (de la ${adO.toFixed(3)} ani) · Target: ${params.tDif} ani</span>`;
+  }
+  ps.addEventListener('input',()=>{pv.textContent=`+${ps.value} pers (${parseInt(ps.value)/2} echipe)`;upd();});
+  rs.addEventListener('input',()=>{rv.textContent=`${parseFloat(rs.value).toFixed(2)} km/h`;upd();});
+  gs.addEventListener('change',upd);upd();
+}
+
+function rExec(){
+  const v=vm(),now=new Date();
+  // ── opGroups MUST be defined first ──
+  const mergedCORGs=new Set(GD.filter(g=>g.merged).flatMap(g=>g.corg));
+  const opGroups=GD.filter(g=>g.merged||(g.corg.length===1&&!mergedCORGs.has(g.corg[0])));
+  const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000;
+  const tDif=opGroups.reduce((a,g)=>a+g.difKm,0);
+  const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
+  const _fce=params.factorC||1.0;
+  const maxAD=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fce/oa:0;}));
+  const maxAP=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fce/oa:0;}));
+  const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v/oa<=params.tDif/12;}).length;
+  const tPers=opGroups.reduce((a,g)=>a+persTotal(g.name),0);
+  const startD=new Date(getStartDate());
+  const tDifDate=addM(startD,params.tDif/12);
+  const daysLeft=Math.round((tDifDate-now)/86400000);
+  const elapsedYears=Math.max((now-startD)/365.25/86400000,0);
+  const planPctDif=Math.min(elapsedYears/params.tDif*100,100);
+  const planPctPM=Math.min(elapsedYears/params.tPM*100,100);
+  const behindDif=maxAD>params.tDif/12, behindPM=maxAP>params.tPM/12;
+
+  // ── Verdict extins (fix ChatGPT #1) — include si behindPM
+  const allOk=grpOk===opGroups.length&&!behindDif&&!behindPM;
+  const nearOk=grpOk===opGroups.length&&!behindDif&&behindPM; // dif ok, PM intarzie
+  const someOk=grpOk>opGroups.length/2;
+  let verdictColor=allOk?'var(--green)':nearOk?'var(--accent)':someOk?'var(--yellow)':'var(--red)';
+  let verdictIcon=allOk?'✅':nearOk?'📋':someOk?'⚠️':'🚨';
+  let verdictText=allOk?'PE PLAN':nearOk?'APROAPE DE TARGET':someOk?'ATENȚIE NECESARĂ':'INTERVENȚIE URGENTĂ';
+  let verdictSub=allOk?`Toate ${opGroups.length} grupurile respectă ambele targeturi`:
+    nearOk?`Diferențele în target · Rețea PM: ETA ${fmtLuni(maxAP*12)} vs target ${params.tPM} luni`:
+    someOk?`${opGroups.length-grpOk} din ${opGroups.length} grupuri depășesc targetul diferențe`:
+    `${opGroups.length-grpOk} grupuri necesită intervenție urgentă`;
+
+  // ── KPI zile depășite (fix ChatGPT #3)
+  const daysDisplay=daysLeft>0?daysLeft+' zile':(daysLeft===0?'AZI':'+'+ Math.abs(daysLeft)+' zile dep.');
+  const daysColor=daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':daysLeft>0?'var(--red)':'var(--red)';
+
+  // ── Eficienta per grup (DeepSeek formula)
+  // eficienta = difKm / oreAn = km de diferente per ora totala de lucru a echipei
+  const groupEff=opGroups.map(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    const eff=oa>0?g.difKm/oa:0; // km / ora_echipa
+    return{name:g.name,eff,ad,color:g.color,merged:g.merged};
+  }).sort((a,b)=>b.eff-a.eff);
+  const bestEff=groupEff[0]?.eff||1;
+  const avgAD=groupEff.reduce((s,g)=>s+(isFinite(g.ad)?g.ad:0),0)/groupEff.length;
+
+  // ── Clasament (DeepSeek)
+  const rankingHtml=groupEff.map((g,i)=>{
+    const pct=bestEff>0?(g.eff/bestEff*100):0;
+    const dot=g.ad<=params.tDif?'var(--green)':g.ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'';
+    return `<div class="ranking-item">
+      <div class="ranking-pos">${medal}</div>
+      <div class="ranking-name" style="color:${g.color}">${g.name}</div>
+      <div class="ranking-bar"><div class="ranking-fill" style="width:${pct.toFixed(1)}%;background:${dot}"></div></div>
+      <div class="ranking-value" style="color:${dot}">${g.eff.toFixed(4)} km/h/pers</div>
+    </div>`;
+  }).join('') + `<div class="ranking-avg-line"><span>Medie DEGR</span><span>${(groupEff.reduce((s,g)=>s+g.eff,0)/groupEff.length).toFixed(4)} km/h/pers</span></div>`;
+
+  // ── Comparatie vs medie si vs target (DeepSeek)
+  const groupCompareHtml=opGroups.map(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    const dot=ad<=params.tDif?'var(--green)':ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
+    const vsAvg=isFinite(ad)?(ad-avgAD):0;
+    const pctBar=Math.min((params.tDif/Math.max(ad,0.001))*100,100);
+    return `<div class="exec-group-item">
+      <div class="exec-group-dot" style="background:${dot}"></div>
+      <span class="exec-group-name" style="color:${g.color}">${g.name}</span>
+      <div class="exec-group-bar-wrap"><div class="exec-group-bar" style="width:${pctBar.toFixed(1)}%;background:${dot}"></div></div>
+      <span class="exec-group-pct" style="color:${dot}">${isFinite(ad)?ad.toFixed(2):'∞'} ani</span>
+      <span class="exec-group-eta" style="color:${vsAvg<=0?'var(--green)':'var(--red)'};font-size:8px">${vsAvg>0?'+':''}${vsAvg.toFixed(2)} vs med</span>
+    </div>`;
+  }).join('');
+
+  // ── Actiuni recomandate (ChatGPT #2 — include si rate advice)
+  const actions=[];
+  opGroups.forEach(g=>{
+    const oa=oreAn(g.name);
+    const ad=oa>0?g.difKm/v/oa:Infinity;
+    if(!isFinite(ad))return;
+    if(ad>params.tDif/12*1.5){
+      actions.push({icon:'🚨',title:`Alocare urgentă — ${g.name}`,desc:`ETA ${fmtLuni(ad*12)} vs target ${params.tDif} luni. Adaugă GIS+RASR imediat.`,badge:'urgent'});
+    } else if(ad>params.tDif/12){
+      // fix ChatGPT #2 — sugereaza rata daca e mica
+      if(v<2.0&&ad<params.tDif/12*1.2){
+        actions.push({icon:'⚡',title:`Îmbunătățește rata — ${g.name}`,desc:`ETA la ${fmtLuni(ad*12)}, ușor peste target. Rata medie ${v.toFixed(2)} km/h sub 2.0 km/h. Optimizarea procesului de corelare poate fi suficientă.`,badge:'watch'});
+      } else {
+        actions.push({icon:'⚠️',title:`Monitorizare — ${g.name}`,desc:`ETA ${fmtLuni(ad*12)} > target ${params.tDif} luni. Verifică ritmul săptămânal.`,badge:'watch'});
+      }
+    }
+  });
+  if(behindPM&&!behindDif){
+    actions.push({icon:'📋',title:'Rețea PM — planificare pe termen lung',desc:`ETA rețea PM: ${fmtLuni(maxAP*12)} vs target ${params.tPM} luni. Diferențele sunt în target — concentrare pe calitate date PM.`,badge:'watch'});
+  }
+  if(actions.length===0){
+    actions.push({icon:'✅',title:'Toate grupurile în target',desc:`ETA max diferențe: ${fmtLuni(maxAD*12)} · ETA rețea PM: ${fmtLuni(maxAP*12)}.`,badge:'good'});
+  }
+  actions.push({icon:'📊',title:'Monitorizare lunară activă',desc:`${tPers} persoane · ${GD.length} grupuri · Rată medie: ${v.toFixed(2)} km/h/pers.`,badge:'good'});
+
+  // ── TARGET INTERN (ChatGPT #5 — 98% configurabil via param)
+  const targetPct=98;
+  const pctDisplay=`${(tPct*100).toFixed(1)}%`;
+  const pctTarget=`target intern: ${targetPct}%`;
+  const pctGap=((tPct*100)-targetPct).toFixed(1);
+  const pctGapText=pctGap>=0?`✓ +${pctGap}pp față de target`:`${pctGap}pp sub target`;
+  const pctGapColor=pctGap>=0?'var(--green)':'var(--red)';
+
+  document.getElementById('execWrap').innerHTML=`
+    <div class="exec-hero">
+      <div class="exec-hero-left">
+        <h2>Kaizen Date Gaz — Status Corelare GIS ↔ SAP PM</h2>
+        <p>Delgaz Grid S.A. · ${GD.length} grupuri operative · ${tPers} persoane implicate</p>
+        <div class="exec-hero-date">📅 ${now.toLocaleDateString('ro-RO',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · Start: ${fmtD(startD)}</div>
+        <button class="exec-print-btn" onclick="execPrint()">🖨 Export PDF Executive</button>
+      </div>
+      <div class="exec-verdict">
+        <div class="exec-verdict-val" style="color:${verdictColor}">${verdictIcon}</div>
+        <div class="exec-verdict-lbl" style="color:${verdictColor}">${verdictText}</div>
+        <div class="exec-verdict-sub" style="color:var(--muted)">${verdictSub}</div>
+      </div>
+    </div>
+
+    <div class="exec-kpi-row">
+      <div class="exec-kpi ${tPct>.97?'green':tPct>.95?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'}">${pctDisplay}</div>
+        <div class="exec-kpi-lbl">Lungime Rețea Corelată</div>
+        <div class="kpi-target">${(CORG.reduce((a,r)=>a+r.rGIS,0)/1000).toFixed(0)} km GIS / ${(CORG.reduce((a,r)=>a+r.rPM,0)/1000).toFixed(0)} km PM</div>
+        <div class="exec-kpi-sub" style="color:${pctGapColor};font-size:9px">${pctGapText}</div>
+      </div>
+      <div class="exec-kpi ${tDif<500?'green':tDif<1000?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'}">${tDif.toFixed(0)} km</div>
+        <div class="exec-kpi-lbl">De Corelat</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">din ${tPM.toFixed(0)} km total</div>
+      </div>
+      <div class="exec-kpi ${grpOk===GD.length?'green':grpOk>GD.length/2?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${grpOk===GD.length?'var(--green)':grpOk>GD.length/2?'var(--yellow)':'var(--red)'}">${grpOk}/${GD.length}</div>
+        <div class="exec-kpi-lbl">Grupuri în Target</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">target: ${params.tDif} luni diferențe</div>
+      </div>
+      <div class="exec-kpi ${daysLeft>90?'green':daysLeft>30?'yellow':'red'}">
+        <div class="exec-kpi-val" style="color:${daysColor}">${daysDisplay}</div>
+        <div class="exec-kpi-lbl">${daysLeft>0?'Zile Rămase':'Deadline Depășit'}</div>
+        <div class="exec-kpi-sub" style="color:var(--muted)">${fmtD(tDifDate)}</div>
+      </div>
+    </div>
+
+    <div class="exec-progress-card">
+      <h3><span></span>Progres față de Targeturi</h3>
+      <div class="exec-prog-row">
+        <span class="exec-prog-label">🔴 Diferențe GIS vs PM</span>
+        <div class="exec-prog-outer">
+          <div class="exec-prog-fill" style="width:${planPctDif.toFixed(1)}%;background:${behindDif?'var(--red)':'var(--accent)'}"></div>
+          <div class="exec-prog-target" style="left:${Math.min((maxAD/params.tDif)*100,99).toFixed(1)}%"></div>
+        </div>
+        <span class="exec-prog-pct" style="color:${behindDif?'var(--red)':'var(--green)'}">${planPctDif.toFixed(0)}%</span>
+        <span class="exec-prog-eta" style="color:${behindDif?'var(--red)':'var(--muted)'}">ETA: ${fmtD(addM(startD,maxAD))} ${behindDif?'⚠':''}</span>
+      </div>
+      <div class="exec-prog-row">
+        <span class="exec-prog-label">🔵 Rețea PM totală</span>
+        <div class="exec-prog-outer">
+          <div class="exec-prog-fill" style="width:${planPctPM.toFixed(1)}%;background:${behindPM?'var(--yellow)':'var(--blue)'}"></div>
+          <div class="exec-prog-target" style="left:${Math.min((maxAP/params.tPM)*100,99).toFixed(1)}%"></div>
+        </div>
+        <span class="exec-prog-pct" style="color:${behindPM?'var(--yellow)':'var(--green)'}">${planPctPM.toFixed(0)}%</span>
+        <span class="exec-prog-eta" style="color:var(--muted)">ETA: ${fmtD(addM(startD,maxAP))}</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:4px;font-family:var(--mono)">Bara = timp scurs din target · Linie galbenă = ETA estimat</div>
+    </div>
+
+    <div class="exec-two-col">
+      <div class="exec-card">
+        <h3><span></span>🏆 Clasament Eficiență Corelare</h3>
+        ${rankingHtml}
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Eficiență = km diferențe / ore totale echipă · Mai mare = mai eficient</div>
+      </div>
+      <div class="exec-card">
+        <h3><span></span>📊 Status & Comparație vs Medie</h3>
+        ${groupCompareHtml}
+        <div style="font-size:9px;color:var(--muted);margin-top:6px">Bara = % din target atins · Verde sub medie = performanță bună</div>
+      </div>
+    </div>
+
+    <div class="exec-card" style="margin-top:16px">
+      <h3><span></span>💼 Acțiuni Recomandate</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${actions.map(a=>`<div class="exec-action-item">
+          <div class="exec-action-icon">${a.icon}</div>
+          <div class="exec-action-text">
+            <div class="exec-action-title">${a.title}</div>
+            <div class="exec-action-desc">${a.desc}</div>
+          </div>
+          <span class="exec-action-badge ${a.badge}">${a.badge==='urgent'?'URGENT':a.badge==='watch'?'ATENȚIE':'OK'}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="exec-footer">
+      Kaizen Date Gaz · Delgaz Grid S.A. · Date Power BI · Rată: ${params.vMin}–${params.vMax} km/h/pers (medie ${v.toFixed(2)}) · ${params.oreSapt}h/săpt · ${params.saptAn} săpt/an · ${now.toLocaleString('ro-RO')}
+    </div>
+  `;
+}
+
+function execPrint(){
+  const curTab = document.querySelector('.content.active')?.id || 'tab-executive';
+  // Activează tab-ul executive
+  swTab('executive');
+  // Randează conținut actualizat
+  rExec();
+  // Setează modul print executiv
+  document.body.classList.add('exec-print-mode');
+  // Mică întârziere să se randeze DOM-ul
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => {
+      document.body.classList.remove('exec-print-mode');
+      // Restaurează tab-ul anterior
+      const prevId = curTab.replace('tab-', '');
+      swTab(prevId);
+    }, 800);
+  }, 250);
+}
+
+function fullUpdate(){
+  rHeader();rRetea();rGrupuri();rGroupInputs();rPlanificare();rProiectie();
+  rKPI();rAlerts();rProgress();rDaysInfo();rBlockers();rProbability();initWhatIf();
+  document.getElementById('rataMedie').textContent=vm().toFixed(2)+' km/h';
+  rExec();
+}
+function scheduleUpdate(){
+  if(updateScheduled)return;updateScheduled=true;
+  requestAnimationFrame(()=>{fullUpdate();saveState();updateScheduled=false;});
+}
+function updParams(){
+  let vMin=parseFloat(document.getElementById('vMin').value);
+  let vMax=parseFloat(document.getElementById('vMax').value);
+  if(vMin>=vMax)vMax=vMin+0.5;
+  params.vMin=vMin;params.vMax=vMax;
+  params.oreSapt=parseFloat(document.getElementById('oreSapt').value)||4;
+  params.saptAn=parseInt(document.getElementById('saptAn').value)||47;
+  params.tDif=parseFloat(document.getElementById('tDif').value)||6;
+  params.tPM=parseFloat(document.getElementById('tPM').value)||36;
+  params.pctFOL=parseFloat(document.getElementById('pctFOL').value)||0;
+  const fcEl=document.getElementById('factorC');if(fcEl)params.factorC=parseFloat(fcEl.value)||1.0;
+  scheduleUpdate();
+}
+const SHEET_NAME="Date Rețea Grup";
+async function loadExcel(file){
+  if(!file||isLoadingExcel)return;isLoadingExcel=true;
+  const st=document.getElementById('uploadStatus'),inf=document.getElementById('uploadInfo');
+  st.className='upload-status idle';st.innerHTML='<span class="spinner"></span> Se încarcă...';
+  try{
+    const data=await file.arrayBuffer();
+    const wb=XLSX.read(data,{type:'array'});
+    let sn=wb.SheetNames.find(n=>n===SHEET_NAME)||wb.SheetNames.find(n=>n.toLowerCase().includes('grup'))||wb.SheetNames.find(n=>n.toLowerCase().includes('retea'));
+    if(!sn)throw new Error(`Foaia "${SHEET_NAME}" nu a fost găsită. Foi: ${wb.SheetNames.join(', ')}`);
+    const ws=wb.Sheets[sn];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:0});
+    let hi=rows.findIndex(r=>r.some(c=>String(c).toLowerCase().includes('corg')||String(c).toLowerCase().includes('grup')));
+    if(hi<0)hi=2;
+    const dr=rows.slice(hi+1).filter(r=>{const n=String(r[0]||'').trim();return n&&!n.toLowerCase().includes('total')&&n.length>1;});
+    if(!dr.length)throw new Error(`Nu s-au găsit rânduri de date în foaia "${sn}"`);
+    const pn=v=>{ if(typeof v==='number') return v; if(typeof v==='string'&&v.startsWith('=')) return 0; return parseFloat(String(v).replace(/[\s]/g,'').replace(',','.'))||0; };
+    const newCORG=dr.map(r=>{
+        const rPM=pn(r[1]),rGIS=pn(r[2]);
+        const bPM=pn(r[4]),bGIS=pn(r[5]);
+        const tPM=pn(r[7]),tGIS=pn(r[8]);
+        // Diferentele pot fi formule Excel (=B2-C2) — calculam direct din PM-GIS
+        const dR=(typeof r[3]==='number'&&r[3]!==0)?r[3]:rPM-rGIS;
+        const dB=(typeof r[6]==='number'&&r[6]!==0)?r[6]:bPM-bGIS;
+        const dT=(typeof r[9]==='number'&&r[9]!==0)?r[9]:tPM-tGIS;
+        return {n:String(r[0]||'').trim(),rPM,rGIS,dR,bPM,bGIS,dB,tPM,tGIS,dT};
+      });
+    CORG=newCORG;GROUPS=buildGroupsFromCORG();
+    GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:1,rasr:1,fol:0};});
+    GD=computeGD(GROUPS,CORG);
+    const tPM=(CORG.reduce((a,g)=>a+g.rPM,0)/1000).toFixed(1),tDif=GD.reduce((a,g)=>a+g.difKm,0).toFixed(1);
+    st.className='upload-status ok';st.textContent=`✓ ${file.name} — foaia "${sn}" — ${newCORG.length} grupuri încărcate`;
+    inf.innerHTML=`<span>PM Total: ${tPM} km</span><span>Dif Totală: ${tDif} km</span><span>Grupuri: ${newCORG.length}</span><span style="color:var(--green)">Actualizat: ${new Date().toLocaleTimeString('ro-RO')}</span>`;
+    fullUpdate();saveState();
+  }catch(err){st.className='upload-status err';st.textContent=`✗ ${err.message}`;inf.innerHTML='';}
+  finally{isLoadingExcel=false;}
+}
+function resetDefault(){
+  initDefault();fullUpdate();saveState();
+  const st=document.getElementById('uploadStatus');
+  st.className='upload-status idle';st.textContent='Datele implicite au fost restaurate';
+  document.getElementById('uploadInfo').innerHTML='';
+  setTimeout(()=>{if(st.textContent==='Datele implicite au fost restaurate')st.textContent='Niciun fișier încărcat — datele hardcodate sunt active';},3000);
+}
+function exportCSV(){
+  const v=vm();
+  const rows=[['Grup CORG','PM Total (km)','Dif Totala (km)','% Corelat','Ore necesare Dif','Ani Dif','Ani PM','GIS','RASR','FOL','Target Dif OK','Target PM OK']];
+  GD.forEach(g=>{
+    const oa=oreAn(g.name),_fcsv=params.factorC||1.0,ad=oa>0?g.difKm/v*_fcsv/oa:0,ap=oa>0?g.pmKm/v*_fcsv/oa:0;
+    const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
+    rows.push([g.name,g.pmKm.toFixed(2),g.difKm.toFixed(2),(g.pct*100).toFixed(2)+'%',(g.difKm/v).toFixed(0),ad.toFixed(3),ap.toFixed(3),c.gis,c.rasr,c.fol,ad<=params.tDif?'DA':'NU',ap<=params.tPM?'DA':'NU']);
+  });
+  const csv=rows.map(r=>r.join(';')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`Kaizen_Date_Gaz_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+function saveTeamCfg(){
+  localStorage.setItem('kaizen_team_config',JSON.stringify(params.comp));
+  const pl=document.querySelector('#notifPanel .notif-list');
+  const d=document.createElement('div');d.className='notif-item ok';
+  d.innerHTML='<div class="ni-title">✅ Configurație salvată</div><div class="ni-msg">Componența echipelor a fost salvată în browser.</div>';
+  pl.prepend(d);setTimeout(()=>d.remove(),3000);
+  document.getElementById('notifPanel').classList.add('open');
+  setTimeout(()=>document.getElementById('notifPanel').classList.remove('open'),2500);
+}
+function loadTeamCfg(){
+  const saved=localStorage.getItem('kaizen_team_config');
+  if(!saved){alert('Nu există o configurație salvată anterior.');return;}
+  params.comp=JSON.parse(saved);
+  GROUPS.forEach(g=>{if(!params.comp[g.name])params.comp[g.name]={gis:1,rasr:1,fol:0};});
+  fullUpdate();
+}
+function swTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
+  document.getElementById(`tab-${id}`).classList.add('active');
+  if(id==='executive')rExec();
+}
+function bindEvents(){
+  ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorC'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updParams);});
+  document.getElementById('startDate').addEventListener('change',()=>{rProgress();rDaysInfo();rKPI();});
+  document.getElementById('xlsxFile').addEventListener('change',e=>{if(e.target.files[0])loadExcel(e.target.files[0]);});
+  document.getElementById('resetDataBtn').addEventListener('click',resetDefault);
+  document.getElementById('exportCsvBtn').addEventListener('click',exportCSV);
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('saveTeamConfigBtn').addEventListener('click',saveTeamCfg);
+  document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.toggle('open'));
+  document.getElementById('notifCloseBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.remove('open'));
+  document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>swTab(tab.dataset.tab)));
+  document.getElementById('executiveModeToggle').addEventListener('change',e=>document.body.classList.toggle('executive-mode',e.target.checked));
+}
+function init(){loadState();bindEvents();fullUpdate();}
+// DOMContentLoaded pentru siguranta in iframe SharePoint
+init();
+})();
+
+
+</script>
+
+<script>
+// ── LOGIN KAIZEN ──────────────────────────────────────────────
+const _KP = atob('RGVsZ2F6LjIwMjY=');
+function kzLogin(){
+  const v = document.getElementById('kzPwd').value;
+  if(v === _KP){
+    const el = document.getElementById('kzLogin');
+    el.style.opacity='0';
+    el.style.transition='opacity .4s';
+    setTimeout(()=>el.style.display='none', 400);
+    try{ sessionStorage.setItem('kz_ok','1'); }catch(e){}
+  } else {
+    const e = document.getElementById('kzErr');
+    e.classList.add('show');
+    document.getElementById('kzPwd').value='';
+    document.getElementById('kzPwd').focus();
+    setTimeout(()=>e.classList.remove('show'), 2500);
+  }
+}
+function kzToggle(){
+  const i=document.getElementById('kzPwd');
+  const e=document.querySelector('.kzEye');
+  i.type = i.type==='password'?'text':'password';
+  e.textContent = i.type==='password'?'👁':'🙈';
+}
+// Daca e deja autentificat in aceasta sesiune, sari peste login
+try{
+  if(sessionStorage.getItem('kz_ok')==='1'){
+    const el=document.getElementById('kzLogin');
+    if(el) el.style.display='none';
+  }
+}catch(e){}
+</script>
+
+</body>
+</html>
