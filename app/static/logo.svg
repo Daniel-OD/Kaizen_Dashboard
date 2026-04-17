@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Delgaz Grid Logo -->
+  <rect x="8" y="8" width="44" height="44" rx="6" fill="url(#logoGradient)"/>
+  
+  <!-- Grid pattern inside -->
+  <g stroke="#ffffff" stroke-width="1.2" opacity="0.9">
+    <line x1="18" y1="18" x2="42" y2="42"/>
+    <line x1="42" y1="18" x2="18" y2="42"/>
+    <circle cx="30" cy="30" r="6" fill="none"/>
+  </g>
+  
+  <!-- Text: Delgaz Grid -->
+  <text x="62" y="38" font-family="DM Sans, Arial, sans-serif" font-size="22" font-weight="700" fill="#1d4ed8" letter-spacing="-0.5">Delgaz Grid</text>
+</svg>
