@@ -1,36 +1,54 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from app.api.routes import router
-import os
 
-app = FastAPI(title="Kaizen Dashboard API", version="1.1")
-
+app = FastAPI(title="Kaizen Dashboard API", version="1.2")
 app.include_router(router, prefix="/api")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_DIR = os.path.dirname(BASE_DIR)
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(APP_DIR)
+STATIC_DIR = os.path.join(APP_DIR, "static")
+INDEX_PATH = os.path.join(PROJECT_ROOT, "index.html")
 
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-@app.get("/", response_class=HTMLResponse)
-def root():
-    index_path = os.path.join(ROOT_DIR, "index.html")
-    try:
-        with open(index_path, "r", encoding="utf-8") as f:
-            html = f.read()
-    except:
-        return "index.html not found"
+
+def render_dashboard_html() -> HTMLResponse:
+    if not os.path.exists(INDEX_PATH):
+        raise HTTPException(status_code=500, detail=f"index.html not found at {INDEX_PATH}")
+
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        html = f.read()
 
     inject = '<script src="/static/bridge.js"></script>'
-
-    if "</body>" in html:
-        html = html.replace("</body>", inject + "\n</body>")
-    else:
-        html += inject
+    if inject not in html:
+        if "</body>" in html:
+            html = html.replace("</body>", inject + "\n</body>")
+        else:
+            html += inject
 
     return HTMLResponse(content=html)
 
+
+@app.get("/", response_class=HTMLResponse)
+def root() -> HTMLResponse:
+    return render_dashboard_html()
+
+
 @app.get("/health")
-def health():
-    return {"status": "ok"}
+def health() -> dict:
+    return {
+        "status": "ok",
+        "index_exists": os.path.exists(INDEX_PATH),
+        "index_path": INDEX_PATH,
+        "static_path": STATIC_DIR,
+    }
+
+
+@app.get("/{full_path:path}", response_class=HTMLResponse)
+def spa_fallback(full_path: str) -> HTMLResponse:
+    if full_path.startswith("api/") or full_path.startswith("static/"):
+        raise HTTPException(status_code=404, detail="Not Found")
+    return render_dashboard_html()
