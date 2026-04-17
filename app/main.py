@@ -50,7 +50,9 @@ def root() -> HTMLResponse:
 def health() -> dict:
     return {
         "status": "ok",
+        "version": app.version,
         "index_exists": os.path.exists(INDEX_PATH),
+        "static_exists": os.path.isdir(STATIC_DIR),
     }
 
 

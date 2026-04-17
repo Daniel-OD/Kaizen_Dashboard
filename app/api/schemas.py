@@ -39,7 +39,7 @@ class CalculateRequest(BaseModel):
     """Full payload for /api/calculate."""
 
     params: DashboardParams = DashboardParams()
-    groups: list[GroupInput] = []
+    groups: list[GroupInput] = Field(default_factory=list)
 
 
 class GroupResult(BaseModel):

@@ -1,16 +1,22 @@
 """Core business calculations for Kaizen Dashboard.
 
 Business rules:
-  nr_echipe       = min(GIS, RASR)
+  nr_echipe       = min(GIS, RASR)          — returns 0 when either is 0
   ore_an          = ore_sapt * sapt_an * (nr_echipe + FOL * pctFOL / 100)
   rata_medie      = (vMin + vMax) / 2
   ore_nec_dif     = dif_km / rata_medie
   ore_nec_pm      = pm_km / rata_medie
   luni_dif        = (ore_nec_dif / ore_an) * 12 * factorC
   luni_pm         = (ore_nec_pm  / ore_an) * 12 * factorC
+
+When nr_echipe == 0 the group has no capacity.  ore_an falls to 0 and
+ETA becomes ``float('inf')`` (reported as -1 in JSON) to signal a
+blocked / non-achievable state.
 """
 
 from __future__ import annotations
+
+import math
 
 from app.core.validators import clamp_positive, safe_div
 
@@ -20,15 +26,22 @@ from app.core.validators import clamp_positive, safe_div
 # ---------------------------------------------------------------------------
 
 def nr_echipe(gis: int, rasr: int) -> int:
-    """Real team count = min(GIS, RASR), at least 1."""
-    return max(1, min(gis, rasr))
+    """Real team count = min(GIS, RASR).
+
+    Returns 0 when either operand is 0 — the group has no capacity.
+    """
+    return min(gis, rasr)
 
 
 def ore_an(ore_sapt: float, sapt_an: int, teams: int, fol: int, pct_fol: float) -> float:
     """Yearly working hours for the group.
 
     ``ore_an = ore_sapt * sapt_an * (nr_echipe + FOL * pctFOL / 100)``
+
+    Returns 0.0 when *teams* is 0 (blocked group — no capacity).
     """
+    if teams <= 0:
+        return 0.0
     effective = teams + fol * (pct_fol / 100.0)
     result = ore_sapt * sapt_an * effective
     return clamp_positive(result, fallback=ore_sapt * sapt_an)
@@ -44,8 +57,29 @@ def ore_necesare(km: float, rate: float) -> float:
     return safe_div(km, clamp_positive(rate), default=0.0)
 
 
+_BLOCKED_ETA: float = float("inf")
+
+# Sentinel used in JSON output: ``-1`` signals a blocked / non-achievable ETA.
+BLOCKED_ETA_JSON: float = -1
+
+
+def _eta_for_json(val: float) -> float:
+    """Convert internal ETA to a JSON-safe number.
+
+    ``inf`` (blocked) → ``-1``.
+    """
+    return BLOCKED_ETA_JSON if not math.isfinite(val) else round(val, 2)
+
+
 def luni_eta(ore_nec: float, ore_an_val: float, factor_c: float) -> float:
-    """ETA in months = (ore_nec / ore_an) * 12 * factorC."""
+    """ETA in months = (ore_nec / ore_an) * 12 * factorC.
+
+    Returns ``inf`` when *ore_an_val* is 0 and work is pending,
+    signalling a blocked / non-achievable state.
+    Returns 0 when there is no work to do (ore_nec == 0).
+    """
+    if ore_an_val <= 0:
+        return _BLOCKED_ETA if ore_nec > 0 else 0.0
     return safe_div(ore_nec, ore_an_val, default=0.0) * 12.0 * max(factor_c, 1.0)
 
 
@@ -93,16 +127,18 @@ def compute_dashboard(payload: dict) -> dict:
         l_dif = luni_eta(o_dif, oa, factor_c)
         l_pm = luni_eta(o_pm, oa, factor_c)
 
+        blocked = math.isinf(l_dif) or math.isinf(l_pm)
+
         results.append({
             "name": g.get("name", ""),
             "nr_echipe": teams,
             "ore_an": round(oa, 2),
             "ore_nec_dif": round(o_dif, 2),
             "ore_nec_pm": round(o_pm, 2),
-            "luni_dif": round(l_dif, 2),
-            "luni_pm": round(l_pm, 2),
-            "ok_dif": l_dif <= t_dif,
-            "ok_pm": l_pm <= t_pm,
+            "luni_dif": _eta_for_json(l_dif),
+            "luni_pm": _eta_for_json(l_pm),
+            "ok_dif": (not blocked) and l_dif <= t_dif,
+            "ok_pm": (not blocked) and l_pm <= t_pm,
         })
 
     scenarios = compute_scenarios(groups_in, params)
