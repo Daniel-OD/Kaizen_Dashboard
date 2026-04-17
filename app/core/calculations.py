@@ -1,30 +1,114 @@
-def ore_an(params, comp):
-    teams = min(comp.get("gis",1), comp.get("rasr",1))
-    fol = comp.get("fol",0) * (params.get("pctFOL",0)/100)
-    return params["oreSapt"] * params["saptAn"] * (teams + fol)
+"""Core business calculations for Kaizen Dashboard.
+
+Business rules:
+  nr_echipe       = min(GIS, RASR)
+  ore_an          = ore_sapt * sapt_an * (nr_echipe + FOL * pctFOL / 100)
+  rata_medie      = (vMin + vMax) / 2
+  ore_nec_dif     = dif_km / rata_medie
+  ore_nec_pm      = pm_km / rata_medie
+  luni_dif        = (ore_nec_dif / ore_an) * 12 * factorC
+  luni_pm         = (ore_nec_pm  / ore_an) * 12 * factorC
+"""
+
+from __future__ import annotations
+
+from app.core.validators import clamp_positive, safe_div
 
 
-def compute_eta(km, rate, ore_an_val, factor):
-    if ore_an_val <= 0:
-        return float("inf")
-    return (km / rate) / ore_an_val * factor
+# ---------------------------------------------------------------------------
+# Primitive helpers
+# ---------------------------------------------------------------------------
+
+def nr_echipe(gis: int, rasr: int) -> int:
+    """Real team count = min(GIS, RASR), at least 1."""
+    return max(1, min(gis, rasr))
 
 
-def compute_dashboard(payload: dict):
+def ore_an(ore_sapt: float, sapt_an: int, teams: int, fol: int, pct_fol: float) -> float:
+    """Yearly working hours for the group.
+
+    ``ore_an = ore_sapt * sapt_an * (nr_echipe + FOL * pctFOL / 100)``
+    """
+    effective = teams + fol * (pct_fol / 100.0)
+    result = ore_sapt * sapt_an * effective
+    return clamp_positive(result, fallback=ore_sapt * sapt_an)
+
+
+def rata_medie(v_min: float, v_max: float) -> float:
+    """Average correlation rate = (vMin + vMax) / 2."""
+    return clamp_positive((v_min + v_max) / 2.0, fallback=2.25)
+
+
+def ore_necesare(km: float, rate: float) -> float:
+    """Hours required = km / rate.  Returns 0 when rate is non-positive."""
+    return safe_div(km, clamp_positive(rate), default=0.0)
+
+
+def luni_eta(ore_nec: float, ore_an_val: float, factor_c: float) -> float:
+    """ETA in months = (ore_nec / ore_an) * 12 * factorC."""
+    return safe_div(ore_nec, ore_an_val, default=0.0) * 12.0 * max(factor_c, 1.0)
+
+
+# ---------------------------------------------------------------------------
+# High-level compute function called by the API
+# ---------------------------------------------------------------------------
+
+def compute_dashboard(payload: dict) -> dict:
+    """Compute all dashboard results from a validated payload dict.
+
+    This is the single authoritative source of business calculations.
+    """
+    from app.core.scenarios import compute_scenarios  # avoid circular at module level
+
     params = payload.get("params", {})
-    groups = payload.get("groups", [])
+    groups_in = payload.get("groups", [])
+
+    v_min = clamp_positive(params.get("vMin", 1.5))
+    v_max = clamp_positive(params.get("vMax", 3.0))
+    ore_sapt = clamp_positive(params.get("oreSapt", 4.0))
+    sapt_an = max(1, int(params.get("saptAn", 47)))
+    t_dif = clamp_positive(params.get("tDif", 6.0))
+    t_pm = clamp_positive(params.get("tPM", 36.0))
+    pct_fol = max(0.0, min(params.get("pctFOL", 0.0), 100.0))
+    factor_c = max(1.0, params.get("factorC", 1.0))
+
+    avg_rate = rata_medie(v_min, v_max)
 
     results = []
+    for g in groups_in:
+        comp = g.get("comp", {})
+        gis = max(0, int(comp.get("gis", 1)))
+        rasr = max(0, int(comp.get("rasr", 1)))
+        fol = max(0, int(comp.get("fol", 0)))
 
-    for g in groups:
-        comp = g.get("comp", {"gis":1,"rasr":1,"fol":0})
-        oa = ore_an(params, comp)
-        eta = compute_eta(g.get("difKm",0), params.get("vMed",2.25), oa, params.get("factorC",1))
+        teams = nr_echipe(gis, rasr)
+        oa = ore_an(ore_sapt, sapt_an, teams, fol, pct_fol)
+
+        dif_km = max(0.0, float(g.get("difKm", 0)))
+        pm_km = max(0.0, float(g.get("pmKm", 0)))
+
+        o_dif = ore_necesare(dif_km, avg_rate)
+        o_pm = ore_necesare(pm_km, avg_rate)
+
+        l_dif = luni_eta(o_dif, oa, factor_c)
+        l_pm = luni_eta(o_pm, oa, factor_c)
 
         results.append({
-            "name": g.get("name"),
-            "oreAn": oa,
-            "etaYears": eta
+            "name": g.get("name", ""),
+            "nr_echipe": teams,
+            "ore_an": round(oa, 2),
+            "ore_nec_dif": round(o_dif, 2),
+            "ore_nec_pm": round(o_pm, 2),
+            "luni_dif": round(l_dif, 2),
+            "luni_pm": round(l_pm, 2),
+            "ok_dif": l_dif <= t_dif,
+            "ok_pm": l_pm <= t_pm,
         })
 
-    return {"results": results}
+    scenarios = compute_scenarios(groups_in, params)
+
+    return {
+        "rata_medie": round(avg_rate, 4),
+        "groups": results,
+        "scenarios": scenarios,
+    }

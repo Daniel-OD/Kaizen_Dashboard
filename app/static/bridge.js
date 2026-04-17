@@ -23,19 +23,20 @@
     const groups = [];
 
     rows.forEach(r=>{
-      if(r.classList.contains('total')) return;
+      if(r.classList.contains('tot')) return;
       const tds = r.querySelectorAll('td');
       if(tds.length < 11) return;
 
       const name = tds[0].textContent.trim();
-      const compTxt = tds[3].textContent;
-      const [gis,rasr,fol] = compTxt.split('/').map(x=>num(x));
+      const gis = num(tds[1].textContent);
+      const rasr = num(tds[2].textContent);
+      const fol = num(tds[3].textContent);
 
       groups.push({
         name,
         difKm: num(tds[6].textContent),
         pmKm: num(tds[10].textContent),
-        comp: {gis,rasr,fol}
+        comp: {gis: gis||1, rasr: rasr||1, fol: fol||0}
       });
     });
 
@@ -61,11 +62,8 @@
 
     el = document.createElement('div');
     el.id = 'pyPanel';
-    el.style.margin = '12px 0';
-    el.style.padding = '10px';
-    el.style.border = '1px solid #444';
-    el.style.borderRadius = '8px';
-    el.innerHTML = '<b>Python Engine</b><div id="pyContent">loading...</div>';
+    el.style.cssText = 'margin:12px 24px;padding:12px 16px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:11px;box-shadow:0 1px 3px rgba(0,0,0,.08)';
+    el.innerHTML = '<div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">🐍 PYTHON ENGINE VALIDATION</div><div id="pyContent" style="font-family:var(--mono)">loading...</div>';
 
     const anchor = document.querySelector('.kpi-bar') || document.body;
     anchor.parentNode.insertBefore(el, anchor.nextSibling);
@@ -74,13 +72,24 @@
 
   function render(data){
     const el = ensurePanel().querySelector('#pyContent');
-    if(!data){ el.innerHTML = '⚠️ API unavailable'; return; }
+    if(!data){ el.innerHTML = '<span style="color:var(--red)">⚠ API unavailable</span>'; return; }
 
-    const rows = (data.results||[]).slice(0,6).map(r=>
-      `<div>${r.name}: ${r.etaYears?.toFixed(2)||'-'} yrs</div>`
+    const rows = (data.groups||[]).map(r=>{
+      const color = r.ok_dif ? 'var(--green)' : 'var(--red)';
+      const icon = r.ok_dif ? '✓' : '✗';
+      return `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border)">
+        <span>${r.name}</span>
+        <span style="color:${color}">${icon} ${r.luni_dif?.toFixed(1)||'-'} luni dif · ${r.luni_pm?.toFixed(1)||'-'} luni PM</span>
+      </div>`;
+    }).join('');
+
+    const scenarios = (data.scenarios||[]).map(s=>
+      `<span style="margin-right:12px">${s.rate} km/h → dif ${(s.max_eta_dif_years*12).toFixed(1)}l · PM ${(s.max_eta_pm_years*12).toFixed(1)}l</span>`
     ).join('');
 
-    el.innerHTML = rows || 'no data';
+    el.innerHTML = rows +
+      `<div style="margin-top:6px;font-size:9px;color:var(--muted)">Scenarii: ${scenarios}</div>` +
+      `<div style="font-size:9px;color:var(--muted)">Rată medie: ${data.rata_medie} km/h</div>`;
   }
 
   let t;

@@ -30,6 +30,14 @@ def render_dashboard_html() -> HTMLResponse:
         else:
             html += inject
 
+    # Inject bridge.js to connect frontend with Python API
+    bridge = '<script src="/static/bridge.js"></script>'
+    if bridge not in html:
+        if "</body>" in html:
+            html = html.replace("</body>", bridge + "\n</body>")
+        else:
+            html += bridge
+
     return HTMLResponse(content=html)
 
 
