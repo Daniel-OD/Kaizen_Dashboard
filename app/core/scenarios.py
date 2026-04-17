@@ -46,8 +46,7 @@ def compute_scenarios(groups: list[dict], params: dict) -> list[dict]:
     v_med = (v_min + v_max) / 2.0
 
     out: list[dict] = []
-    for label_rate in [(v_min, "worst"), (v_med, "medium"), (v_max, "best")]:
-        rate = label_rate[0]
+    for rate, _label in [(v_min, "worst"), (v_med, "medium"), (v_max, "best")]:
         dif_m, pm_m = _max_eta(groups, params, rate)
         out.append({
             "rate": round(rate, 4),
