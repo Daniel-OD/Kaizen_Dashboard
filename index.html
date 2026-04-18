@@ -1425,7 +1425,7 @@ function fullUpdate(){
   rHeader();rRetea();rGrupuri();rGroupInputs();rPlanificare();rProiectie();
   rKPI();rAlerts();rProgress();rDaysInfo();rBlockers();rProbability();initWhatIf();
   document.getElementById('rataMedie').textContent=vm().toFixed(2)+' km/h';
-  rExec();renderCharts();
+  rExec();renderCharts();attachAllTips();
   const activeTab=document.querySelector('.tab.active');
   if(activeTab&&activeTab.dataset.tab==='proiectie')renderETAChart();
   // Expose stable state for bridge.js — table is rendering target only
@@ -1532,7 +1532,7 @@ function swTab(id){
   activeTab.classList.add('active');activeTab.setAttribute('aria-selected','true');
   document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
   document.getElementById(`tab-${id}`).classList.add('active');
-  if(id==='executive'){rExec();renderCharts();}
+  if(id==='executive'){rExec();renderCharts();attachAllTips();}
   if(id==='proiectie')renderETAChart();
 }
 function bindEvents(){
