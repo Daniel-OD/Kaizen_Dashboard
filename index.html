@@ -423,9 +423,16 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 /* ── HOVER TOOLTIPS ── */
 /* ── UNIFIED JS-MANAGED TOOLTIP (position:fixed, never clipped by overflow:hidden) ── */
 [data-tip],[data-col-tip]{cursor:help;}
-#colTip{position:fixed;z-index:9999;background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:320px;text-align:left;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;transform:translateY(-4px);}
-#colTip.show{opacity:1;pointer-events:auto;transform:translateY(0);}
-@media(max-width:600px){#colTip{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
+#colTip{position:fixed;z-index:9999;background:rgba(20,20,18,.92);color:#fff;padding:10px 14px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.6;white-space:normal;min-width:180px;max-width:340px;text-align:left;opacity:0;pointer-events:none;transition:opacity .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1);box-shadow:0 6px 24px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.15);letter-spacing:normal;text-transform:none;font-weight:400;transform:translateY(-6px) scale(.97);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+#colTip.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+#colTip .tip-title{font-size:12px;font-weight:700;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:6px;}
+#colTip .tip-title .tip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;}
+#colTip .tip-body{font-size:11px;color:rgba(255,255,255,.88);line-height:1.55;}
+#colTip .tip-body .tip-row{display:flex;align-items:baseline;gap:4px;padding:1px 0;}
+#colTip .tip-body .tip-lbl{color:rgba(255,255,255,.55);font-size:10px;}
+#colTip .tip-body .tip-val{font-weight:600;}
+#colTip .tip-footer{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.12);font-size:10px;color:rgba(255,255,255,.5);font-style:italic;}
+@media(max-width:600px){#colTip{min-width:150px;max-width:240px;font-size:10px;padding:8px 10px;}#colTip .tip-title{font-size:11px;}}
 
 /* ── UPDATE TOAST ── */
 .update-toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:var(--rsm);font-size:11px;font-weight:600;z-index:300;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-md);}
@@ -1014,12 +1021,17 @@ function rProiectie(){
   ].map(c=>`<div class="pc" data-tip="${c.tip}" tabindex="0"><div class="pv" style="color:${c.c}">${c.v}</div><div class="pla">${c.l}</div><div class="pd">${c.d}</div></div>`).join('');
   function buildTL(cid,data,maxV,tgt,unit){
     const scale=Math.max(maxV,tgt)*1.15,tp=(tgt/scale)*100;
-    document.getElementById(cid).innerHTML=data.map(({name,val})=>{
+    document.getElementById(cid).innerHTML=data.map(({name,val,km,typeLbl})=>{
       const p2=Math.min(val/scale*100,100),ok=val<=tgt;
+      const rawCol=ok?'#2d7a4f':val<tgt*1.5?'#e8a000':'#c0392b';
       const col=ok?'var(--green)':val<tgt*1.5?'var(--yellow)':'var(--red)';
       const lbl=fmtLuni(val);
       const barTxt=p2>20?lbl:'';
-      return `<div class="tlr">
+      const finDate=addM(new Date(),val/12);
+      const diff=val-tgt;
+      const statusTxt=ok?'✅ În target':'⚠ Depășește targetul cu '+fmtLuni(Math.abs(diff));
+      const tipTxt=escAttr(name+' — '+(typeLbl||'')+'\nETA: '+lbl+'\nTarget: '+fmtLuni(tgt)+(km!=null?'\nVolum: '+km.toFixed(1)+' km':'')+'\nData estimată finalizare: '+fmtD(finDate)+'\n'+statusTxt);
+      return `<div class="tlr" data-tip="${tipTxt}" data-tip-color="${rawCol}" tabindex="0">
         <span class="tll">${name}</span>
         <div class="tlbw"><div class="tlbb"></div>
           <div class="tlbf" style="width:${p2}%;background:${col}">${barTxt}</div>
@@ -1029,8 +1041,8 @@ function rProiectie(){
       </div>`;
     }).join('');
   }
-  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorCDif/oa*12:0};}),maxAD*12,params.tDif,' luni');
-  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorCPM/oa*12:0};}),maxAP*12,params.tPM,' luni');
+  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorCDif/oa*12:0,km:g.difKm,typeLbl:'Diferențe GIS↔PM'};}),maxAD*12,params.tDif,' luni');
+  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorCPM/oa*12:0,km:g.pmKm,typeLbl:'Rețea PM totală'};}),maxAP*12,params.tPM,' luni');
   const H=[
     {n:'Grup CORG',t:'Centrul Operațional (grup CORG).'},
     {n:'Dif (km)',t:'Diferențe totale de corelat pentru acest grup, în km.'},
@@ -1738,12 +1750,41 @@ function renderETAChart(){
 const _tipEl=document.getElementById('colTip');
 let _tipTimer=null;
 const _TIP_BOUND='_tipBound';
+function _escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function _renderTipHtml(tip,dotColor){
+  const lines=tip.split('\n').filter(Boolean);
+  if(lines.length<=1){
+    // Single line — render as simple text (backward compat)
+    return '<div class="tip-body">'+_escHtml(tip)+'</div>';
+  }
+  // Multi-line: first line = title, last line starting with ✅/⚠/ℹ = footer, rest = body
+  const title=lines[0];
+  let footer='';
+  let body=lines.slice(1);
+  const lastLine=body[body.length-1]||'';
+  if(/^[✅⚠ℹ🔴🟡🟢]/.test(lastLine)){
+    footer=body.pop();
+  }
+  let html='<div class="tip-title">';
+  if(dotColor)html+='<span class="tip-dot" style="background:'+dotColor+'"></span>';
+  html+=_escHtml(title)+'</div>';
+  if(body.length){
+    html+='<div class="tip-body">'+body.map(l=>{
+      const m=l.match(/^([^:]+):\s*(.+)$/);
+      if(m) return '<div class="tip-row"><span class="tip-lbl">'+_escHtml(m[1])+':</span> <span class="tip-val">'+_escHtml(m[2])+'</span></div>';
+      return '<div class="tip-row">'+_escHtml(l)+'</div>';
+    }).join('')+'</div>';
+  }
+  if(footer) html+='<div class="tip-footer">'+_escHtml(footer)+'</div>';
+  return html;
+}
 function _showTip(e){
   const el=e.currentTarget;
   const tip=el.getAttribute('data-col-tip')||el.getAttribute('data-tip');
   if(!tip||!_tipEl)return;
   clearTimeout(_tipTimer);
-  _tipEl.textContent=tip;
+  const dotColor=el.getAttribute('data-tip-color')||'';
+  _tipEl.innerHTML=_renderTipHtml(tip,dotColor);
   _tipEl.classList.add('show');
   const r=el.getBoundingClientRect();
   const tW=_tipEl.offsetWidth,tH=_tipEl.offsetHeight;
