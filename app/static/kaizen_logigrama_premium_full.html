@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaizen Dashboard — Diagramă Premium</title>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --bg2:#eef3fa;
+      --card:rgba(255,255,255,.88);
+      --text:#10233b;
+      --muted:#5e7188;
+      --blue:#2056d8;
+      --blue2:#4f8dff;
+      --green:#19956a;
+      --amber:#d38c00;
+      --red:#c64949;
+      --shadow:0 14px 40px rgba(16,35,59,.10);
+      --shadow2:0 18px 60px rgba(32,86,216,.16);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(79,141,255,.16), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(25,149,106,.12), transparent 20%),
+        radial-gradient(circle at 80% 82%, rgba(211,140,0,.10), transparent 22%),
+        linear-gradient(180deg, #f8fbff 0%, #eff4fb 50%, #f3f6fb 100%);
+      overflow-x:hidden;
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:28px 22px 60px}
+    .hero{
+      position:relative;overflow:hidden;border-radius:30px;
+      background:linear-gradient(135deg, #1748be 0%, #2567ef 55%, #5a98ff 100%);
+      color:#fff;box-shadow:var(--shadow2);padding:34px 36px 30px;margin-bottom:24px;
+    }
+    .hero:before,.hero:after{
+      content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10);filter:blur(8px)
+    }
+    .hero:before{width:220px;height:220px;right:-70px;top:-60px}
+    .hero:after{width:160px;height:160px;left:-40px;bottom:-50px}
+    .eyebrow{
+      display:inline-flex;padding:7px 12px;border-radius:999px;
+      background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);
+      font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;
+    }
+    .hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:22px;align-items:start}
+    .hero h1{margin:0 0 12px;font-size:42px;line-height:1.03;letter-spacing:-.03em}
+    .hero p{margin:0;max-width:850px;font-size:16px;line-height:1.65;color:rgba(255,255,255,.92)}
+    .hero-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .hero-kpi{
+      border-radius:18px;padding:16px;background:rgba(255,255,255,.11);
+      border:1px solid rgba(255,255,255,.16);backdrop-filter: blur(6px);
+    }
+    .hero-kpi b{display:block;font-size:28px;margin-bottom:6px}
+    .hero-kpi span{color:rgba(255,255,255,.84);font-size:12px;line-height:1.4}
+    .section-title{font-size:26px;margin:26px 0 14px;letter-spacing:-.02em}
+    .sub{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 18px;max-width:980px}
+    .board{
+      position:relative;background:linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.62));
+      border:1px solid rgba(255,255,255,.65);border-radius:30px;box-shadow:var(--shadow);
+      padding:30px;backdrop-filter: blur(8px);overflow:hidden;
+    }
+    .grid{display:grid;grid-template-columns:repeat(5, 1fr);gap:20px;align-items:stretch}
+    .node{
+      position:relative;border-radius:24px;min-height:240px;padding:18px 18px 16px;
+      background:var(--card);border:1px solid #e8eef8;box-shadow:var(--shadow);
+      overflow:hidden;transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .node:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(16,35,59,.14)}
+    .node:before{
+      content:"";position:absolute;inset:0 auto auto 0;width:100%;height:5px;
+      background:linear-gradient(90deg, rgba(32,86,216,.95), rgba(79,141,255,.75));
+    }
+    .node.green:before{background:linear-gradient(90deg, #168c63, #39b689)}
+    .node.amber:before{background:linear-gradient(90deg, #c98300, #f0b03a)}
+    .node.red:before{background:linear-gradient(90deg, #be4141, #e26a6a)}
+    .node h3{margin:10px 0 10px;font-size:20px;letter-spacing:-.01em}
+    .node p{margin:0 0 10px;color:var(--muted);line-height:1.55;font-size:14px}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;
+      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      background:#edf3ff;color:var(--blue);
+    }
+    .green .badge{background:#e8f8f1;color:var(--green)}
+    .amber .badge{background:#fff4de;color:var(--amber)}
+    .red .badge{background:#fdeceb;color:var(--red)}
+    .list{margin:12px 0 0 0;padding:0;list-style:none}
+    .list li{display:flex;gap:10px;margin:0 0 10px;color:var(--muted);font-size:14px;line-height:1.45}
+    .dot{
+      width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 8px;
+      margin-top:7px;box-shadow:0 0 0 4px rgba(32,86,216,.10)
+    }
+    .green .dot{background:var(--green);box-shadow:0 0 0 4px rgba(25,149,106,.10)}
+    .amber .dot{background:var(--amber);box-shadow:0 0 0 4px rgba(211,140,0,.10)}
+    .red .dot{background:var(--red);box-shadow:0 0 0 4px rgba(198,73,73,.10)}
+    .connector{display:flex;align-items:center;justify-content:center;position:relative;min-height:240px}
+    .connector svg{width:100%;height:90px;overflow:visible}
+    .connector path.base{stroke:#c6d4e8;stroke-width:4;fill:none;stroke-linecap:round}
+    .connector path.flow{
+      stroke:url(#grad);stroke-width:6;fill:none;stroke-linecap:round;
+      stroke-dasharray:12 22;animation: flowMove 1.6s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(79,141,255,.35));
+    }
+    @keyframes flowMove{from{stroke-dashoffset:0}to{stroke-dashoffset:-68}}
+    .pulse{
+      position:absolute;width:12px;height:12px;border-radius:50%;background:#66a0ff;top:50%;left:-8px;
+      transform:translateY(-50%);
+      animation:pulseTravel 4.8s linear infinite;
+      box-shadow:0 0 0 8px rgba(102,160,255,.10), 0 0 18px rgba(79,141,255,.4);
+    }
+    .pulse.green{background:#3dcf96; box-shadow:0 0 0 8px rgba(61,207,150,.10), 0 0 18px rgba(61,207,150,.35)}
+    .pulse.amber{background:#ffbc49; box-shadow:0 0 0 8px rgba(255,188,73,.10), 0 0 18px rgba(255,188,73,.35)}
+    @keyframes pulseTravel{
+      0%{left:-10px;opacity:0}
+      8%{opacity:1}
+      50%{left:calc(100% - 6px);opacity:1}
+      100%{left:calc(100% - 6px);opacity:0}
+    }
+    .formula-area{margin-top:22px;display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
+    .panel{
+      border-radius:24px;background:rgba(255,255,255,.82);border:1px solid #e7edf7;
+      box-shadow:var(--shadow);padding:22px;
+    }
+    .panel h3{margin:0 0 12px;font-size:22px}
+    .panel p{color:var(--muted);line-height:1.65;font-size:14px;margin:0 0 12px}
+    .formula{
+      border-radius:16px;background:#f7fafe;border:1px solid #dfebfb;padding:14px 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:14px;
+      line-height:1.55;color:#17304a;margin:10px 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    .steps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+    .step{background:#fbfdff;border:1px solid #e8eef8;border-radius:18px;padding:16px}
+    .step h4{margin:0 0 8px;font-size:16px}
+    .step p{margin:0;font-size:14px}
+    .signal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+    .signal-card{
+      border-radius:20px;background:rgba(255,255,255,.84);border:1px solid #e8eef8;
+      box-shadow:var(--shadow);padding:18px;
+    }
+    .signal-card b{display:block;font-size:18px;margin-bottom:8px}
+    .signal-card p{margin:0;color:var(--muted);line-height:1.55;font-size:14px}
+    .footer{
+      margin-top:20px;border-radius:20px;background:linear-gradient(135deg, #10233b, #18365a);
+      color:#fff;padding:18px 20px;box-shadow:var(--shadow);
+    }
+    .footer b{display:block;margin-bottom:8px;font-size:16px}
+    .footer span{color:rgba(255,255,255,.86);line-height:1.6;font-size:14px}
+    @media (max-width: 1180px){
+      .grid{grid-template-columns:1fr}
+      .connector{min-height:auto}
+      .connector svg{height:54px; transform:rotate(90deg)}
+      .formula-area{grid-template-columns:1fr}
+      .hero-grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .steps,.signal,.hero-kpis{grid-template-columns:1fr}
+      .hero h1{font-size:32px}
+      .wrap{padding:18px 14px 34px}
+      .board,.panel{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Executive Architecture View</div>
+      <div class="hero-grid">
+        <div>
+          <h1>Kaizen Dashboard — Diagramă Premium</h1>
+          <p>
+            Varianta aceasta explică, într-un stil executive tip McKinsey / BCG, cum circulă datele prin dashboard, cum se leagă HTML-ul de API, cum intră repository-ul și deploy-ul în ecuație și pe ce logică se estimează necesarul FTE pentru corelarea GIS ↔ SAP PM.
+          </p>
+        </div>
+        <div class="hero-kpis">
+          <div class="hero-kpi"><b>Input</b><span>Date operaționale, Excel, parametri, compoziție echipe</span></div>
+          <div class="hero-kpi"><b>Processing</b><span>FastAPI + Python validează și calculează ETA / capacitate</span></div>
+          <div class="hero-kpi"><b>Output</b><span>KPI executive, scenarii, blocaje, impact decizional</span></div>
+          <div class="hero-kpi"><b>Deploy</b><span>GitHub repository → PR → Merge → Render → dashboard live</span></div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">1. Fluxul de funcționare, cap-coadă</h2>
+    <p class="sub">
+      Diagrama de mai jos arată traseul complet al informației: de la datele de intrare, prin interfața HTML și API-ul Python, până la motorul de calcul și indicatorii executive folosiți în decizie.
+    </p>
+
+    <section class="board">
+      <div class="grid">
+        <article class="node">
+          <span class="badge">Pas 1 · Input</span>
+          <h3>Date de intrare</h3>
+          <p>Tot ce alimentează modelul de estimare.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>Date GIS și SAP PM</span></li>
+            <li><span class="dot"></span><span>Fișier Excel importat manual</span></li>
+            <li><span class="dot"></span><span>Echipe pe grup: GIS, RASR, FOL</span></li>
+            <li><span class="dot"></span><span>Parametri: vMin, vMax, ore/săpt, săpt/an, target, factorC</span></li>
+          </ul>
+        </article>
+
+        <div class="connector">
+          <svg viewBox="0 0 180 90" aria-hidden="true">
+            <defs>
+              <linearGradient id="grad" x1="0" x2="1">
+                <stop offset="0%" stop-color="#2056d8"></stop>
+                <stop offset="100%" stop-color="#4f8dff"></stop>
+              </linearGradient>
+            </defs>
+            <path class="base" d="M10,45 C55,45 65,45 170,45"></path>
+            <path class="flow" d="M10,45 C55,45 65,45 170,45"></path>
+          </svg>
+          <span class="pulse"></span>
+        </div>
+
+        <article class="node green">
+          <span class="badge">Pas 2 · UI</span>
+          <h3>Interfață HTML</h3>
+          <p>Partea vizibilă pentru utilizator și management.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>Afișează KPI executive și tabele</span></li>
+            <li><span class="dot"></span><span>Permite modificarea parametrilor</span></li>
+            <li><span class="dot"></span><span>Rulează simulări what-if</span></li>
+            <li><span class="dot"></span><span>Trimite date spre backend prin API</span></li>
+          </ul>
+        </article>
+
+        <div class="connector">
+          <svg viewBox="0 0 180 90" aria-hidden="true">
+            <path class="base" d="M10,45 C55,45 65,45 170,45"></path>
+            <path class="flow" d="M10,45 C55,45 65,45 170,45"></path>
+          </svg>
+          <span class="pulse green" style="animation-delay:1.1s"></span>
+        </div>
+
+        <article class="node amber">
+          <span class="badge">Pas 3 · API</span>
+          <h3>FastAPI / Python</h3>
+          <p>Stratul care primește, validează și orchestrează calculele.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>Endpointuri de calcul și import Excel</span></li>
+            <li><span class="dot"></span><span>Validare date și reguli business</span></li>
+            <li><span class="dot"></span><span>Protecție logică împotriva erorilor</span></li>
+            <li><span class="dot"></span><span>Returnează rezultate consolidate</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="grid" style="margin-top:18px;">
+        <article class="node red">
+          <span class="badge">Pas 4 · Engine</span>
+          <h3>Motor de calcul FTE</h3>
+          <p>Aici se transformă resursele și volumul în timp estimat.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>Capacitate anuală de lucru</span></li>
+            <li><span class="dot"></span><span>ETA pe grup și ETA total</span></li>
+            <li><span class="dot"></span><span>Scenarii worst / mediu / best</span></li>
+            <li><span class="dot"></span><span>Identificare grupuri blocate</span></li>
+          </ul>
+        </article>
+
+        <div class="connector">
+          <svg viewBox="0 0 180 90" aria-hidden="true">
+            <path class="base" d="M10,45 C55,45 65,45 170,45"></path>
+            <path class="flow" d="M10,45 C55,45 65,45 170,45"></path>
+          </svg>
+          <span class="pulse amber" style="animation-delay:2.0s"></span>
+        </div>
+
+        <article class="node">
+          <span class="badge">Pas 5 · Output</span>
+          <h3>Indicatori pentru management</h3>
+          <p>Rezultatele care se văd în dashboard și susțin decizia.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>% corelat și km rămași</span></li>
+            <li><span class="dot"></span><span>Grupuri în target / în risc / blocate</span></li>
+            <li><span class="dot"></span><span>ETA estimat până la finalizare</span></li>
+            <li><span class="dot"></span><span>Impactul suplimentării de resurse</span></li>
+          </ul>
+        </article>
+
+        <div class="connector">
+          <svg viewBox="0 0 180 90" aria-hidden="true">
+            <path class="base" d="M10,45 C55,45 65,45 170,45"></path>
+            <path class="flow" d="M10,45 C55,45 65,45 170,45"></path>
+          </svg>
+          <span class="pulse" style="animation-delay:2.8s"></span>
+        </div>
+
+        <article class="node green">
+          <span class="badge">Pas 6 · Decizie</span>
+          <h3>Acțiune managerială</h3>
+          <p>Locul în care informația devine decizie.</p>
+          <ul class="list">
+            <li><span class="dot"></span><span>Unde suplimentezi FTE</span></li>
+            <li><span class="dot"></span><span>Ce grupuri prioritezi</span></li>
+            <li><span class="dot"></span><span>Ce target este realist</span></li>
+            <li><span class="dot"></span><span>Care este impactul operațional</span></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <div class="formula-area">
+      <section class="panel">
+        <h3>2. Conexiunile dintre HTML, API, repository și deploy</h3>
+        <p>
+          Dashboard-ul HTML este interfața din browser. El citește și afișează datele, dar pentru calculele oficiale apelează API-ul Python.
+          Codul sursă trăiește în GitHub, iar Render publică aplicația live după procesul de aprobare și deploy.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <h4>HTML / Frontend</h4>
+            <p>Vizualizează KPI-uri, tabele și simulări. Aici se fac modificările de parametri și interacțiunea cu utilizatorul.</p>
+          </div>
+          <div class="step">
+            <h4>Bridge / Request</h4>
+            <p>Frontend-ul trimite către API datele despre grupuri, parametri și scenarii. Practic, este puntea dintre ecran și motorul de calcul.</p>
+          </div>
+          <div class="step">
+            <h4>API FastAPI</h4>
+            <p>Primește datele, le validează și cheamă funcțiile Python care aplică regulile de business și formulele de estimare.</p>
+          </div>
+          <div class="step">
+            <h4>GitHub + Render</h4>
+            <p>Orice update intră în repository, trece prin Pull Request și Merge, apoi Render face deploy și publică noua versiune live.</p>
+          </div>
+        </div>
+
+        <div class="formula">Utilizator → Dashboard HTML → API FastAPI → Motor Python → KPI / ETA / Scenarii → Decizie</div>
+        <div class="formula">Repository GitHub → Pull Request → Merge → Render Deploy → Dashboard Live</div>
+      </section>
+
+      <section class="panel">
+        <h3>3. Principiul de estimare FTE</h3>
+        <p>
+          Modelul răspunde la întrebarea: <b>Cu echipele actuale și productivitatea actuală, în cât timp terminăm corelarea GIS ↔ SAP PM?</b>
+        </p>
+
+        <div class="formula">Nr. echipe reale = min(GIS, RASR)</div>
+        <div class="formula">Ore/an = ore/săpt × săpt/an × (echipe + FOL × % contribuție)</div>
+        <div class="formula">Rată medie = (vMin + vMax) / 2</div>
+        <div class="formula">Ore necesare = km / rată medie</div>
+        <div class="formula">Luni ETA = (Ore necesare / Ore disponibile) × 12 × factorC</div>
+
+        <p>
+          <b>factorC</b> este multiplicatorul de realitate operațională. El ajustează estimarea matematică ideală cu complexitatea din teren, blocajele și variația procesului.
+        </p>
+      </section>
+    </div>
+
+    <h2 class="section-title">4. Ce livrează concret managementului</h2>
+    <section class="signal">
+      <div class="signal-card">
+        <b>Estimare de timp</b>
+        <p>Arată în câte luni se finalizează corelarea la nivel total și pe fiecare grup operațional.</p>
+      </div>
+      <div class="signal-card">
+        <b>Identificare blocaje</b>
+        <p>Evidențiază grupurile care nu au capacitate reală sau care ies din target.</p>
+      </div>
+      <div class="signal-card">
+        <b>Simulare decizională</b>
+        <p>Permite testarea impactului dacă adaugi oameni, schimbi parametri sau repoziționezi resurse.</p>
+      </div>
+    </section>
+
+    <section class="footer">
+      <b>Mesaj executiv</b>
+      <span>
+        Kaizen Dashboard nu este doar un tablou de bord. Este un instrument de transformare a volumului de lucru și a resurselor disponibile în timp estimat, risc și opțiuni de decizie privind FTE-ul. Cu alte cuvinte: traduce datele operaționale în decizii manageriale.
+      </span>
+    </section>
+  </div>
+</body>
+</html>
