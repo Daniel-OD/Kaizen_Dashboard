@@ -38,8 +38,7 @@ ALLOWED_TENANT_IDS: list[str] = _csv(
 )
 
 # ── Feature flag ─────────────────────────────────────────────────────────────
-# When SSO is not configured (no client-id), the app falls back to the old
-# frontend-only password gate so that local development and existing deployments
-# are not broken.
+# SSO is disabled — the dashboard is served without Microsoft Entra ID login.
+# The legacy frontend-only password gate remains as the only access control.
 
-SSO_ENABLED: bool = bool(ENTRA_CLIENT_ID and ENTRA_CLIENT_SECRET and ENTRA_TENANT_ID)
+SSO_ENABLED: bool = False
