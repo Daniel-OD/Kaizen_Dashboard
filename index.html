@@ -1058,14 +1058,14 @@ function rKPI(){
   const startD=new Date(getStartDate());
   const tDifDate=addM(startD,params.tDif/12),daysLeft=Math.round((tDifDate-new Date())/86400000);
   const kpis=[
-    {val:(tPct*100).toFixed(2)+'%',lbl:'% Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'},
+    {val:(tPct*100).toFixed(2)+'%',lbl:'% Lungime Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)',logo:true},
     {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'},
     {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)'},
     {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)'},
     {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===_og.length?'var(--green)':grpOk>=_og.length*.75?'var(--yellow)':'var(--red)'},
     {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)'}
   ];
-  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item"><div class="kpi-val" style="color:${k.c}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
+  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item"><div class="kpi-val" style="color:${k.c}">${k.logo?'<img src="/static/logo-delgaz.svg" alt="Delgaz" style="height:18px;vertical-align:middle;margin-right:4px">':''}${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
 }
 function rAlerts(){
   const v=vm(),alerts=[];
