@@ -72,6 +72,7 @@ td.n{font-family:var(--mono);text-align:right;}
 .upload-info{font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
 .upload-info span{background:var(--llblue);border:1px solid rgba(26,95,168,.15);border-radius:4px;padding:2px 8px;font-family:var(--mono);color:var(--navy);}
 .kpi-bar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:2px solid var(--border);display:flex;align-items:stretch;gap:0;box-shadow:var(--shadow-md);}
+.kpi-logo{display:flex;align-items:center;justify-content:center;padding:6px 14px;border-right:1px solid var(--border);flex-shrink:0;}
 .kpi-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;border-right:1px solid var(--border);min-width:0;transition:var(--transition);cursor:default;}
 .kpi-item:last-child{border-right:none;}.kpi-item:hover{background:var(--llblue);}
 .kpi-val{font-family:var(--mono);font-size:17px;font-weight:600;line-height:1;white-space:nowrap;}
@@ -375,7 +376,7 @@ body.dark .exec-kpi:hover{box-shadow:0 8px 24px rgba(0,0,0,.4);}
 
 /* ── MOBILE RESPONSIVENESS ── */
 @media(max-width:600px){
-  .kpi-bar{flex-wrap:wrap;}.kpi-item{flex:1 1 calc(33.33% - 1px);min-width:0;padding:6px 4px;}
+  .kpi-bar{flex-wrap:wrap;}.kpi-logo{padding:6px 10px;}.kpi-item{flex:1 1 calc(33.33% - 1px);min-width:0;padding:6px 4px;}
   .kpi-val{font-size:14px;}.kpi-lbl{font-size:9px;}
   .blockers-grid{grid-template-columns:1fr!important;}
   .plan-grid{grid-template-columns:1fr!important;}
@@ -1074,14 +1075,14 @@ function rKPI(){
   const startD=new Date(getStartDate());
   const tDifDate=addM(startD,params.tDif/12),daysLeft=Math.round((tDifDate-new Date())/86400000);
   const kpis=[
-    {val:(tPct*100).toFixed(2)+'%',lbl:'% Lungime Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)',logo:true,tip:'Procentul din rețeaua SAP PM corelat cu GIS. Verde >97%, galben 95-97%, roșu <95%.'},
+    {val:(tPct*100).toFixed(2)+'%',lbl:'% Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)',tip:'Procentul din rețeaua SAP PM corelat cu GIS. Verde >97%, galben 95-97%, roșu <95%.'},
     {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)',tip:'Km totali de diferențe (|Dif_BR|+|Dif_TR|)/1000 de rezolvat pe toate grupurile. Verde <500 km, roșu >1000 km.'},
     {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)',tip:'Timpul estimat cel mai lung pentru finalizarea diferențelor, calculat pe grupul cel mai încărcat. Formula: (km_dif / rată_medie × factorC) / ore_an × 12.'},
     {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)',tip:'Zile rămase până la termenul limită pentru targetul de diferențe (' + params.tDif + ' luni de la start). Verde >90 zile, galben 30-90, roșu <30.'},
     {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===_og.length?'var(--green)':grpOk>=_og.length*.75?'var(--yellow)':'var(--red)',tip:'Număr grupuri care respectă targetul de ' + params.tDif + ' luni pentru diferențe. Verde = toate, galben ≥75%, roșu <75%.'},
     {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)',tip:'Total persoane alocate (GIS + RASR + FOL) pe toate grupurile. Echipele efective = min(GIS, RASR) per grup.'}
   ];
-  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item" data-tip="${k.tip}" data-tip-pos="bottom" tabindex="0"><div class="kpi-val" style="color:${k.c}">${k.logo?'<img src="/static/logo-delgaz.svg" alt="Delgaz" style="height:18px;vertical-align:middle;margin-right:4px">':''}${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
+  document.getElementById('kpiBar').innerHTML='<div class="kpi-logo"><img src="/static/logo-delgaz.svg" alt="Delgaz" style="height:28px"></div>'+kpis.map(k=>`<div class="kpi-item" data-tip="${k.tip}" data-tip-pos="bottom" tabindex="0"><div class="kpi-val" style="color:${k.c}">${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
 }
 function rAlerts(){
   const v=vm(),alerts=[];
