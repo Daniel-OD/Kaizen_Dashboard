@@ -435,6 +435,11 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 .kpi-item[data-tip]::after,.stat[data-tip]::after,.pc[data-tip]::after,.exec-kpi[data-tip]::after{min-width:200px;max-width:320px;}
 @media(max-width:600px){[data-tip]::after{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
 
+/* ── COLUMN HEADER TOOLTIP (JS-managed, not clipped by overflow:hidden) ── */
+#colTip{position:fixed;z-index:600;background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:300px;text-align:left;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;transform:translateY(-4px);}
+#colTip.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+th[data-col-tip]{cursor:help;}
+
 /* ── UPDATE TOAST ── */
 .update-toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:var(--rsm);font-size:11px;font-weight:600;z-index:300;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-md);}
 .update-toast.show{opacity:1;transform:translateY(0);}
@@ -445,6 +450,7 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<div id="colTip"></div>
 
 <!-- LOGIN -->
 
@@ -874,8 +880,22 @@ function rHeader(){
   document.getElementById('hStats').innerHTML=[{v:tPM.toFixed(0)+' km',l:'Rețea SAP PM',tip:'Lungimea totală a rețelei de gaz din SAP PM (sistem de mentenanță). Reprezintă totalul km de conducte gestionate.'},{v:tDif.toFixed(1)+' km',l:'Dif. de rezolvat',tip:'Diferențe totale între GIS și SAP PM de rezolvat. Cu cât valoarea e mai mică, cu atât rețeaua e mai bine corelată.'},{v:(tPct*100).toFixed(2)+'%',l:'% Corelat',tip:'Procentul din lungimea rețelei PM care este corelată cu GIS. Formula: Rețea_GIS / Rețea_PM × 100. Ținta: >97%.'},{v:og.length+'',l:'Centre Operaționale',tip:'Numărul de Centre Operaționale (grupuri CORG) conform reorganizare. Fiecare are echipe GIS + RASR alocate.'}].map(s=>`<div class="stat" data-tip="${s.tip}" data-tip-pos="bottom" tabindex="0"><span class="v">${s.v}</span><span class="l">${s.l}</span></div>`).join('');
 }
 function rRetea(){
-  const H=['CORG','Rețea PM (m)','Rețea GIS (m)','Dif Rețea (m)','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','PM Total (km)','Dif Totală (km)','% Corelat'];
-  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  const H=[
+    {n:'CORG',t:'Centrul Operațional de Rețele de Gaz — zona de responsabilitate (12 CORG-uri istorice).'},
+    {n:'Rețea PM (m)',t:'Lungimea rețelei din SAP PM (sistem de mentenanță), în metri. Include toate conductele gestionate.'},
+    {n:'Rețea GIS (m)',t:'Lungimea rețelei din GIS (sistem informațional geografic), în metri.'},
+    {n:'Dif Rețea (m)',t:'Diferența totală între rețeaua PM și GIS, în metri. Formula: Rețea_PM − Rețea_GIS.'},
+    {n:'BR PM (m)',t:'Lungimea branșamentelor din SAP PM, în metri.'},
+    {n:'BR GIS (m)',t:'Lungimea branșamentelor din GIS, în metri.'},
+    {n:'Dif BR (m)',t:'Diferența branșamente PM vs GIS, în metri.'},
+    {n:'TR PM (m)',t:'Lungimea conductelor de transport din SAP PM, în metri.'},
+    {n:'TR GIS (m)',t:'Lungimea conductelor de transport din GIS, în metri.'},
+    {n:'Dif TR (m)',t:'Diferența conducte transport PM vs GIS, în metri.'},
+    {n:'PM Total (km)',t:'Lungimea totală a rețelei SAP PM, convertită în kilometri (Rețea PM / 1000).'},
+    {n:'Dif Totală (km)',t:'Diferențe totale de corelat: (|Dif_BR| + |Dif_TR|) / 1000, în km.'},
+    {n:'% Corelat',t:'Procentul de corelare: Rețea_GIS / Rețea_PM × 100. Ținta: >97%.'}
+  ];
+  let h=`<thead><tr>${H.map(x=>`<th data-col-tip="${x.t}">${x.n}</th>`).join('')}</tr></thead><tbody>`;
   for(const r of CORG){const dk=difTot(r),pk=pmKm(r),pc=pctC(r),pc_c=pctColor(pc);
     h+=`<tr><td style="font-weight:600">${r.n}</td><td class="n">${fmt(r.rPM)}</td><td class="n">${fmt(r.rGIS)}</td><td class="n">${fmt(r.dR)}</td><td class="n">${fmt(r.bPM)}</td><td class="n">${fmt(r.bGIS)}</td><td class="n">${fmt(r.dB)}</td><td class="n">${fmt(r.tPM)}</td><td class="n">${fmt(r.tGIS)}</td><td class="n">${fmt(r.dT)}</td><td class="n" style="color:var(--accent)">${pk.toFixed(1)}</td><td class="n">${dk.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(pc*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(pc*100).toFixed(2)}%</span></div></td></tr>`;
   }
@@ -885,8 +905,20 @@ function rRetea(){
 }
 function rGrupuri(){
   const og=getOpGroups();
-  const H=['Grup CORG','PM Total (km)','Dif Totală (km)','% Corelat Rețea','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','CORG componente'];
-  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  const H=[
+    {n:'Grup CORG',t:'Centrul Operațional (grup de CORG-uri conform reorganizare). Fiecare grup poate conține 1-2 CORG-uri.'},
+    {n:'PM Total (km)',t:'Lungimea totală a rețelei SAP PM pentru acest grup, în km.'},
+    {n:'Dif Totală (km)',t:'Diferențe totale de corelat: (|Dif_BR| + |Dif_TR|) / 1000, în km. Verde <80, galben 80-150, roșu >150 km.'},
+    {n:'% Corelat Rețea',t:'Procentul de corelare: Rețea_GIS / Rețea_PM × 100. Verde >97%, galben 95-97%, roșu <95%.'},
+    {n:'BR PM (m)',t:'Lungimea branșamentelor din SAP PM, în metri (sumă CORG componente).'},
+    {n:'BR GIS (m)',t:'Lungimea branșamentelor din GIS, în metri (sumă CORG componente).'},
+    {n:'Dif BR (m)',t:'Diferența branșamente PM vs GIS, în metri.'},
+    {n:'TR PM (m)',t:'Lungimea conductelor de transport din SAP PM, în metri.'},
+    {n:'TR GIS (m)',t:'Lungimea conductelor de transport din GIS, în metri.'},
+    {n:'Dif TR (m)',t:'Diferența conducte transport PM vs GIS, în metri.'},
+    {n:'CORG componente',t:'Lista CORG-urilor individuale care compun acest grup operațional.'}
+  ];
+  let h=`<thead><tr>${H.map(x=>`<th data-col-tip="${x.t}">${x.n}</th>`).join('')}</tr></thead><tbody>`;
   for(const g of og){const pc_c=pctColor(g.pct);
     h+=`<tr class="merged"><td style="font-weight:700;color:${g.color}">${g.name}</td><td class="n" style="color:var(--accent)">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${g.difKm>150?'var(--red)':g.difKm>80?'var(--yellow)':'var(--green)'}">${g.difKm.toFixed(1)}</td><td><div class="pb"><div class="pb-bg"><div class="pb-fill" style="width:${(g.pct*100).toFixed(2)}%;background:${pc_c}"></div></div><span class="pb-txt" style="color:${pc_c}">${(g.pct*100).toFixed(2)}%</span></div></td><td class="n">${fmt(g.bPM)}</td><td class="n">${fmt(g.bGIS)}</td><td class="n">${fmt(g.dB)}</td><td class="n">${fmt(g.tPM)}</td><td class="n">${fmt(g.tGIS)}</td><td class="n">${fmt(g.dT)}</td><td style="font-size:9.5px;color:var(--muted)">${g.corg.join(' + ')}</td></tr>`;
   }
@@ -912,8 +944,23 @@ function hTeamChange(e){
 function rPlanificare(){
   const v=vm();
   const og=getOpGroups();
-  const H=['Grup CORG','GIS','RASR','FOL','Pers. efect.','Ore/an','Dif (km)','Ore nec.','Luni Dif','✓ Dif?','PM (km)','Ore nec.','Luni PM','✓ PM?'];
-  let h=`<thead><tr>${H.map(x=>`<th class="c">${x}</th>`).join('')}</tr></thead><tbody>`;
+  const H=[
+    {n:'Grup CORG',t:'Centrul Operațional (grup CORG). Bordura stânga = status general: verde = ambele targeturi OK, galben = doar dif OK, roșu = target dif depășit.'},
+    {n:'GIS',t:'Numărul de persoane GIS alocate acestui grup. Specialiști GIS care efectuează corelarea în sistem.'},
+    {n:'RASR',t:'Numărul de persoane RASR alocate acestui grup. Specialiști rețea necesari în pereche cu GIS.'},
+    {n:'FOL',t:'Numărul de persoane FOL (suport) alocate. Contribuție parțială la corelare (pctFOL%). GIS + RASR = echipă de bază, FOL = suport.'},
+    {n:'Pers. efect.',t:'Persoane efective/an. Capacitatea reală de lucru, incluzând FOL parțial. Formula: min(GIS,RASR) + FOL × pctFOL/100.'},
+    {n:'Ore/an',t:'Total ore disponibile pe an per echipă. Formula: ore_săpt × săpt_an × nr_echipe. nr_echipe = min(GIS, RASR).'},
+    {n:'Dif (km)',t:'Diferențe totale de corelat pentru acest grup, în km. (|Dif_BR| + |Dif_TR|) / 1000.'},
+    {n:'Ore nec.',t:'Ore necesare pentru finalizarea diferențelor. Formula: Dif(km) / rată_medie × factorCDif.'},
+    {n:'Luni Dif',t:'Timpul estimat (ETA) pentru finalizarea diferențelor. Formula: (ore_nec / ore_an) × 12 luni. Verde = în target, galben = sub 150% din target, roșu = depășit.'},
+    {n:'✓ Dif?',t:'Dacă grupul respectă targetul de diferențe. DA = ETA ≤ target, NU = ETA > target.'},
+    {n:'PM (km)',t:'Lungimea totală a rețelei PM pentru acest grup, în km. Include toate conductele PM.'},
+    {n:'Ore nec.',t:'Ore necesare pentru corelarea completă a rețelei PM. Formula: PM(km) / rată_medie × factorCPM.'},
+    {n:'Luni PM',t:'Timpul estimat pentru corelarea completă a rețelei PM. Formula: (ore_nec_PM / ore_an) × 12 luni.'},
+    {n:'✓ PM?',t:'Dacă grupul respectă targetul de rețea PM. DA = ETA ≤ target, NU = ETA > target.'}
+  ];
+  let h=`<thead><tr>${H.map(x=>`<th class="c" data-col-tip="${x.t}">${x.n}</th>`).join('')}</tr></thead><tbody>`;
   for(const g of og){
     const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
     const oa=oreAn(g.name),pa=persAn(g.name);
@@ -997,8 +1044,19 @@ function rProiectie(){
   }
   buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorCDif/oa*12:0};}),maxAD*12,params.tDif,' luni');
   buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorCPM/oa*12:0};}),maxAP*12,params.tPM,' luni');
-  const H=['Grup CORG','Dif (km)','Timp Diferențe','Data Finalizare Corelare','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
-  let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  const H=[
+    {n:'Grup CORG',t:'Centrul Operațional (grup CORG).'},
+    {n:'Dif (km)',t:'Diferențe totale de corelat pentru acest grup, în km.'},
+    {n:'Timp Diferențe',t:'Timpul estimat (ETA) pentru finalizarea diferențelor. Formula: (Dif_km / rată_medie × factorCDif) / ore_an × 12.'},
+    {n:'Data Finalizare Corelare',t:'Data estimată la care diferențele vor fi complet rezolvate, calculată de la data curentă + ETA.'},
+    {n:'PM (km)',t:'Lungimea totală a rețelei PM pentru acest grup, în km.'},
+    {n:'Timp PM',t:'Timpul estimat pentru corelarea completă a rețelei PM. Formula: (PM_km / rată_medie × factorCPM) / ore_an × 12.'},
+    {n:'Data fin. PM',t:'Data estimată la care corelarea completă a rețelei PM va fi finalizată.'},
+    {n:'Pers.',t:'Persoane alocate: G = GIS, R = RASR, F = FOL. Echipa efectivă = min(GIS, RASR).'},
+    {n:'Scen. Lent',t:'Estimare ETA cu rata minimă de corelare (scenariul pesimist, rată = vMin km/h/pers).'},
+    {n:'Scen. Rapid',t:'Estimare ETA cu rata maximă de corelare (scenariul optimist, rată = vMax km/h/pers).'}
+  ];
+  let h=`<thead><tr>${H.map(x=>`<th data-col-tip="${x.t}">${x.n}</th>`).join('')}</tr></thead><tbody>`;
   for(const g of og){
     const oa=oreAn(g.name),_fcsvDif=params.factorCDif||1.0,_fcsvPM=params.factorCPM||1.0,ad=oa>0?g.difKm/v*_fcsvDif/oa:0,ap=oa>0?g.pmKm/v*_fcsvPM/oa:0;
     const adMin=oa>0?g.difKm/params.vMin*_fcsvDif/oa:0,adMax=oa>0?g.difKm/params.vMax*_fcsvDif/oa:0;
@@ -1689,6 +1747,39 @@ function renderETAChart(){
   }
 }
 
+// ── COLUMN HEADER TOOLTIPS (JS-managed, avoids overflow:hidden clipping) ──
+const _colTipEl=document.getElementById('colTip');
+let _colTipTimer=null;
+function _showColTip(e){
+  const th=e.currentTarget,tip=th.getAttribute('data-col-tip');
+  if(!tip||!_colTipEl)return;
+  clearTimeout(_colTipTimer);
+  _colTipEl.textContent=tip;
+  _colTipEl.classList.add('show');
+  const r=th.getBoundingClientRect();
+  const tW=_colTipEl.offsetWidth,tH=_colTipEl.offsetHeight;
+  let left=r.left+r.width/2-tW/2;
+  let top=r.bottom+6;
+  if(left<4)left=4;
+  if(left+tW>window.innerWidth-4)left=window.innerWidth-tW-4;
+  if(top+tH>window.innerHeight-4){top=r.top-tH-6;}
+  _colTipEl.style.left=left+'px';
+  _colTipEl.style.top=top+'px';
+}
+function _hideColTip(){
+  _colTipTimer=setTimeout(()=>{if(_colTipEl)_colTipEl.classList.remove('show');},80);
+}
+function attachColTips(tableId){
+  const tbl=document.getElementById(tableId);
+  if(!tbl)return;
+  tbl.querySelectorAll('th[data-col-tip]').forEach(th=>{
+    th.addEventListener('mouseenter',_showColTip);
+    th.addEventListener('mouseleave',_hideColTip);
+    th.addEventListener('focus',_showColTip);
+    th.addEventListener('blur',_hideColTip);
+  });
+}
+
 // ── TABLE SORTING ──
 function enableTableSort(tableId){
   const table=document.getElementById(tableId);
@@ -1742,6 +1833,10 @@ function initTableSorting(){
   enableTableSort('tGrup');
   enableTableSort('tPlan');
   enableTableSort('tProj');
+  attachColTips('tRetea');
+  attachColTips('tGrup');
+  attachColTips('tPlan');
+  attachColTips('tProj');
 }
 
 function initStickyTabs(){
