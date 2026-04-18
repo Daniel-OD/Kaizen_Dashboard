@@ -418,6 +418,21 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 .chart-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
 .chart-canvas-wrap{position:relative;height:240px;}
 
+/* ── HOVER TOOLTIPS ── */
+[data-tip]{position:relative;cursor:help;}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:300px;text-align:left;z-index:500;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;}
+[data-tip]:hover::after,[data-tip]:focus::after{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+[data-tip]::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(20,20,18,.92);z-index:501;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+[data-tip]:hover::before,[data-tip]:focus::before{opacity:1;}
+[data-tip-pos="bottom"]::after{bottom:auto;top:calc(100% + 8px);transform:translateX(-50%) translateY(-4px);}
+[data-tip-pos="bottom"]:hover::after,[data-tip-pos="bottom"]:focus::after{transform:translateX(-50%) translateY(0);}
+[data-tip-pos="bottom"]::before{bottom:auto;top:calc(100% + 4px);border-top-color:transparent;border-bottom-color:rgba(20,20,18,.92);}
+[data-tip-pos="left"]::after{bottom:auto;top:50%;left:auto;right:calc(100% + 8px);transform:translateY(-50%) translateX(4px);}
+[data-tip-pos="left"]:hover::after,[data-tip-pos="left"]:focus::after{transform:translateY(-50%) translateX(0);}
+[data-tip-pos="left"]::before{bottom:auto;top:50%;left:auto;right:calc(100% + 4px);transform:translateY(-50%);border-top-color:transparent;border-right-color:transparent;border-left-color:rgba(20,20,18,.92);}
+.kpi-item[data-tip]::after,.stat[data-tip]::after,.pc[data-tip]::after,.exec-kpi[data-tip]::after{min-width:200px;max-width:320px;}
+@media(max-width:600px){[data-tip]::after{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
+
 /* ── UPDATE TOAST ── */
 .update-toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:var(--rsm);font-size:11px;font-weight:600;z-index:300;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-md);}
 .update-toast.show{opacity:1;transform:translateY(0);}
@@ -493,11 +508,11 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 <div class="kpi-bar" id="kpiBar"></div>
 
 <div class="blockers-card" id="blockersCard">
-  <div class="blockers-title">🔥 TOP 3 BLOCKERS</div>
+  <div class="blockers-title" data-tip="Top 3 grupuri care depășesc cel mai mult targetul de diferențe. Clasate descrescător după depășirea targetului (ani). Click pe un blocker → navigare la Planificare FTE.">🔥 TOP 3 BLOCKERS</div>
   <div class="blockers-grid" id="blockersGrid"></div>
 </div>
 
-<div class="probability-card" id="probabilityCard">
+<div class="probability-card" id="probabilityCard" data-tip="Probabilitate de a atinge targetul de diferențe în timp. Calculată pe baza scenariilor optimist (rată max), mediu și pesimist (rată min). Verde ≥80%, galben 50-80%, roșu <50%.">
   <div class="probability-title">🎯 PROBABILITATE DE SUCCES</div>
   <div class="probability-bar-container">
     <div class="probability-bar-bg">
@@ -509,7 +524,7 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 </div>
 
 <div class="whatif-card" id="whatifCard">
-  <div class="whatif-title">⚡ SIMULATOR — Impact decizii în timp real</div>
+  <div class="whatif-title" data-tip="Simulează impactul adăugării de persoane sau modificării ratei de corelare asupra timpului de finalizare per grup. Ajustează parametrii și vezi rezultatul imediat.">⚡ SIMULATOR — Impact decizii în timp real</div>
   <div class="whatif-controls">
     <div class="whatif-group"><label>Grup afectat</label><select class="whatif-select" id="whatifGroup" aria-label="Selectează grup pentru simulare"></select></div>
     <div class="whatif-group">
@@ -572,11 +587,11 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
   </div>
   <div class="chart-row" id="execCharts" style="max-width:1100px;margin:0 auto 18px;padding:0 24px;">
     <div class="chart-card">
-      <h3>% Corelat per Grup</h3>
+      <h3 data-tip="Distribuția diferențelor (km) pe Centre Operaționale. Aria fiecărei secțiuni este proporțională cu km de diferențe din grup. Hover pe felie → detalii.">% Corelat per Grup</h3>
       <div class="chart-canvas-wrap"><canvas id="chartDonut"></canvas></div>
     </div>
     <div class="chart-card">
-      <h3>Diferențe vs PM Total (km)</h3>
+      <h3 data-tip="Comparație vizuală între rețeaua PM totală (albastru) și diferențele de corelat (roșu) per grup. Cu cât roșu e mai mic față de albastru, cu atât grupul e mai bine corelat.">Diferențe vs PM Total (km)</h3>
       <div class="chart-canvas-wrap"><canvas id="chartBar"></canvas></div>
     </div>
   </div>
@@ -687,7 +702,7 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
   <div class="pg" id="pCards"></div>
   <div class="chart-row" style="margin-bottom:18px;">
     <div class="chart-card" style="grid-column:1/-1;">
-      <h3>⏱ ETA Timeline per Grup — Diferențe (luni)</h3>
+      <h3 data-tip="Timpul estimat (ETA) în luni per grup. Roșu = diferențe, albastru = rețea PM totală. Linia galbenă = target. Formulă: (km / rată_medie × factorC) / ore_an × 12.">⏱ ETA Timeline per Grup — Diferențe (luni)</h3>
       <div class="chart-canvas-wrap" style="height:280px"><canvas id="chartETA"></canvas></div>
     </div>
   </div>
@@ -741,6 +756,7 @@ let CORG=[],GROUPS=[],GD=[];
 const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorCDif:3.0,factorCPM:3.0,comp:{}};
 let updateScheduled=false,isLoadingExcel=false;
 const fmt=n=>Number(n).toLocaleString('ro-RO');
+const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const difTot=r=>(Math.abs(r.dB)+Math.abs(r.dT))/1000; // |dB|+|dT| = tot ce trebuie rezolvat
 const pmKm=r=>r.rPM/1000;
 const pctC=r=>r.rGIS/r.rPM;
@@ -853,7 +869,7 @@ function rHeader(){
   const og=getOpGroups();
   const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=og.reduce((a,g)=>a+g.difKm,0);
   const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
-  document.getElementById('hStats').innerHTML=[{v:tPM.toFixed(0)+' km',l:'Rețea SAP PM'},{v:tDif.toFixed(1)+' km',l:'Dif. de rezolvat'},{v:(tPct*100).toFixed(2)+'%',l:'% Corelat'},{v:og.length+'',l:'Centre Operaționale'}].map(s=>`<div class="stat"><span class="v">${s.v}</span><span class="l">${s.l}</span></div>`).join('');
+  document.getElementById('hStats').innerHTML=[{v:tPM.toFixed(0)+' km',l:'Rețea SAP PM',tip:'Lungimea totală a rețelei de gaz din SAP PM (sistem de mentenanță). Reprezintă totalul km de conducte gestionate.'},{v:tDif.toFixed(1)+' km',l:'Dif. de rezolvat',tip:'Diferențe totale între GIS și SAP PM de rezolvat. Cu cât valoarea e mai mică, cu atât rețeaua e mai bine corelată.'},{v:(tPct*100).toFixed(2)+'%',l:'% Corelat',tip:'Procentul din lungimea rețelei PM care este corelată cu GIS. Formula: Rețea_GIS / Rețea_PM × 100. Ținta: >97%.'},{v:og.length+'',l:'Centre Operaționale',tip:'Numărul de Centre Operaționale (grupuri CORG) conform reorganizare. Fiecare are echipe GIS + RASR alocate.'}].map(s=>`<div class="stat" data-tip="${s.tip}" data-tip-pos="bottom" tabindex="0"><span class="v">${s.v}</span><span class="l">${s.l}</span></div>`).join('');
 }
 function rRetea(){
   const H=['CORG','Rețea PM (m)','Rețea GIS (m)','Dif Rețea (m)','BR PM (m)','BR GIS (m)','Dif BR (m)','TR PM (m)','TR GIS (m)','Dif TR (m)','PM Total (km)','Dif Totală (km)','% Corelat'];
@@ -955,11 +971,11 @@ function rProiectie(){
   const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fcePM/oa:0;}));
   const tDK=og.reduce((a,g)=>a+g.difKm,0),tP=og.reduce((a,g)=>a+persTotal(g.name),0),tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
   document.getElementById('pCards').innerHTML=[
-    {v:`${(maxAD*12).toFixed(1)} luni`,l:'Finalizare Diferențe (max grup)',d:fmtD(addM(now,maxAD)),c:'var(--red)'},
-    {v:`${(maxAP*12).toFixed(0)} luni`,l:'Finalizare Rețea PM (max grup)',d:fmtD(addM(now,maxAP)),c:'var(--blue)'},
-    {v:`${tP}`,l:'Persoane implicate DEGR',d:`${tPeff.toFixed(1)} pers. efective/an`,c:'#a371f7'},
-    {v:`${tDK.toFixed(1)} km`,l:'Diferențe totale grupuri',d:`din ${GD.reduce((a,g)=>a+g.pmKm,0).toFixed(1)} km PM total`,c:'var(--yellow)'}
-  ].map(c=>`<div class="pc"><div class="pv" style="color:${c.c}">${c.v}</div><div class="pla">${c.l}</div><div class="pd">${c.d}</div></div>`).join('');
+    {v:`${(maxAD*12).toFixed(1)} luni`,l:'Finalizare Diferențe (max grup)',d:fmtD(addM(now,maxAD)),c:'var(--red)',tip:'Timpul estimat pentru finalizarea diferențelor pe grupul cel mai încărcat. Formula: (Dif_km / rată_medie × factorCDif) / ore_an_echipă × 12 luni.'},
+    {v:`${(maxAP*12).toFixed(0)} luni`,l:'Finalizare Rețea PM (max grup)',d:fmtD(addM(now,maxAP)),c:'var(--blue)',tip:'ETA pentru corelarea completă a rețelei PM pe grupul cu cel mai lung timp. Include toate conductele PM, nu doar diferențele.'},
+    {v:`${tP}`,l:'Persoane implicate DEGR',d:`${tPeff.toFixed(1)} pers. efective/an`,c:'#a371f7',tip:'Total persoane alocate (GIS+RASR+FOL). Persoane efective = ore_sapt × sapt_an × min(GIS,RASR) + FOL×pctFOL%. Nr. pers. efective reflectă capacitatea reală de lucru.'},
+    {v:`${tDK.toFixed(1)} km`,l:'Diferențe totale grupuri',d:`din ${GD.reduce((a,g)=>a+g.pmKm,0).toFixed(1)} km PM total`,c:'var(--yellow)',tip:'Suma diferențelor (|Dif_BR|+|Dif_TR|)/1000 pe toate centrele operaționale. Reprezintă volumul total de lucru de corelare GIS↔PM.'}
+  ].map(c=>`<div class="pc" data-tip="${c.tip}" tabindex="0"><div class="pv" style="color:${c.c}">${c.v}</div><div class="pla">${c.l}</div><div class="pd">${c.d}</div></div>`).join('');
   function buildTL(cid,data,maxV,tgt,unit){
     const scale=Math.max(maxV,tgt)*1.15,tp=(tgt/scale)*100;
     document.getElementById(cid).innerHTML=data.map(({name,val})=>{
@@ -1000,7 +1016,7 @@ function rBlockers(){
   const gs=g=>g>params.tDif/12*1.5?'🔴 critical':g>params.tDif/12?'🟡 warning':'🟢 ok';
   const grid=document.getElementById('blockersGrid');
   if(top3[0]&&top3[0].over<=0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--green);padding:20px;">✅ Niciun blocaj major! Toate grupurile sunt în target.</div>';return;}
-  grid.innerHTML=top3.map((b,i)=>`<div class="blocker-item ${gc(b.ad)}" data-group="${b.name}"><div class="blocker-rank">#${i+1}</div><div class="blocker-name">${b.name}</div><div class="blocker-detail">${b.over.toFixed(2)} ani peste target · ${b.dk.toFixed(1)} km</div><div class="blocker-detail" style="margin-top:4px">${gs(b.ad)}</div></div>`).join('');
+  grid.innerHTML=top3.map((b,i)=>`<div class="blocker-item ${gc(b.ad)}" data-group="${escAttr(b.name)}" data-tip="${escAttr('Grup '+b.name+': ETA '+(b.ad*12).toFixed(1)+' luni, depășește targetul de '+params.tDif+' luni cu '+(b.over*12).toFixed(1)+' luni. Diferențe: '+b.dk.toFixed(1)+' km. Click → vezi detalii în Planificare FTE.')}"><div class="blocker-rank">#${i+1}</div><div class="blocker-name">${b.name}</div><div class="blocker-detail">${b.over.toFixed(2)} ani peste target · ${b.dk.toFixed(1)} km</div><div class="blocker-detail" style="margin-top:4px">${gs(b.ad)}</div></div>`).join('');
   document.querySelectorAll('#blockersGrid .blocker-item').forEach(el=>{
     el.addEventListener('click',()=>{swTab('planificare');setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(el.dataset.group)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);});
   });
@@ -1058,14 +1074,14 @@ function rKPI(){
   const startD=new Date(getStartDate());
   const tDifDate=addM(startD,params.tDif/12),daysLeft=Math.round((tDifDate-new Date())/86400000);
   const kpis=[
-    {val:(tPct*100).toFixed(2)+'%',lbl:'% Lungime Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)',logo:true},
-    {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'},
-    {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)'},
-    {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)'},
-    {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===_og.length?'var(--green)':grpOk>=_og.length*.75?'var(--yellow)':'var(--red)'},
-    {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)'}
+    {val:(tPct*100).toFixed(2)+'%',lbl:'% Lungime Corelat',c:tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)',logo:true,tip:'Procentul din rețeaua SAP PM corelat cu GIS. Verde >97%, galben 95-97%, roșu <95%.'},
+    {val:tDif.toFixed(1)+' km',lbl:'Dif. de rezolvat',c:tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)',tip:'Km totali de diferențe (|Dif_BR|+|Dif_TR|)/1000 de rezolvat pe toate grupurile. Verde <500 km, roșu >1000 km.'},
+    {val:maxAD<.01?'< 1 zi':maxAD<1?(maxAD*12).toFixed(1)+' luni':maxAD.toFixed(1)+' ani',lbl:'Timp max. dif.',c:maxAD<=params.tDif/12?'var(--green)':maxAD<=params.tDif*1.5?'var(--yellow)':'var(--red)',tip:'Timpul estimat cel mai lung pentru finalizarea diferențelor, calculat pe grupul cel mai încărcat. Formula: (km_dif / rată_medie × factorC) / ore_an × 12.'},
+    {val:daysLeft>0?daysLeft+' zile':'EXPIRAT',lbl:'Zile pt. target dif.',c:daysLeft>90?'var(--green)':daysLeft>30?'var(--yellow)':'var(--red)',tip:'Zile rămase până la termenul limită pentru targetul de diferențe (' + params.tDif + ' luni de la start). Verde >90 zile, galben 30-90, roșu <30.'},
+    {val:grpOk+'/'+_og.length,lbl:'Grupuri în target',c:grpOk===_og.length?'var(--green)':grpOk>=_og.length*.75?'var(--yellow)':'var(--red)',tip:'Număr grupuri care respectă targetul de ' + params.tDif + ' luni pentru diferențe. Verde = toate, galben ≥75%, roșu <75%.'},
+    {val:tPers+'',lbl:'Persoane implicate',c:'var(--accent)',tip:'Total persoane alocate (GIS + RASR + FOL) pe toate grupurile. Echipele efective = min(GIS, RASR) per grup.'}
   ];
-  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item"><div class="kpi-val" style="color:${k.c}">${k.logo?'<img src="/static/logo-delgaz.svg" alt="Delgaz" style="height:18px;vertical-align:middle;margin-right:4px">':''}${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
+  document.getElementById('kpiBar').innerHTML=kpis.map(k=>`<div class="kpi-item" data-tip="${k.tip}" data-tip-pos="bottom" tabindex="0"><div class="kpi-val" style="color:${k.c}">${k.logo?'<img src="/static/logo-delgaz.svg" alt="Delgaz" style="height:18px;vertical-align:middle;margin-right:4px">':''}${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
 }
 function rAlerts(){
   const v=vm(),alerts=[];
@@ -1259,23 +1275,23 @@ function rExec(){
     </div>
 
     <div class="exec-kpi-row">
-      <div class="exec-kpi ${tPct>.97?'green':tPct>.95?'yellow':'red'}">
+      <div class="exec-kpi ${tPct>.97?'green':tPct>.95?'yellow':'red'}" data-tip="Procentul din lungimea rețelei PM care este corelată cu GIS. Formula: Rețea_GIS / Rețea_PM × 100. Verde >97%, galben 95-97%, roșu <95%. Target intern: ${targetPct}%.">
         <div class="exec-kpi-val" style="color:${tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'}">${pctDisplay}</div>
         <div class="exec-kpi-lbl">Lungime Rețea Corelată</div>
         <div class="kpi-target">${(CORG.reduce((a,r)=>a+r.rGIS,0)/1000).toFixed(0)} km GIS / ${(CORG.reduce((a,r)=>a+r.rPM,0)/1000).toFixed(0)} km PM</div>
         <div class="exec-kpi-sub" style="color:${pctGapColor}">${pctGapText}</div>
       </div>
-      <div class="exec-kpi ${tDif<500?'green':tDif<1000?'yellow':'red'}">
+      <div class="exec-kpi ${tDif<500?'green':tDif<1000?'yellow':'red'}" data-tip="Diferențe totale (km) între GIS și SAP PM de rezolvat. Formulă: (|Dif_BR|+|Dif_TR|)/1000 per grup, sumă pe toate centrele operaționale. Verde <500 km, galben 500-1000, roșu >1000 km.">
         <div class="exec-kpi-val" style="color:${tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'}">${tDif.toFixed(0)} km</div>
         <div class="exec-kpi-lbl">De Corelat</div>
         <div class="exec-kpi-sub" style="color:var(--muted)">din ${tPM.toFixed(0)} km total</div>
       </div>
-      <div class="exec-kpi ${grpOk===opGroups.length?'green':grpOk>opGroups.length/2?'yellow':'red'}">
+      <div class="exec-kpi ${grpOk===opGroups.length?'green':grpOk>opGroups.length/2?'yellow':'red'}" data-tip="Câte grupuri respectă targetul de ${params.tDif} luni pentru diferențe. Un grup e în target dacă ETA ≤ target. Verde = toate, galben >50%, roșu ≤50%.">
         <div class="exec-kpi-val" style="color:${grpOk===opGroups.length?'var(--green)':grpOk>opGroups.length/2?'var(--yellow)':'var(--red)'}">${grpOk}/${opGroups.length}</div>
         <div class="exec-kpi-lbl">Grupuri în Target</div>
         <div class="exec-kpi-sub" style="color:var(--muted)">target: ${params.tDif} luni diferențe</div>
       </div>
-      <div class="exec-kpi ${daysLeft>90?'green':daysLeft>30?'yellow':'red'}">
+      <div class="exec-kpi ${daysLeft>90?'green':daysLeft>30?'yellow':'red'}" data-tip="Zile rămase până la termenul limită al targetului de diferențe (${params.tDif} luni de la data start ${fmtD(startD)}). Verde >90 zile, galben 30-90, roșu <30 zile.">
         <div class="exec-kpi-val" style="color:${daysColor}">${daysDisplay}</div>
         <div class="exec-kpi-lbl">${daysLeft>0?'Zile Rămase':'Deadline Depășit'}</div>
         <div class="exec-kpi-sub" style="color:var(--muted)">${fmtD(tDifDate)}</div>
@@ -1559,7 +1575,21 @@ function renderCharts(){
         responsive:true,maintainAspectRatio:false,
         plugins:{
           legend:{position:'right',labels:{color:textColor,font:{size:10,family:"'DM Sans',sans-serif"},padding:8,boxWidth:12}},
-          tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toFixed(1)+' km dif';}}}
+          tooltip:{
+            backgroundColor:'rgba(20,20,18,.92)',titleFont:{size:12,weight:'bold'},bodyFont:{size:11},padding:10,cornerRadius:8,
+            callbacks:{
+              title:function(items){return items[0].label;},
+              label:function(ctx){
+                const g=og[ctx.dataIndex];
+                return [
+                  'Diferențe: '+ctx.parsed.toFixed(1)+' km',
+                  'PM Total: '+g.pmKm.toFixed(1)+' km',
+                  '% Corelat: '+(g.pct*100).toFixed(2)+'%'
+                ];
+              },
+              afterBody:function(){return ['','Aria = proporție diferențe din total'];}
+            }
+          }
         }
       }
     });
@@ -1584,7 +1614,20 @@ function renderCharts(){
           x:{ticks:{color:textColor,font:{size:9}},grid:{display:false}},
           y:{ticks:{color:textColor,font:{size:9}},grid:{color:gridColor}}
         },
-        plugins:{legend:{labels:{color:textColor,font:{size:10},boxWidth:12}}}
+        plugins:{
+          legend:{labels:{color:textColor,font:{size:10},boxWidth:12}},
+          tooltip:{
+            backgroundColor:'rgba(20,20,18,.92)',titleFont:{size:12,weight:'bold'},bodyFont:{size:11},padding:10,cornerRadius:8,
+            callbacks:{
+              afterBody:function(items){
+                const i=items[0].dataIndex;
+                const g=og[i];
+                const pct=(g.pct*100).toFixed(2);
+                return ['','% Corelat: '+pct+'%','Albastru = rețea PM totală','Roșu = diferențe de corelat'];
+              }
+            }
+          }
+        }
       }
     });
   }
@@ -1619,6 +1662,24 @@ function renderETAChart(){
         },
         plugins:{
           legend:{labels:{color:textColor,font:{size:10},boxWidth:12}},
+          tooltip:{
+            backgroundColor:'rgba(20,20,18,.92)',titleFont:{size:12,weight:'bold'},bodyFont:{size:11},padding:10,cornerRadius:8,
+            callbacks:{
+              afterBody:function(items){
+                const i=items[0].dataIndex;
+                const g=og[i];
+                const cc=params.comp[g.name]||{gis:1,rasr:1,fol:0};
+                const teams=Math.min(cc.gis,cc.rasr);
+                return [
+                  '',
+                  'Echipe: '+teams+' (min GIS:'+cc.gis+', RASR:'+cc.rasr+')',
+                  'Dif: '+g.difKm.toFixed(1)+' km · PM: '+g.pmKm.toFixed(1)+' km',
+                  'Target diferențe: '+params.tDif+' luni',
+                  'Roșu = ETA diferențe · Albastru = ETA rețea PM'
+                ];
+              }
+            }
+          },
           annotation:params.tDif?{annotations:{targetLine:{type:'line',xMin:params.tDif,xMax:params.tDif,borderColor:'rgba(232,160,0,.8)',borderWidth:2,borderDash:[5,3],label:{content:'Target '+params.tDif+' luni',display:true}}}}:undefined
         }
       }
