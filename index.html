@@ -421,24 +421,11 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 .chart-canvas-wrap{position:relative;height:240px;}
 
 /* ── HOVER TOOLTIPS ── */
-[data-tip]{position:relative;cursor:help;}
-[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:300px;text-align:left;z-index:500;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;}
-[data-tip]:hover::after,[data-tip]:focus::after{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
-[data-tip]::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(20,20,18,.92);z-index:501;opacity:0;pointer-events:none;transition:opacity .2s ease;}
-[data-tip]:hover::before,[data-tip]:focus::before{opacity:1;}
-[data-tip-pos="bottom"]::after{bottom:auto;top:calc(100% + 8px);transform:translateX(-50%) translateY(-4px);}
-[data-tip-pos="bottom"]:hover::after,[data-tip-pos="bottom"]:focus::after{transform:translateX(-50%) translateY(0);}
-[data-tip-pos="bottom"]::before{bottom:auto;top:calc(100% + 4px);border-top-color:transparent;border-bottom-color:rgba(20,20,18,.92);}
-[data-tip-pos="left"]::after{bottom:auto;top:50%;left:auto;right:calc(100% + 8px);transform:translateY(-50%) translateX(4px);}
-[data-tip-pos="left"]:hover::after,[data-tip-pos="left"]:focus::after{transform:translateY(-50%) translateX(0);}
-[data-tip-pos="left"]::before{bottom:auto;top:50%;left:auto;right:calc(100% + 4px);transform:translateY(-50%);border-top-color:transparent;border-right-color:transparent;border-left-color:rgba(20,20,18,.92);}
-.kpi-item[data-tip]::after,.stat[data-tip]::after,.pc[data-tip]::after,.exec-kpi[data-tip]::after,.ranking-item[data-tip]::after,.exec-group-item[data-tip]::after,.exec-card>h3[data-tip]::after{min-width:200px;max-width:320px;}
-@media(max-width:600px){[data-tip]::after{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
-
-/* ── COLUMN HEADER TOOLTIP (JS-managed, not clipped by overflow:hidden) ── */
-#colTip{position:fixed;z-index:600;background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:300px;text-align:left;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;transform:translateY(-4px);}
+/* ── UNIFIED JS-MANAGED TOOLTIP (position:fixed, never clipped by overflow:hidden) ── */
+[data-tip],[data-col-tip]{cursor:help;}
+#colTip{position:fixed;z-index:9999;background:rgba(20,20,18,.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:11px;font-family:var(--sans);line-height:1.5;white-space:normal;min-width:180px;max-width:320px;text-align:left;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;box-shadow:0 4px 16px rgba(0,0,0,.25);letter-spacing:normal;text-transform:none;font-weight:400;transform:translateY(-4px);}
 #colTip.show{opacity:1;pointer-events:auto;transform:translateY(0);}
-th[data-col-tip]{cursor:help;}
+@media(max-width:600px){#colTip{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
 
 /* ── UPDATE TOAST ── */
 .update-toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:var(--rsm);font-size:11px;font-weight:600;z-index:300;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-md);}
@@ -1747,37 +1734,53 @@ function renderETAChart(){
   }
 }
 
-// ── COLUMN HEADER TOOLTIPS (JS-managed, avoids overflow:hidden clipping) ──
-const _colTipEl=document.getElementById('colTip');
-let _colTipTimer=null;
-function _showColTip(e){
-  const th=e.currentTarget,tip=th.getAttribute('data-col-tip');
-  if(!tip||!_colTipEl)return;
-  clearTimeout(_colTipTimer);
-  _colTipEl.textContent=tip;
-  _colTipEl.classList.add('show');
-  const r=th.getBoundingClientRect();
-  const tW=_colTipEl.offsetWidth,tH=_colTipEl.offsetHeight;
-  let left=r.left+r.width/2-tW/2;
-  let top=r.bottom+6;
+// ── UNIFIED TOOLTIP SYSTEM (JS-managed, position:fixed, never clipped) ──
+const _tipEl=document.getElementById('colTip');
+let _tipTimer=null;
+const _TIP_BOUND='_tipBound';
+function _showTip(e){
+  const el=e.currentTarget;
+  const tip=el.getAttribute('data-col-tip')||el.getAttribute('data-tip');
+  if(!tip||!_tipEl)return;
+  clearTimeout(_tipTimer);
+  _tipEl.textContent=tip;
+  _tipEl.classList.add('show');
+  const r=el.getBoundingClientRect();
+  const tW=_tipEl.offsetWidth,tH=_tipEl.offsetHeight;
+  const pos=el.getAttribute('data-tip-pos')||'';
+  let left,top;
+  if(pos==='left'){
+    left=r.left-tW-8;
+    top=r.top+r.height/2-tH/2;
+    if(left<4){left=r.right+8;}
+  } else if(pos==='bottom'){
+    left=r.left+r.width/2-tW/2;
+    top=r.bottom+6;
+    if(top+tH>window.innerHeight-4){top=r.top-tH-6;}
+  } else {
+    left=r.left+r.width/2-tW/2;
+    top=r.top-tH-6;
+    if(top<4){top=r.bottom+6;}
+  }
   if(left<4)left=4;
   if(left+tW>window.innerWidth-4)left=window.innerWidth-tW-4;
-  if(top+tH>window.innerHeight-4){top=r.top-tH-6;}
-  _colTipEl.style.left=left+'px';
-  _colTipEl.style.top=top+'px';
+  if(top<4)top=4;
+  _tipEl.style.left=left+'px';
+  _tipEl.style.top=top+'px';
 }
-function _hideColTip(){
-  _colTipTimer=setTimeout(()=>{if(_colTipEl)_colTipEl.classList.remove('show');},80);
+function _hideTip(){
+  _tipTimer=setTimeout(()=>{if(_tipEl)_tipEl.classList.remove('show');},80);
 }
-function attachColTips(tableId){
-  const tbl=document.getElementById(tableId);
-  if(!tbl)return;
-  tbl.querySelectorAll('th[data-col-tip]').forEach(th=>{
-    th.addEventListener('mouseenter',_showColTip);
-    th.addEventListener('mouseleave',_hideColTip);
-    th.addEventListener('focus',_showColTip);
-    th.addEventListener('blur',_hideColTip);
-  });
+function _bindTip(el){
+  if(el[_TIP_BOUND])return;
+  el[_TIP_BOUND]=true;
+  el.addEventListener('mouseenter',_showTip);
+  el.addEventListener('mouseleave',_hideTip);
+  el.addEventListener('focus',_showTip);
+  el.addEventListener('blur',_hideTip);
+}
+function attachAllTips(){
+  document.querySelectorAll('[data-tip],[data-col-tip]').forEach(_bindTip);
 }
 
 // ── TABLE SORTING ──
@@ -1833,10 +1836,7 @@ function initTableSorting(){
   enableTableSort('tGrup');
   enableTableSort('tPlan');
   enableTableSort('tProj');
-  attachColTips('tRetea');
-  attachColTips('tGrup');
-  attachColTips('tPlan');
-  attachColTips('tProj');
+  attachAllTips();
 }
 
 function initStickyTabs(){
