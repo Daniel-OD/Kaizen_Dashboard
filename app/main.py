@@ -76,11 +76,11 @@ def render_dashboard_html(user: dict | None = None) -> HTMLResponse:
     # When SSO is active, inject a small script that exposes the user identity
     # and hides the legacy password gate immediately.
     if SSO_ENABLED and user:
-        safe_name = html_mod.escape(user.get("name", ""))
-        safe_email = html_mod.escape(user.get("email", ""))
+        import json as json_mod
+        user_json = json_mod.dumps({"name": user.get("name", ""), "email": user.get("email", "")})
         user_script = (
             "<script>"
-            "window.__ssoUser={name:" + repr(safe_name) + ",email:" + repr(safe_email) + "};"
+            "window.__ssoUser=" + user_json + ";"
             # Hide legacy login overlay
             "(function(){var el=document.getElementById('kzLogin');if(el)el.style.display='none';}());"
             "</script>"

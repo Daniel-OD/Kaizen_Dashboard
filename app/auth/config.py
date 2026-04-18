@@ -34,7 +34,7 @@ ALLOWED_EMAIL_DOMAINS: list[str] = _csv(
 )
 
 ALLOWED_TENANT_IDS: list[str] = _csv(
-    os.environ.get("ALLOWED_TENANT_IDS", ENTRA_TENANT_ID)
+    os.environ.get("ALLOWED_TENANT_IDS", ENTRA_TENANT_ID if ENTRA_TENANT_ID else "")
 )
 
 # ── Feature flag ─────────────────────────────────────────────────────────────

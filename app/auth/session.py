@@ -24,7 +24,17 @@ _serializer: URLSafeTimedSerializer | None = None
 def _get_serializer() -> URLSafeTimedSerializer:
     global _serializer
     if _serializer is None:
-        _serializer = URLSafeTimedSerializer(SESSION_SECRET_KEY or "dev-fallback-key")
+        key = SESSION_SECRET_KEY
+        if not key:
+            # Import here to avoid circular dependency at module level
+            from app.auth.config import SSO_ENABLED
+            if SSO_ENABLED:
+                raise RuntimeError(
+                    "SESSION_SECRET_KEY must be set when SSO is enabled. "
+                    "Generate one with: python -c \"import secrets; print(secrets.token_urlsafe(32))\""
+                )
+            key = "dev-fallback-key-not-for-production"
+        _serializer = URLSafeTimedSerializer(key)
     return _serializer
 
 

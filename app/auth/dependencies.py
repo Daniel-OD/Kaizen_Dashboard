@@ -9,7 +9,7 @@ Usage in routes::
 
 from __future__ import annotations
 
-from fastapi import Cookie, HTTPException, Request
+from fastapi import HTTPException, Request
 from fastapi.responses import RedirectResponse
 
 from app.auth.config import SSO_ENABLED
@@ -28,14 +28,13 @@ def require_user(request: Request) -> dict:
     """Dependency that ensures the request comes from an authenticated user.
 
     When SSO is disabled the dependency is a no-op (returns a stub user).
+    When SSO is enabled, API requests get 401 and browser requests get 401
+    (the page-level routes handle redirects themselves).
     """
     if not SSO_ENABLED:
         return {"name": "Local User", "email": "local@dev", "tid": "", "oid": ""}
 
     user = get_current_user(request)
     if user is None:
-        # For API requests return 401; for browser navigation redirect to /login
-        if request.url.path.startswith("/api/"):
-            raise HTTPException(status_code=401, detail="Authentication required")
-        return None  # signal to the route to redirect
+        raise HTTPException(status_code=401, detail="Authentication required")
     return user
