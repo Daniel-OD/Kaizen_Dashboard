@@ -144,8 +144,6 @@ def compute_dashboard(payload: dict) -> dict:
     scenarios = compute_scenarios(groups_in, params)
 
     # Build summary — handle blocked sentinel (-1) safely
-    total_dif_km = sum(r["ore_nec_dif"] * avg_rate for r in results)
-    total_pm_km = sum(r["ore_nec_pm"] * avg_rate for r in results)
     finite_dif = [r["luni_dif"] for r in results if r["luni_dif"] != BLOCKED_ETA_JSON]
     finite_pm = [r["luni_pm"] for r in results if r["luni_pm"] != BLOCKED_ETA_JSON]
     blocked_count = sum(1 for r in results if r["luni_dif"] == BLOCKED_ETA_JSON or r["luni_pm"] == BLOCKED_ETA_JSON)
@@ -156,6 +154,8 @@ def compute_dashboard(payload: dict) -> dict:
         "total_groups": len(results),
         "groups_ok_dif": sum(1 for r in results if r["ok_dif"]),
         "groups_ok_pm": sum(1 for r in results if r["ok_pm"]),
+        # When any group is blocked, max ETA = -1 (blocked sentinel) because
+        # the blocked group dominates the worst-case; finite groups can't offset it.
         "max_luni_dif": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_dif) if finite_dif else 0.0),
         "max_luni_pm": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_pm) if finite_pm else 0.0),
         "blocked_groups": blocked_count,
