@@ -7,3 +7,22 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
+    envVars:
+      # ── Microsoft Entra ID SSO (set all to enable SSO) ──
+      - key: ENTRA_CLIENT_ID
+        sync: false
+      - key: ENTRA_CLIENT_SECRET
+        sync: false
+      - key: ENTRA_TENANT_ID
+        sync: false
+      - key: ENTRA_REDIRECT_URI
+        sync: false
+      # ── Session signing key (random, keep secret) ──
+      - key: SESSION_SECRET_KEY
+        generateValue: true
+      # ── Optional: restrict email domains (comma-separated) ──
+      - key: ALLOWED_EMAIL_DOMAINS
+        value: "eon.com,delgaz-grid.ro"
+      # ── Optional: restrict tenant IDs (comma-separated) ──
+      - key: ALLOWED_TENANT_IDS
+        sync: false

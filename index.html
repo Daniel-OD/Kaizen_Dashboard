@@ -372,7 +372,14 @@ body.exec-print-mode #tab-executive { display: block !important; }
       <h1>Dashboard Strategic Corelare Date Rețea GIS ↔ SAP PM</h1>
       <div class="header-sub">Filtre: StareUtiliz=ACT/PIF · Stare GIS=Executat/În Exploatare · xdm_status=2/3 · Rată corelare = km procesați/oră/pers. din birou · Dif Totală = |Dif_BR|+|Dif_TR|</div>
     </div>
-    <div class="stats" id="hStats"></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="stats" id="hStats"></div>
+      <div id="ssoUserBar" style="display:none;font-size:11px;color:var(--muted);text-align:right;white-space:nowrap">
+        <span id="ssoUserName" style="font-weight:600;color:var(--text)"></span><br>
+        <span id="ssoUserEmail" style="font-size:10px"></span>
+        <a href="/logout" style="margin-left:8px;font-size:10px;color:var(--accent);text-decoration:none" title="Sign out">⏏ Logout</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1364,36 +1371,58 @@ init();
 
 <script>
 // ── LOGIN KAIZEN ──────────────────────────────────────────────
-const _KP = atob('RGVsZ2F6LjIwMjY=');
-function kzLogin(){
-  const v = document.getElementById('kzPwd').value;
-  if(v === _KP){
-    const el = document.getElementById('kzLogin');
-    el.style.opacity='0';
-    el.style.transition='opacity .4s';
-    setTimeout(()=>el.style.display='none', 400);
-    try{ sessionStorage.setItem('kz_ok','1'); }catch(e){}
-  } else {
-    const e = document.getElementById('kzErr');
-    e.classList.add('show');
-    document.getElementById('kzPwd').value='';
-    document.getElementById('kzPwd').focus();
-    setTimeout(()=>e.classList.remove('show'), 2500);
-  }
-}
-function kzToggle(){
-  const i=document.getElementById('kzPwd');
-  const e=document.querySelector('.kzEye');
-  i.type = i.type==='password'?'text':'password';
-  e.textContent = i.type==='password'?'👁':'🙈';
-}
-// Daca e deja autentificat in aceasta sesiune, sari peste login
-try{
-  if(sessionStorage.getItem('kz_ok')==='1'){
-    const el=document.getElementById('kzLogin');
+// When SSO is active (window.__ssoUser injected by backend), the legacy
+// password gate is bypassed and a user identity bar is shown instead.
+// The legacy password flow is kept as fallback for local development
+// where the Entra environment variables are not configured.
+
+if(window.__ssoUser){
+  // SSO active — hide login overlay, show user bar
+  (function(){
+    var el=document.getElementById('kzLogin');
     if(el) el.style.display='none';
-  }
-}catch(e){}
+    var bar=document.getElementById('ssoUserBar');
+    if(bar){
+      bar.style.display='block';
+      var n=document.getElementById('ssoUserName');
+      var e=document.getElementById('ssoUserEmail');
+      if(n) n.textContent=window.__ssoUser.name||'';
+      if(e) e.textContent=window.__ssoUser.email||'';
+    }
+  }());
+} else {
+  // Legacy frontend-only password gate (local dev fallback)
+  const _KP = atob('RGVsZ2F6LjIwMjY=');
+  window.kzLogin=function(){
+    const v = document.getElementById('kzPwd').value;
+    if(v === _KP){
+      const el = document.getElementById('kzLogin');
+      el.style.opacity='0';
+      el.style.transition='opacity .4s';
+      setTimeout(()=>el.style.display='none', 400);
+      try{ sessionStorage.setItem('kz_ok','1'); }catch(e){}
+    } else {
+      const e = document.getElementById('kzErr');
+      e.classList.add('show');
+      document.getElementById('kzPwd').value='';
+      document.getElementById('kzPwd').focus();
+      setTimeout(()=>e.classList.remove('show'), 2500);
+    }
+  };
+  window.kzToggle=function(){
+    const i=document.getElementById('kzPwd');
+    const e=document.querySelector('.kzEye');
+    i.type = i.type==='password'?'text':'password';
+    e.textContent = i.type==='password'?'👁':'🙈';
+  };
+  // Daca e deja autentificat in aceasta sesiune, sari peste login
+  try{
+    if(sessionStorage.getItem('kz_ok')==='1'){
+      const el=document.getElementById('kzLogin');
+      if(el) el.style.display='none';
+    }
+  }catch(e){}
+}
 </script>
 
 </body>
