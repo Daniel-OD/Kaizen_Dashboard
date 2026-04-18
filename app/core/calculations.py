@@ -104,7 +104,7 @@ def compute_dashboard(payload: dict) -> dict:
     t_dif = clamp_positive(params.get("tDif", 6.0))
     t_pm = clamp_positive(params.get("tPM", 36.0))
     pct_fol = max(0.0, min(params.get("pctFOL", 0.0), 100.0))
-    factor_c = max(1.0, params.get("factorC", 1.0))
+    factor_c = max(1.0, params.get("factorC", 3.0))
 
     avg_rate = rata_medie(v_min, v_max)
 

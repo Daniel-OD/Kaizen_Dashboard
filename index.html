@@ -624,7 +624,7 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
         <div class="pr" style="align-items:flex-start;margin-bottom:4px">
           <span class="pl" style="padding-top:5px">⚙ Factor complexitate</span>
           <div style="display:flex;align-items:center;gap:5px">
-            <input class="pi" id="factorC" type="number" value="1.0" step="0.5" min="1.0" max="10.0" style="width:64px">
+            <input class="pi" id="factorC" type="number" value="3.0" step="0.5" min="1.0" max="10.0" style="width:64px">
             <span class="pu">× ETA</span>
           </div>
         </div>
@@ -731,7 +731,7 @@ const GROUPS_DEFAULT=[
   {name:"SUCEAVA + IASI",corg:["SUCEAVA","IASI"],color:"#a371f7",merged:true}
 ];
 let CORG=[],GROUPS=[],GD=[];
-const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorC:1.0,comp:{}};
+const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorC:3.0,comp:{}};
 let updateScheduled=false,isLoadingExcel=false;
 const fmt=n=>Number(n).toLocaleString('ro-RO');
 const difTot=r=>(Math.abs(r.dB)+Math.abs(r.dT))/1000; // |dB|+|dT| = tot ce trebuie rezolvat
