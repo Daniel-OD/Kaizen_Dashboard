@@ -432,7 +432,7 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
 [data-tip-pos="left"]::after{bottom:auto;top:50%;left:auto;right:calc(100% + 8px);transform:translateY(-50%) translateX(4px);}
 [data-tip-pos="left"]:hover::after,[data-tip-pos="left"]:focus::after{transform:translateY(-50%) translateX(0);}
 [data-tip-pos="left"]::before{bottom:auto;top:50%;left:auto;right:calc(100% + 4px);transform:translateY(-50%);border-top-color:transparent;border-right-color:transparent;border-left-color:rgba(20,20,18,.92);}
-.kpi-item[data-tip]::after,.stat[data-tip]::after,.pc[data-tip]::after,.exec-kpi[data-tip]::after{min-width:200px;max-width:320px;}
+.kpi-item[data-tip]::after,.stat[data-tip]::after,.pc[data-tip]::after,.exec-kpi[data-tip]::after,.ranking-item[data-tip]::after,.exec-group-item[data-tip]::after,.exec-card>h3[data-tip]::after{min-width:200px;max-width:320px;}
 @media(max-width:600px){[data-tip]::after{min-width:150px;max-width:220px;font-size:10px;padding:6px 9px;}}
 
 /* ── COLUMN HEADER TOOLTIP (JS-managed, not clipped by overflow:hidden) ── */
@@ -1262,7 +1262,7 @@ function rExec(){
     const pct=bestEff>0?(g.eff/bestEff*100):0;
     const dot=g.ad<=params.tDif?'var(--green)':g.ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
     const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'';
-    return `<div class="ranking-item">
+    return `<div class="ranking-item" data-tip="${escAttr(g.name+': eficiență '+g.eff.toFixed(4)+' km/h/pers ('+pct.toFixed(0)+'% din lider). Eficiența = km diferențe / ore totale echipă. Culoare: '+(g.ad<=params.tDif?'verde = în target':'galben/roșu = peste target')+'. Mai mare = mai eficient.')}" data-tip-pos="bottom" tabindex="0">
       <div class="ranking-pos">${medal}</div>
       <div class="ranking-name" style="color:${g.color}">${g.name}</div>
       <div class="ranking-bar"><div class="ranking-fill" style="width:${pct.toFixed(1)}%;background:${dot}"></div></div>
@@ -1277,7 +1277,7 @@ function rExec(){
     const dot=ad<=params.tDif?'var(--green)':ad<=params.tDif*1.5?'var(--yellow)':'var(--red)';
     const vsAvg=isFinite(ad)?(ad-avgAD):0;
     const pctBar=Math.min((params.tDif/Math.max(ad,0.001))*100,100);
-    return `<div class="exec-group-item">
+    return `<div class="exec-group-item" data-tip="${escAttr(g.name+': ETA diferențe '+(isFinite(ad)?ad.toFixed(2):'∞')+' ani (target: '+(params.tDif/12).toFixed(1)+' ani). '+(vsAvg<=0?'Sub medie cu '+Math.abs(vsAvg).toFixed(2)+' ani → performanță bună.':'Peste medie cu '+vsAvg.toFixed(2)+' ani → necesită atenție.')+' Bara = % din target atins. Culoare: verde = sub medie, roșu = peste medie.')}" data-tip-pos="bottom" tabindex="0">
       <div class="exec-group-dot" style="background:${dot}"></div>
       <span class="exec-group-name" style="color:${g.color}">${g.name}</span>
       <div class="exec-group-bar-wrap"><div class="exec-group-bar" style="width:${pctBar.toFixed(1)}%;background:${dot}"></div></div>
@@ -1383,12 +1383,12 @@ function rExec(){
 
     <div class="exec-two-col">
       <div class="exec-card">
-        <h3><span></span>🏆 Clasament Eficiență Corelare</h3>
+        <h3 data-tip="Clasamentul grupurilor ordonate descrescător după eficiența de corelare. Eficiența = km diferențe / ore totale echipă (km/h/pers). Grupul cu cea mai mare eficiență ocupă locul 1. Bara arată performanța relativă față de lider. Culoare: verde = în target, galben = ușor depășit, roșu = depășire mare." tabindex="0"><span></span>🏆 Clasament Eficiență Corelare</h3>
         ${rankingHtml}
         <div style="font-size:9px;color:var(--muted);margin-top:6px">Eficiență = km diferențe / ore totale echipă · Mai mare = mai eficient</div>
       </div>
       <div class="exec-card">
-        <h3><span></span>📊 Status & Comparație vs Medie</h3>
+        <h3 data-tip="Statusul fiecărui grup comparativ cu media DEGR. Bara arată procentul din target atins. Valoarea în ani = ETA estimat pentru finalizarea diferențelor. 'vs med' = diferența față de media tuturor grupurilor. Verde (sub medie) = performanță bună, Roșu (peste medie) = necesită atenție." tabindex="0"><span></span>📊 Status & Comparație vs Medie</h3>
         ${groupCompareHtml}
         <div style="font-size:9px;color:var(--muted);margin-top:6px">Bara = % din target atins · Verde sub medie = performanță bună</div>
       </div>
