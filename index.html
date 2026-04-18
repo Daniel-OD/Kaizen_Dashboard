@@ -935,6 +935,7 @@ function rPlanificare(){
 const addM=(d,m)=>{const r=new Date(d);r.setMonth(r.getMonth()+Math.round(m*12));return r;};
 const getStartDate=()=>{const el=document.getElementById('startDate');return el?el.value||'2026-04-01':'2026-04-01';};
 const fmtD=d=>d.toLocaleDateString('ro-RO',{month:'short',year:'numeric'});
+const fmtDFull=d=>d.toLocaleDateString('ro-RO',{day:'numeric',month:'long',year:'numeric'});
 function rProiectie(){
   const v=vm(),now=new Date();
   const og=getOpGroups();
@@ -967,13 +968,15 @@ function rProiectie(){
   }
   buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorC/oa*12:0};}),maxAD*12,params.tDif,' luni');
   buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorC/oa*12:0};}),maxAP*12,params.tPM,' luni');
-  const H=['Grup CORG','Dif (km)','Timp Diferențe','Data fin. Dif','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
+  const H=['Grup CORG','Dif (km)','Timp Diferențe','Data Finalizare Corelare','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
   let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
   for(const g of og){
     const oa=oreAn(g.name),_fcsv=params.factorC||1.0,ad=oa>0?g.difKm/v*_fcsv/oa:0,ap=oa>0?g.pmKm/v*_fcsv/oa:0;
     const adMin=oa>0?g.difKm/params.vMin*_fcsv/oa:0,adMax=oa>0?g.difKm/params.vMax*_fcsv/oa:0;
     const cc=params.comp[g.name]||{gis:1,rasr:1,fol:0};
-    h+=`<tr class="${g.merged?'merged':''}"><td style="font-weight:600;color:${g.color}">${g.name}</td><td class="n">${g.difKm.toFixed(1)}</td><td class="n" style="color:${ad<=params.tDif/12?'var(--green)':'var(--red)'}"><span title="${(ad*12).toFixed(1)} luni">${fmtZileLucr(ad)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ad))}</td><td class="n">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${ap<=params.tPM/12?'var(--green)':'var(--red)'}"><span title="${(ap*12).toFixed(1)} luni">${fmtZileLucr(ap)}</span></td><td class="c" style="font-family:var(--mono);font-size:10px">${fmtD(addM(now,ap))}</td><td class="c"><span class="role-pill rp-gis">${cc.gis}G</span><span class="role-pill rp-rasr">${cc.rasr}R</span>${cc.fol>0?`<span class="role-pill rp-fol">${cc.fol}F</span>`:''}</td><td class="n" style="color:var(--muted)"><span title="${params.vMin} km/h">${fmtZileLucr(adMin)}</span></td><td class="n" style="color:var(--muted)"><span title="${params.vMax} km/h">${fmtZileLucr(adMax)}</span></td></tr>`;
+    const finDate=addM(now,ad);
+    const finColor=ad<=params.tDif/12?'var(--green)':'var(--red)';
+    h+=`<tr class="${g.merged?'merged':''}"><td style="font-weight:600;color:${g.color}">${g.name}</td><td class="n">${g.difKm.toFixed(1)}</td><td class="n" style="color:${finColor}"><span title="${(ad*12).toFixed(1)} luni">${fmtZileLucr(ad)}</span></td><td class="c" style="font-family:var(--mono);font-size:11px;font-weight:600;color:${finColor};white-space:nowrap">${fmtDFull(finDate)}</td><td class="n">${g.pmKm.toFixed(1)}</td><td class="n" style="color:${ap<=params.tPM/12?'var(--green)':'var(--red)'}"><span title="${(ap*12).toFixed(1)} luni">${fmtZileLucr(ap)}</span></td><td class="c" style="font-family:var(--mono);font-size:11px;white-space:nowrap">${fmtDFull(addM(now,ap))}</td><td class="c"><span class="role-pill rp-gis">${cc.gis}G</span><span class="role-pill rp-rasr">${cc.rasr}R</span>${cc.fol>0?`<span class="role-pill rp-fol">${cc.fol}F</span>`:''}</td><td class="n" style="color:var(--muted)"><span title="${params.vMin} km/h">${fmtZileLucr(adMin)}</span></td><td class="n" style="color:var(--muted)"><span title="${params.vMax} km/h">${fmtZileLucr(adMax)}</span></td></tr>`;
   }
   document.getElementById('tProj').innerHTML=h+'</tbody>';
 }
