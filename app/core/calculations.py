@@ -143,8 +143,29 @@ def compute_dashboard(payload: dict) -> dict:
 
     scenarios = compute_scenarios(groups_in, params)
 
+    # Build summary — handle blocked sentinel (-1) safely
+    total_dif_km = sum(r["ore_nec_dif"] * avg_rate for r in results)
+    total_pm_km = sum(r["ore_nec_pm"] * avg_rate for r in results)
+    finite_dif = [r["luni_dif"] for r in results if r["luni_dif"] != BLOCKED_ETA_JSON]
+    finite_pm = [r["luni_pm"] for r in results if r["luni_pm"] != BLOCKED_ETA_JSON]
+    blocked_count = sum(1 for r in results if r["luni_dif"] == BLOCKED_ETA_JSON or r["luni_pm"] == BLOCKED_ETA_JSON)
+
+    summary = {
+        "total_dif_km": round(sum(max(0.0, float(g.get("difKm", 0))) for g in groups_in), 4),
+        "total_pm_km": round(sum(max(0.0, float(g.get("pmKm", 0))) for g in groups_in), 4),
+        "total_groups": len(results),
+        "groups_ok_dif": sum(1 for r in results if r["ok_dif"]),
+        "groups_ok_pm": sum(1 for r in results if r["ok_pm"]),
+        "max_luni_dif": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_dif) if finite_dif else 0.0),
+        "max_luni_pm": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_pm) if finite_pm else 0.0),
+        "blocked_groups": blocked_count,
+        "factor_c": factor_c,
+        "rata_medie": round(avg_rate, 4),
+    }
+
     return {
         "rata_medie": round(avg_rate, 4),
         "groups": results,
         "scenarios": scenarios,
+        "summary": summary,
     }

@@ -64,9 +64,25 @@ class ScenarioResult(BaseModel):
     max_eta_pm_years: float
 
 
+class DashboardSummary(BaseModel):
+    """Aggregated summary across all groups."""
+
+    total_dif_km: float
+    total_pm_km: float
+    total_groups: int
+    groups_ok_dif: int
+    groups_ok_pm: int
+    max_luni_dif: float
+    max_luni_pm: float
+    blocked_groups: int
+    factor_c: float
+    rata_medie: float
+
+
 class CalculateResponse(BaseModel):
     """Full response from /api/calculate."""
 
     rata_medie: float
     groups: list[GroupResult]
     scenarios: list[ScenarioResult]
+    summary: DashboardSummary
