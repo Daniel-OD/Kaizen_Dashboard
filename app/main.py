@@ -113,6 +113,7 @@ def login(request: Request):
         samesite="lax",
         secure=request.url.scheme == "https",
         max_age=600,
+        path="/",
     )
     return resp
 
@@ -184,7 +185,7 @@ def auth_callback(request: Request, code: str = "", state: str = "", error: str 
         max_age=c_max_age,
         path="/",
     )
-    resp.delete_cookie("_auth_state")
+    resp.delete_cookie("_auth_state", path="/")
     return resp
 
 
