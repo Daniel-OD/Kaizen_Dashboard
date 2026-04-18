@@ -26,7 +26,8 @@
       tDif: num(document.getElementById('tDif')?.value),
       tPM: num(document.getElementById('tPM')?.value),
       pctFOL: num(document.getElementById('pctFOL')?.value),
-      factorC: num(document.getElementById('factorC')?.value) || 1
+      factorCDif: num(document.getElementById('factorCDif')?.value) || 1,
+      factorCPM: num(document.getElementById('factorCPM')?.value) || 1
     };
   }
 
@@ -153,7 +154,7 @@
 
     // Summary line (if available from backend)
     const sum = data.summary;
-    const sumLine = sum ? `<div style="font-size:9px;color:var(--muted)">Sumar: ${sum.total_groups} grupuri · ${sum.groups_ok_dif} ok dif · ${sum.blocked_groups} blocate · factorC=${sum.factor_c}</div>` : '';
+    const sumLine = sum ? `<div style="font-size:9px;color:var(--muted)">Sumar: ${sum.total_groups} grupuri · ${sum.groups_ok_dif} ok dif · ${sum.blocked_groups} blocate · factorDif=${sum.factor_c_dif} · factorPM=${sum.factor_c_pm}</div>` : '';
 
     el.innerHTML = rows +
       `<div style="margin-top:6px;font-size:9px;color:var(--muted)">Scenarii: ${scenarios}</div>` +

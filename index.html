@@ -622,19 +622,26 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
         </div>
         <div style="height:1px;background:var(--border);margin:8px 0 10px"></div>
         <div class="pr" style="align-items:flex-start;margin-bottom:4px">
-          <span class="pl" style="padding-top:5px">⚙ Factor complexitate</span>
+          <span class="pl" style="padding-top:5px">⚙ Factor complexitate Dif</span>
           <div style="display:flex;align-items:center;gap:5px">
-            <input class="pi" id="factorC" type="number" value="3.0" step="0.5" min="1.0" max="10.0" style="width:64px">
+            <input class="pi" id="factorCDif" type="number" value="3.0" step="0.5" min="1.0" max="10.0" style="width:64px">
+            <span class="pu">× ETA</span>
+          </div>
+        </div>
+        <div class="pr" style="align-items:flex-start;margin-bottom:4px">
+          <span class="pl" style="padding-top:5px">⚙ Factor complexitate PM</span>
+          <div style="display:flex;align-items:center;gap:5px">
+            <input class="pi" id="factorCPM" type="number" value="3.0" step="0.5" min="1.0" max="10.0" style="width:64px">
             <span class="pu">× ETA</span>
           </div>
         </div>
         <div style="background:var(--llblue);border-left:3px solid var(--navy);border-radius:0 6px 6px 0;padding:9px 12px;font-size:9.5px;color:#1e3a8a;line-height:1.8;margin-bottom:8px">
           <strong>ETA real ≈ ETA_matematic × factor</strong><br>
           <span style="color:#334155">
-            <b>1.0</b> = ideal (pur matematic, fără fricțiuni)<br>
-            <b>2.0</b> = fiecare caz necesită verificare birou<br>
+            <b>1.0</b> = fiecare caz necesită verificare birou<br>
+            <b>2.0</b> = necesită verificare birou + complexitate ore<br>
             <b>3.0</b> = mix simplu + teren <em>(recomandat)</em><br>
-            <b>5.0</b> = majoritate complexe (teren + reconciliere SAP)
+            <b>5.0</b> = majoritate complexe, măsurători teren + reconciliere GIS &amp; SAP PM
           </span>
         </div>
         <div class="comp-hdr">
@@ -668,8 +675,8 @@ body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
         <span style="font-family:'DM Mono',monospace">Rată medie</span> = (vMin + vMax) / 2 &nbsp;|&nbsp;
         <span style="font-family:'DM Mono',monospace">Ore/an echipă</span> = ore/săpt × săpt/an × nr.echipe &nbsp;|&nbsp;
         <span style="font-family:'DM Mono',monospace">nr.echipe</span> = min(GIS, RASR)<br>
-        <span style="font-family:'DM Mono',monospace">Luni Dif</span> = (Ore nec. Dif ÷ Ore/an) × 12 × factorC &nbsp;|&nbsp;
-        <span style="font-family:'DM Mono',monospace">Luni PM</span> = (Ore nec. PM ÷ Ore/an) × 12 × factorC
+        <span style="font-family:'DM Mono',monospace">Luni Dif</span> = (Ore nec. Dif ÷ Ore/an) × 12 × factorCDif &nbsp;|&nbsp;
+        <span style="font-family:'DM Mono',monospace">Luni PM</span> = (Ore nec. PM ÷ Ore/an) × 12 × factorCPM
       </div>
       <div class="tw"><table id="tPlan"></table></div>
     </div>
@@ -731,7 +738,7 @@ const GROUPS_DEFAULT=[
   {name:"SUCEAVA + IASI",corg:["SUCEAVA","IASI"],color:"#a371f7",merged:true}
 ];
 let CORG=[],GROUPS=[],GD=[];
-const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorC:3.0,comp:{}};
+const params={vMin:1.5,vMax:3.0,oreSapt:4,saptAn:47,tDif:6,tPM:36,pctFOL:0,factorCDif:3.0,factorCPM:3.0,comp:{}};
 let updateScheduled=false,isLoadingExcel=false;
 const fmt=n=>Number(n).toLocaleString('ro-RO');
 const difTot=r=>(Math.abs(r.dB)+Math.abs(r.dT))/1000; // |dB|+|dT| = tot ce trebuie rezolvat
@@ -799,7 +806,7 @@ function initDefault(){
 function saveState(){
   try{
     localStorage.setItem('kaizen_comp',JSON.stringify(params.comp));
-    localStorage.setItem('kaizen_params',JSON.stringify({vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL,factorC:params.factorC}));
+    localStorage.setItem('kaizen_params',JSON.stringify({vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL,factorCDif:params.factorCDif,factorCPM:params.factorCPM}));
     localStorage.setItem('kaizen_corg',JSON.stringify(CORG));
   }catch(e){}
 }
@@ -812,8 +819,12 @@ function loadState(){
     if(sp){
       const p=JSON.parse(sp);
       if(p&&typeof p.vMin==='number'&&p.vMin>0&&p.saptAn>0){
+        // Backwards compat: migrate old single factorC to split factors
+        if(p.factorC && !p.factorCDif) { p.factorCDif = p.factorC; }
+        if(p.factorC && !p.factorCPM) { p.factorCPM = p.factorC; }
+        delete p.factorC;
         Object.assign(params,p);
-        ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorC'].forEach(k=>{
+        ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorCDif','factorCPM'].forEach(k=>{
           const el=document.getElementById(k);if(el)el.value=params[k];
         });
       }
@@ -888,8 +899,8 @@ function rPlanificare(){
   for(const g of og){
     const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
     const oa=oreAn(g.name),pa=persAn(g.name);
-    const fc=params.factorC||1.0;
-    const ond=g.difKm/v*fc,onp=g.pmKm/v*fc;
+    const fcDif=params.factorCDif||1.0,fcPM=params.factorCPM||1.0;
+    const ond=g.difKm/v*fcDif,onp=g.pmKm/v*fcPM;
     const ad=oa>0?ond/oa:Infinity,ap=oa>0?onp/oa:Infinity;
     const od=ad<=params.tDif/12,op=ap<=params.tPM/12;
     const fl=c.fol>0?(params.pctFOL>0?`<span class="role-pill rp-fol">${c.fol}</span>`:`<span class="role-pill rp-fol-0">${c.fol}</span>`):`<span style="color:var(--muted)">—</span>`;
@@ -922,9 +933,9 @@ function rPlanificare(){
       <td class="c"><span class="rb ${op?'rok':'rno'}">${op?'✓ DA':'✗ NU'}</span></td>
     </tr>`;
   }
-  const vc=vm(),fct=params.factorC||1.0,tOA=og.reduce((a,g)=>a+oreAn(g.name),0),tDK=og.reduce((a,g)=>a+g.difKm,0),tPK=og.reduce((a,g)=>a+g.pmKm,0);
-  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vc*fct/oa:Infinity;}));
-  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/vc*fct/oa:Infinity;}));
+  const vc=vm(),fctDif=params.factorCDif||1.0,fctPM=params.factorCPM||1.0,tOA=og.reduce((a,g)=>a+oreAn(g.name),0),tDK=og.reduce((a,g)=>a+g.difKm,0),tPK=og.reduce((a,g)=>a+g.pmKm,0);
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/vc*fctDif/oa:Infinity;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/vc*fctPM/oa:Infinity;}));
   const tGIS=og.reduce((a,g)=>a+(params.comp[g.name]||{gis:2}).gis,0);
   const tRASR=og.reduce((a,g)=>a+(params.comp[g.name]||{rasr:2}).rasr,0);
   const tFOL=og.reduce((a,g)=>a+(params.comp[g.name]||{fol:0}).fol,0);
@@ -939,9 +950,9 @@ const fmtDFull=d=>d.toLocaleDateString('ro-RO',{day:'numeric',month:'long',year:
 function rProiectie(){
   const v=vm(),now=new Date();
   const og=getOpGroups();
-  const _fce=params.factorC||1.0;
-  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fce/oa:0;}));
-  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fce/oa:0;}));
+  const _fceDif=params.factorCDif||1.0,_fcePM=params.factorCPM||1.0;
+  const maxAD=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fceDif/oa:0;}));
+  const maxAP=Math.max(...og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fcePM/oa:0;}));
   const tDK=og.reduce((a,g)=>a+g.difKm,0),tP=og.reduce((a,g)=>a+persTotal(g.name),0),tPeff=og.reduce((a,g)=>a+persAn(g.name),0);
   document.getElementById('pCards').innerHTML=[
     {v:`${(maxAD*12).toFixed(1)} luni`,l:'Finalizare Diferențe (max grup)',d:fmtD(addM(now,maxAD)),c:'var(--red)'},
@@ -966,13 +977,13 @@ function rProiectie(){
       </div>`;
     }).join('');
   }
-  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorC/oa*12:0};}),maxAD*12,params.tDif,' luni');
-  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorC/oa*12:0};}),maxAP*12,params.tPM,' luni');
+  buildTL('tlDif',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.difKm/v*params.factorCDif/oa*12:0};}),maxAD*12,params.tDif,' luni');
+  buildTL('tlPM',og.map(g=>{const oa=oreAn(g.name);return{name:g.name,val:oa>0?g.pmKm/v*params.factorCPM/oa*12:0};}),maxAP*12,params.tPM,' luni');
   const H=['Grup CORG','Dif (km)','Timp Diferențe','Data Finalizare Corelare','PM (km)','Timp PM','Data fin. PM','Pers.','Scen. Lent','Scen. Rapid'];
   let h=`<thead><tr>${H.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
   for(const g of og){
-    const oa=oreAn(g.name),_fcsv=params.factorC||1.0,ad=oa>0?g.difKm/v*_fcsv/oa:0,ap=oa>0?g.pmKm/v*_fcsv/oa:0;
-    const adMin=oa>0?g.difKm/params.vMin*_fcsv/oa:0,adMax=oa>0?g.difKm/params.vMax*_fcsv/oa:0;
+    const oa=oreAn(g.name),_fcsvDif=params.factorCDif||1.0,_fcsvPM=params.factorCPM||1.0,ad=oa>0?g.difKm/v*_fcsvDif/oa:0,ap=oa>0?g.pmKm/v*_fcsvPM/oa:0;
+    const adMin=oa>0?g.difKm/params.vMin*_fcsvDif/oa:0,adMax=oa>0?g.difKm/params.vMax*_fcsvDif/oa:0;
     const cc=params.comp[g.name]||{gis:1,rasr:1,fol:0};
     const finDate=addM(now,ad);
     const finColor=ad<=params.tDif/12?'var(--green)':'var(--red)';
@@ -982,7 +993,7 @@ function rProiectie(){
 }
 function rBlockers(){
   const v=vm();
-  const _fcb=params.factorC||1.0;
+  const _fcb=params.factorCDif||1.0;
   const bl=getOpGroups().map(g=>{const oa=oreAn(g.name);const ad=oa>0?g.difKm/v*_fcb/oa:Infinity;return{name:g.name,ad,over:Math.max(0,ad-params.tDif/12),dk:g.difKm};}).sort((a,b)=>b.over-a.over);
   const top3=bl.slice(0,3);
   const gc=g=>g>params.tDif/12*1.5?'blocker-critical':g>params.tDif/12?'blocker-warning':'blocker-ok';
@@ -997,7 +1008,7 @@ function rBlockers(){
 function rProbability(){
   const _og=getOpGroups();
   if(!_og||!_og.length){return;}
-  const _fcp=params.factorC||1.0;
+  const _fcp=params.factorCDif||1.0;
 
   // ETA maxim (cel mai lent centru) la rata minimă și maximă
   const wAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/params.vMin*_fcp/oa:999;}));
@@ -1041,7 +1052,7 @@ function rKPI(){
   const _og=getOpGroups();
   const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000,tDif=_og.reduce((a,g)=>a+g.difKm,0);
   const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
-  const v=vm(),_fc=params.factorC||1.0,maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
+  const v=vm(),_fc=params.factorCDif||1.0,maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
   const grpOk=_og.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v*_fc/oa<=params.tDif/12;}).length;
   const tPers=_og.reduce((a,g)=>a+persTotal(g.name),0);
   const startD=new Date(getStartDate());
@@ -1059,7 +1070,7 @@ function rKPI(){
 function rAlerts(){
   const v=vm(),alerts=[];
   const strip=getOpGroups().map(g=>{
-    const oa=oreAn(g.name),_fca=params.factorC||1.0,ad=oa>0?g.difKm/v*_fca/oa:Infinity,ap=oa>0?g.pmKm/v*_fca/oa:Infinity;
+    const oa=oreAn(g.name),_fcaDif=params.factorCDif||1.0,_fcaPM=params.factorCPM||1.0,ad=oa>0?g.difKm/v*_fcaDif/oa:Infinity,ap=oa>0?g.pmKm/v*_fcaPM/oa:Infinity;
     const okD=ad<=params.tDif/12,okP=ap<=params.tPM/12;
     let cls='ag-ok',dot='var(--green)',st='✓';
     if(!okD){cls='ag-nok';dot='var(--red)';st='✗';}else if(!okP){cls='ag-warn';dot='var(--yellow)';st='!';}
@@ -1084,10 +1095,10 @@ function hAlertClick(e){
   setTimeout(()=>{const rows=document.querySelectorAll('#tPlan tbody tr');for(const r of rows){if(r.cells[0]?.textContent.includes(gn)){r.scrollIntoView({behavior:'smooth',block:'center'});break;}}},100);
 }
 function rProgress(){
-  const startD=new Date(getStartDate()),now=new Date(),v=vm(),_fc=params.factorC||1.0;
+  const startD=new Date(getStartDate()),now=new Date(),v=vm(),_fcDif=params.factorCDif||1.0,_fcPM=params.factorCPM||1.0;
   const _og=getOpGroups();
-  const maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
-  const maxAP=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fc/oa:0;}));
+  const maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fcDif/oa:0;}));
+  const maxAP=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fcPM/oa:0;}));
   function mkBar(lbl,tgtY,eta,barColor){
     const el=Math.max((now-startD)/365.25/86400000,0),pp=Math.min(el/tgtY*100,100);
     const etaD=addM(startD,eta),ep=Math.min(eta/tgtY*100,100),behind=eta>tgtY;
@@ -1130,10 +1141,10 @@ function rExec(){
   const tPM=CORG.reduce((a,r)=>a+r.rPM,0)/1000;
   const tDif=opGroups.reduce((a,g)=>a+g.difKm,0);
   const tPct=CORG.reduce((a,r)=>a+r.rGIS,0)/CORG.reduce((a,r)=>a+r.rPM,0);
-  const _fce=params.factorC||1.0;
-  const maxAD=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fce/oa:0;}));
-  const maxAP=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fce/oa:0;}));
-  const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v*_fce/oa<=params.tDif/12;}).length;
+  const _fceDif=params.factorCDif||1.0,_fcePM=params.factorCPM||1.0;
+  const maxAD=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fceDif/oa:0;}));
+  const maxAP=Math.max(...opGroups.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fcePM/oa:0;}));
+  const grpOk=opGroups.filter(g=>{const oa=oreAn(g.name);return oa>0&&g.difKm/v*_fceDif/oa<=params.tDif/12;}).length;
   const tPers=opGroups.reduce((a,g)=>a+persTotal(g.name),0);
   const startD=new Date(getStartDate());
   const tDifDate=addM(startD,params.tDif/12);
@@ -1357,7 +1368,7 @@ function fullUpdate(){
   // Expose stable state for bridge.js — table is rendering target only
   const og=getOpGroups();
   window.__dashboardState={
-    params:{vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL,factorC:params.factorC},
+    params:{vMin:params.vMin,vMax:params.vMax,oreSapt:params.oreSapt,saptAn:params.saptAn,tDif:params.tDif,tPM:params.tPM,pctFOL:params.pctFOL,factorCDif:params.factorCDif,factorCPM:params.factorCPM},
     groups:og.map(g=>{const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};return{name:g.name,difKm:g.difKm,pmKm:g.pmKm,comp:{gis:c.gis,rasr:c.rasr,fol:c.fol}};})
   };
 }
@@ -1375,7 +1386,8 @@ function updParams(){
   params.tDif=parseFloat(document.getElementById('tDif').value)||6;
   params.tPM=parseFloat(document.getElementById('tPM').value)||36;
   params.pctFOL=parseFloat(document.getElementById('pctFOL').value)||0;
-  const fcEl=document.getElementById('factorC');if(fcEl)params.factorC=parseFloat(fcEl.value)||1.0;
+  const fcDifEl=document.getElementById('factorCDif');if(fcDifEl)params.factorCDif=parseFloat(fcDifEl.value)||1.0;
+  const fcPMEl=document.getElementById('factorCPM');if(fcPMEl)params.factorCPM=parseFloat(fcPMEl.value)||1.0;
   scheduleUpdate();
 }
 const SHEET_NAME="Date Rețea Grup";
@@ -1426,7 +1438,7 @@ function exportCSV(){
   const v=vm();
   const rows=[['Grup CORG','PM Total (km)','Dif Totala (km)','% Corelat','Ore necesare Dif','Ani Dif','Ani PM','GIS','RASR','FOL','Target Dif OK','Target PM OK']];
   GD.forEach(g=>{
-    const oa=oreAn(g.name),_fcsv=params.factorC||1.0,ad=oa>0?g.difKm/v*_fcsv/oa:0,ap=oa>0?g.pmKm/v*_fcsv/oa:0;
+    const oa=oreAn(g.name),_fcsvDif=params.factorCDif||1.0,_fcsvPM=params.factorCPM||1.0,ad=oa>0?g.difKm/v*_fcsvDif/oa:0,ap=oa>0?g.pmKm/v*_fcsvPM/oa:0;
     const c=params.comp[g.name]||{gis:1,rasr:1,fol:0};
     rows.push([g.name,g.pmKm.toFixed(2),g.difKm.toFixed(2),(g.pct*100).toFixed(2)+'%',(g.difKm/v).toFixed(0),ad.toFixed(3),ap.toFixed(3),c.gis,c.rasr,c.fol,ad<=params.tDif?'DA':'NU',ap<=params.tPM?'DA':'NU']);
   });
@@ -1461,7 +1473,7 @@ function swTab(id){
   if(id==='proiectie')renderETAChart();
 }
 function bindEvents(){
-  ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorC'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updParams);});
+  ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorCDif','factorCPM'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updParams);});
   document.getElementById('startDate').addEventListener('change',()=>{rProgress();rDaysInfo();rKPI();});
   document.getElementById('xlsxFile').addEventListener('change',e=>{if(e.target.files[0])loadExcel(e.target.files[0]);});
   document.getElementById('resetDataBtn').addEventListener('click',resetDefault);
@@ -1580,7 +1592,7 @@ function renderCharts(){
 function renderETAChart(){
   if(typeof Chart==='undefined')return;
   const og=getOpGroups();
-  const v=vm(),_fc=params.factorC||1.0;
+  const v=vm(),_fcDif=params.factorCDif||1.0,_fcPM=params.factorCPM||1.0;
   const isDark=document.body.classList.contains('dark');
   const textColor=isDark?'#e4e2de':'#1a1916';
   const gridColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)';
@@ -1588,8 +1600,8 @@ function renderETAChart(){
   const etaCtx=document.getElementById('chartETA');
   if(etaCtx){
     if(_chartETA)_chartETA.destroy();
-    const etaDif=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.difKm/v*_fc/oa*12).toFixed(1):0;});
-    const etaPM=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.pmKm/v*_fc/oa*12).toFixed(1):0;});
+    const etaDif=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.difKm/v*_fcDif/oa*12).toFixed(1):0;});
+    const etaPM=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.pmKm/v*_fcPM/oa*12).toFixed(1):0;});
     _chartETA=new Chart(etaCtx,{
       type:'bar',
       data:{

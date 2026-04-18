@@ -32,7 +32,8 @@ class DashboardParams(BaseModel):
     tDif: float = Field(6.0, gt=0.0, description="Target months for differences")
     tPM: float = Field(36.0, gt=0.0, description="Target months for PM network")
     pctFOL: float = Field(0.0, ge=0.0, le=100.0, description="FOL time % for correlation")
-    factorC: float = Field(1.0, ge=1.0, description="Complexity factor applied to ETA")
+    factorCDif: float = Field(3.0, ge=1.0, description="Complexity factor applied to Dif ETA")
+    factorCPM: float = Field(3.0, ge=1.0, description="Complexity factor applied to PM ETA")
 
 
 class CalculateRequest(BaseModel):
@@ -75,7 +76,8 @@ class DashboardSummary(BaseModel):
     max_luni_dif: float
     max_luni_pm: float
     blocked_groups: int
-    factor_c: float
+    factor_c_dif: float
+    factor_c_pm: float
     rata_medie: float
 
 
