@@ -14,9 +14,4 @@
     logo.src = '/static/logo-delgaz.svg';
     logo.alt = 'Delgaz Grid';
   }
-
-  // Patch factorC consistency in runtime calculations (safe override)
-  window.__applyFactorC = function(val, factor){
-    return val * (factor || 1.0);
-  };
 })();

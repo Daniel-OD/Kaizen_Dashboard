@@ -13,8 +13,11 @@
     return parseFloat(t)||0;
   }
 
-  /** Read global parameters from the input fields. */
+  /** Read global parameters from the exposed dashboard state, falling back to input fields. */
   function readParams(){
+    if(window.__dashboardState && window.__dashboardState.params){
+      return Object.assign({}, window.__dashboardState.params);
+    }
     return {
       vMin: num(document.getElementById('vMin')?.value),
       vMax: num(document.getElementById('vMax')?.value),
@@ -23,12 +26,17 @@
       tDif: num(document.getElementById('tDif')?.value),
       tPM: num(document.getElementById('tPM')?.value),
       pctFOL: num(document.getElementById('pctFOL')?.value),
-      factorC: num(document.getElementById('factorC')?.value) || 1
+      factorCDif: num(document.getElementById('factorCDif')?.value) || 1,
+      factorCPM: num(document.getElementById('factorCPM')?.value) || 1
     };
   }
 
-  /** Read groups from the rendered table (fallback / sync helper). */
-  function readGroupsFromTable(){
+  /** Read groups from the exposed dashboard state, falling back to the rendered table. */
+  function readGroups(){
+    if(window.__dashboardState && Array.isArray(window.__dashboardState.groups) && window.__dashboardState.groups.length){
+      return window.__dashboardState.groups;
+    }
+    // Fallback: scrape table (only used before first fullUpdate runs)
     const rows = document.querySelectorAll('#tPlan tbody tr');
     const groups = [];
     rows.forEach(r=>{
@@ -50,19 +58,13 @@
   }
 
   /**
-   * Build the API payload from in-memory state.
-   * If the dashboard has exposed a state object (window.__dashboardGroups),
-   * prefer that; otherwise fall back to reading the DOM table once.
+   * Build the API payload from the stable dashboard state.
+   * Prefers window.__dashboardState (set by fullUpdate in index.html).
+   * Falls back to DOM scraping only before first fullUpdate.
    */
   function snapshot(){
     _state.params = readParams();
-
-    if(window.__dashboardGroups && Array.isArray(window.__dashboardGroups)){
-      _state.groups = window.__dashboardGroups;
-    } else {
-      _state.groups = readGroupsFromTable();
-    }
-
+    _state.groups = readGroups();
     return { params: _state.params, groups: _state.groups };
   }
 
@@ -150,9 +152,14 @@
       return `<span style="margin-right:12px">${s.rate} km/h → dif ${dM}l · PM ${pM}l</span>`;
     }).join('');
 
+    // Summary line (if available from backend)
+    const sum = data.summary;
+    const sumLine = sum ? `<div style="font-size:9px;color:var(--muted)">Sumar: ${sum.total_groups} grupuri · ${sum.groups_ok_dif} ok dif · ${sum.blocked_groups} blocate · factorDif=${sum.factor_c_dif} · factorPM=${sum.factor_c_pm}</div>` : '';
+
     el.innerHTML = rows +
       `<div style="margin-top:6px;font-size:9px;color:var(--muted)">Scenarii: ${scenarios}</div>` +
-      `<div style="font-size:9px;color:var(--muted)">Rată medie: ${data.rata_medie} km/h</div>`;
+      `<div style="font-size:9px;color:var(--muted)">Rată medie: ${data.rata_medie} km/h</div>` +
+      sumLine;
   }
 
   let t;

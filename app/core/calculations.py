@@ -6,8 +6,8 @@ Business rules:
   rata_medie      = (vMin + vMax) / 2
   ore_nec_dif     = dif_km / rata_medie
   ore_nec_pm      = pm_km / rata_medie
-  luni_dif        = (ore_nec_dif / ore_an) * 12 * factorC
-  luni_pm         = (ore_nec_pm  / ore_an) * 12 * factorC
+  luni_dif        = (ore_nec_dif / ore_an) * 12 * factorCDif
+  luni_pm         = (ore_nec_pm  / ore_an) * 12 * factorCPM
 
 When nr_echipe == 0 the group has no capacity.  ore_an falls to 0 and
 ETA becomes ``float('inf')`` (reported as -1 in JSON) to signal a
@@ -104,7 +104,8 @@ def compute_dashboard(payload: dict) -> dict:
     t_dif = clamp_positive(params.get("tDif", 6.0))
     t_pm = clamp_positive(params.get("tPM", 36.0))
     pct_fol = max(0.0, min(params.get("pctFOL", 0.0), 100.0))
-    factor_c = max(1.0, params.get("factorC", 1.0))
+    factor_c_dif = max(1.0, params.get("factorCDif", params.get("factorC", 3.0)))
+    factor_c_pm = max(1.0, params.get("factorCPM", params.get("factorC", 3.0)))
 
     avg_rate = rata_medie(v_min, v_max)
 
@@ -124,8 +125,8 @@ def compute_dashboard(payload: dict) -> dict:
         o_dif = ore_necesare(dif_km, avg_rate)
         o_pm = ore_necesare(pm_km, avg_rate)
 
-        l_dif = luni_eta(o_dif, oa, factor_c)
-        l_pm = luni_eta(o_pm, oa, factor_c)
+        l_dif = luni_eta(o_dif, oa, factor_c_dif)
+        l_pm = luni_eta(o_pm, oa, factor_c_pm)
 
         blocked = math.isinf(l_dif) or math.isinf(l_pm)
 
@@ -143,8 +144,30 @@ def compute_dashboard(payload: dict) -> dict:
 
     scenarios = compute_scenarios(groups_in, params)
 
+    # Build summary — handle blocked sentinel (-1) safely
+    finite_dif = [r["luni_dif"] for r in results if r["luni_dif"] != BLOCKED_ETA_JSON]
+    finite_pm = [r["luni_pm"] for r in results if r["luni_pm"] != BLOCKED_ETA_JSON]
+    blocked_count = sum(1 for r in results if r["luni_dif"] == BLOCKED_ETA_JSON or r["luni_pm"] == BLOCKED_ETA_JSON)
+
+    summary = {
+        "total_dif_km": round(sum(max(0.0, float(g.get("difKm", 0))) for g in groups_in), 4),
+        "total_pm_km": round(sum(max(0.0, float(g.get("pmKm", 0))) for g in groups_in), 4),
+        "total_groups": len(results),
+        "groups_ok_dif": sum(1 for r in results if r["ok_dif"]),
+        "groups_ok_pm": sum(1 for r in results if r["ok_pm"]),
+        # When any group is blocked, max ETA = -1 (blocked sentinel) because
+        # the blocked group dominates the worst-case; finite groups can't offset it.
+        "max_luni_dif": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_dif) if finite_dif else 0.0),
+        "max_luni_pm": BLOCKED_ETA_JSON if blocked_count > 0 else (max(finite_pm) if finite_pm else 0.0),
+        "blocked_groups": blocked_count,
+        "factor_c_dif": factor_c_dif,
+        "factor_c_pm": factor_c_pm,
+        "rata_medie": round(avg_rate, 4),
+    }
+
     return {
         "rata_medie": round(avg_rate, 4),
         "groups": results,
         "scenarios": scenarios,
+        "summary": summary,
     }

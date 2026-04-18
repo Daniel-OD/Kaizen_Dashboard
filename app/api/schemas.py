@@ -32,7 +32,8 @@ class DashboardParams(BaseModel):
     tDif: float = Field(6.0, gt=0.0, description="Target months for differences")
     tPM: float = Field(36.0, gt=0.0, description="Target months for PM network")
     pctFOL: float = Field(0.0, ge=0.0, le=100.0, description="FOL time % for correlation")
-    factorC: float = Field(1.0, ge=1.0, description="Complexity factor applied to ETA")
+    factorCDif: float = Field(3.0, ge=1.0, description="Complexity factor applied to Dif ETA")
+    factorCPM: float = Field(3.0, ge=1.0, description="Complexity factor applied to PM ETA")
 
 
 class CalculateRequest(BaseModel):
@@ -64,9 +65,26 @@ class ScenarioResult(BaseModel):
     max_eta_pm_years: float
 
 
+class DashboardSummary(BaseModel):
+    """Aggregated summary across all groups."""
+
+    total_dif_km: float
+    total_pm_km: float
+    total_groups: int
+    groups_ok_dif: int
+    groups_ok_pm: int
+    max_luni_dif: float
+    max_luni_pm: float
+    blocked_groups: int
+    factor_c_dif: float
+    factor_c_pm: float
+    rata_medie: float
+
+
 class CalculateResponse(BaseModel):
     """Full response from /api/calculate."""
 
     rata_medie: float
     groups: list[GroupResult]
     scenarios: list[ScenarioResult]
+    summary: DashboardSummary

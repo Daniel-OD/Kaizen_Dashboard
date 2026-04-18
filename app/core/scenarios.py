@@ -17,7 +17,8 @@ def _max_eta(groups: list[dict], params: dict, rate: float) -> tuple[float, floa
     ore_sapt = clamp_positive(params.get("oreSapt", 4.0))
     sapt_an_val = max(1, int(params.get("saptAn", 47)))
     pct_fol = max(0.0, min(params.get("pctFOL", 0.0), 100.0))
-    factor_c = max(1.0, params.get("factorC", 1.0))
+    factor_c_dif = max(1.0, params.get("factorCDif", params.get("factorC", 1.0)))
+    factor_c_pm = max(1.0, params.get("factorCPM", params.get("factorC", 1.0)))
 
     max_dif: float = 0.0
     max_pm: float = 0.0
@@ -34,8 +35,8 @@ def _max_eta(groups: list[dict], params: dict, rate: float) -> tuple[float, floa
         dif_km = max(0.0, float(g.get("difKm", 0)))
         pm_km = max(0.0, float(g.get("pmKm", 0)))
 
-        l_dif = luni_eta(ore_necesare(dif_km, rate), oa, factor_c)
-        l_pm = luni_eta(ore_necesare(pm_km, rate), oa, factor_c)
+        l_dif = luni_eta(ore_necesare(dif_km, rate), oa, factor_c_dif)
+        l_pm = luni_eta(ore_necesare(pm_km, rate), oa, factor_c_pm)
 
         if l_dif > max_dif:
             max_dif = l_dif
