@@ -123,12 +123,12 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .ag-dot{width:6px;height:6px;border-radius:50%;}
 .prog-wrap{padding:10px 24px 0;background:#fff;border-bottom:1px solid var(--border);}
 .prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
-.prog-label{font-size:10px;color:var(--muted);width:160px;flex-shrink:0;}
-.prog-outer{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;position:relative;min-width:120px;border:1px solid var(--border);}
-.prog-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);}
-.prog-plan-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);border-radius:1px;}
-.prog-pct{font-family:var(--mono);font-size:10px;width:42px;text-align:right;}
-.prog-eta{font-family:var(--mono);font-size:9px;color:var(--muted);width:140px;}
+.prog-label{font-size:11px;color:var(--text);width:180px;flex-shrink:0;font-weight:500;}
+.prog-outer{flex:1;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;position:relative;min-width:120px;border:1px solid var(--border);}
+.prog-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.prog-plan-line{position:absolute;top:-1px;bottom:-1px;width:2px;background:rgba(255,180,0,.9);border-radius:1px;box-shadow:0 0 4px rgba(255,180,0,.4);}
+.prog-pct{font-family:var(--mono);font-size:11px;font-weight:600;width:42px;text-align:right;}
+.prog-eta{font-family:var(--mono);font-size:10px;color:var(--muted);width:160px;}
 .toolbar{display:flex;align-items:center;gap:10px;padding:8px 24px;background:#fff;border-bottom:1px solid var(--border);flex-wrap:wrap;}
 .tb-group{display:flex;align-items:center;gap:6px;}
 .tb-lbl{font-size:10px;color:var(--muted);}
@@ -208,10 +208,10 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .exec-hero-left h2{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;}
 .exec-hero-left p{font-size:12px;color:rgba(255,255,255,.8);}
 .exec-hero-date{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.75);margin-top:8px;}
-.exec-verdict{text-align:center;padding:16px 28px;background:rgba(255,255,255,.03);border-radius:10px;min-width:200px;}
-.exec-verdict-val{font-family:var(--mono);font-size:48px;font-weight:700;line-height:1;}
-.exec-verdict-lbl{font-size:10px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;}
-.exec-verdict-sub{font-size:11px;margin-top:6px;color:rgba(255,255,255,.7);}
+.exec-verdict{text-align:center;padding:18px 28px;background:rgba(255,255,255,.15);border-radius:12px;min-width:220px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);}
+.exec-verdict-val{font-family:var(--mono);font-size:48px;font-weight:700;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2));}
+.exec-verdict-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;text-shadow:0 1px 2px rgba(0,0,0,.2);}
+.exec-verdict-sub{font-size:11px;margin-top:8px;line-height:1.4;}
 
 .exec-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
 @media(max-width:700px){.exec-kpi-row{grid-template-columns:repeat(2,1fr);}}
@@ -256,12 +256,12 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .exec-progress-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
 .exec-progress-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:7px;}
 .exec-prog-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.exec-prog-label{font-size:11px;color:var(--text);width:180px;flex-shrink:0;font-weight:500;}
-.exec-prog-outer{flex:1;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;position:relative;border:1px solid var(--border);}
-.exec-prog-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1);}
-.exec-prog-target{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,200,50,.8);}
-.exec-prog-pct{font-family:var(--mono);font-size:11px;font-weight:600;width:48px;text-align:right;}
-.exec-prog-eta{font-family:var(--mono);font-size:10px;color:var(--muted);width:120px;text-align:right;}
+.exec-prog-label{font-size:12px;color:var(--text);width:200px;flex-shrink:0;font-weight:500;display:flex;align-items:center;}
+.exec-prog-outer{flex:1;height:12px;background:var(--bg3);border-radius:6px;overflow:hidden;position:relative;border:1px solid var(--border);}
+.exec-prog-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.exec-prog-target{position:absolute;top:-1px;bottom:-1px;width:2px;background:rgba(255,180,0,.9);box-shadow:0 0 4px rgba(255,180,0,.4);}
+.exec-prog-pct{font-family:var(--mono);font-size:12px;font-weight:700;width:48px;text-align:right;}
+.exec-prog-eta{font-family:var(--mono);font-size:11px;color:var(--muted);width:160px;text-align:right;}
 
 .exec-footer{text-align:center;padding:16px;font-size:10px;color:var(--muted);font-family:var(--mono);}
 
@@ -280,7 +280,7 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .exec-print-btn:hover{background:rgba(255,255,255,.3);}
 
 /* ── KPI TARGET HINT ── */
-.kpi-target{font-size:8px;color:var(--muted);margin-top:2px;font-family:var(--mono);}
+.kpi-target{font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--mono);}
 
 /* ══ PRINT / PDF ══════════════════════════════════════════════ */
 @media print {
@@ -1085,12 +1085,12 @@ function rProgress(){
   const _og=getOpGroups();
   const maxAD=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.difKm/v*_fc/oa:0;}));
   const maxAP=Math.max(..._og.map(g=>{const oa=oreAn(g.name);return oa>0?g.pmKm/v*_fc/oa:0;}));
-  function mkBar(lbl,tgtY,eta){
+  function mkBar(lbl,tgtY,eta,barColor){
     const el=Math.max((now-startD)/365.25/86400000,0),pp=Math.min(el/tgtY*100,100);
     const etaD=addM(startD,eta),ep=Math.min(eta/tgtY*100,100),behind=eta>tgtY;
-    return `<div class="prog-row"><span class="prog-label">${lbl}</span><div class="prog-outer"><div class="prog-fill" style="width:${pp}%;background:${behind?'var(--red)':'var(--accent)'}"></div><div class="prog-plan-line" style="left:${Math.min(ep,99)}%"></div></div><span class="prog-pct" style="color:${behind?'var(--red)':'var(--green)'}">${pp.toFixed(0)}%</span><span class="prog-eta" style="color:${behind?'var(--red)':'var(--muted)'}">ETA: ${fmtD(etaD)} ${behind?'⚠ ÎNTÂRZIERE':''}</span></div>`;
+    return `<div class="prog-row"><span class="prog-label">${lbl}</span><div class="prog-outer"><div class="prog-fill" style="width:${pp}%;background:${barColor}"></div><div class="prog-plan-line" style="left:${Math.min(ep,99)}%"></div></div><span class="prog-pct" style="color:${behind?'var(--red)':'var(--green)'}">${pp.toFixed(0)}%</span><span class="prog-eta" style="color:${behind?'var(--red)':'var(--muted)'}">ETA: ${fmtD(etaD)} ${behind?'⚠ ÎNTÂRZIERE':''}</span></div>`;
   }
-  document.getElementById('progWrap').innerHTML=`<div style="padding:0 0 8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><span style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Progres față de target · Start: ${fmtD(startD)}</span><span style="font-size:9px;color:var(--muted);font-family:var(--mono)">Bara albastră = timp scurs · Linie galbenă = ETA estimat</span></div>${mkBar('Dif. Totală GIS vs SAP PM',params.tDif/12,maxAD)}${mkBar('Corelare Rețea PM totală',params.tPM/12,maxAP)}`;
+  document.getElementById('progWrap').innerHTML=`<div style="padding:0 0 8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><span style="font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Progres față de target · Start: ${fmtD(startD)}</span><span style="font-size:10px;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:8px">Bara colorată = timp scurs <span style="display:inline-block;width:12px;height:2px;background:rgba(255,200,50,.8);border-radius:1px"></span> Linie = ETA estimat</span></div>${mkBar('Dif. Totală GIS vs SAP PM',params.tDif/12,maxAD,'var(--accent)')}${mkBar('Corelare Rețea PM totală',params.tPM/12,maxAP,'var(--blue)')}`;
 }
 function rDaysInfo(){
   const startD=new Date(getStartDate()),now=new Date(),d=Math.round((now-startD)/86400000);
@@ -1144,7 +1144,7 @@ function rExec(){
   const allOk=grpOk===opGroups.length&&!behindDif&&!behindPM;
   const nearOk=grpOk===opGroups.length&&!behindDif&&behindPM; // dif ok, PM intarzie
   const someOk=grpOk>opGroups.length/2;
-  let verdictColor=allOk?'var(--green)':nearOk?'var(--accent)':someOk?'var(--yellow)':'var(--red)';
+  let verdictColor=allOk?'#6fcf97':nearOk?'#7db3e0':someOk?'#f0c060':'#f08070';
   let verdictIcon=allOk?'✅':nearOk?'📋':someOk?'⚠️':'🚨';
   let verdictText=allOk?'PE PLAN':nearOk?'APROAPE DE TARGET':someOk?'ATENȚIE NECESARĂ':'INTERVENȚIE URGENTĂ';
   let verdictSub=allOk?`Toate ${opGroups.length} grupurile respectă ambele targeturi`:
@@ -1192,7 +1192,7 @@ function rExec(){
       <span class="exec-group-name" style="color:${g.color}">${g.name}</span>
       <div class="exec-group-bar-wrap"><div class="exec-group-bar" style="width:${pctBar.toFixed(1)}%;background:${dot}"></div></div>
       <span class="exec-group-pct" style="color:${dot}">${isFinite(ad)?ad.toFixed(2):'∞'} ani</span>
-      <span class="exec-group-eta" style="color:${vsAvg<=0?'var(--green)':'var(--red)'};font-size:8px">${vsAvg>0?'+':''}${vsAvg.toFixed(2)} vs med</span>
+      <span class="exec-group-eta" style="color:${vsAvg<=0?'var(--green)':'var(--red)'};font-size:9.5px">${vsAvg>0?'+':''}${vsAvg.toFixed(2)} vs med</span>
     </div>`;
   }).join('');
 
@@ -1240,7 +1240,7 @@ function rExec(){
       <div class="exec-verdict">
         <div class="exec-verdict-val" style="color:${verdictColor}">${verdictIcon}</div>
         <div class="exec-verdict-lbl" style="color:${verdictColor}">${verdictText}</div>
-        <div class="exec-verdict-sub" style="color:var(--muted)">${verdictSub}</div>
+        <div class="exec-verdict-sub" style="color:rgba(255,255,255,.85)">${verdictSub}</div>
       </div>
     </div>
 
@@ -1249,7 +1249,7 @@ function rExec(){
         <div class="exec-kpi-val" style="color:${tPct>.97?'var(--green)':tPct>.95?'var(--yellow)':'var(--red)'}">${pctDisplay}</div>
         <div class="exec-kpi-lbl">Lungime Rețea Corelată</div>
         <div class="kpi-target">${(CORG.reduce((a,r)=>a+r.rGIS,0)/1000).toFixed(0)} km GIS / ${(CORG.reduce((a,r)=>a+r.rPM,0)/1000).toFixed(0)} km PM</div>
-        <div class="exec-kpi-sub" style="color:${pctGapColor};font-size:9px">${pctGapText}</div>
+        <div class="exec-kpi-sub" style="color:${pctGapColor}">${pctGapText}</div>
       </div>
       <div class="exec-kpi ${tDif<500?'green':tDif<1000?'yellow':'red'}">
         <div class="exec-kpi-val" style="color:${tDif<500?'var(--green)':tDif<1000?'var(--yellow)':'var(--red)'}">${tDif.toFixed(0)} km</div>
@@ -1271,24 +1271,24 @@ function rExec(){
     <div class="exec-progress-card">
       <h3><span></span>Progres față de Targeturi</h3>
       <div class="exec-prog-row">
-        <span class="exec-prog-label">🔴 Diferențe GIS vs PM</span>
+        <span class="exec-prog-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle"></span>Diferențe GIS vs PM</span>
         <div class="exec-prog-outer">
-          <div class="exec-prog-fill" style="width:${planPctDif.toFixed(1)}%;background:${behindDif?'var(--red)':'var(--accent)'}"></div>
+          <div class="exec-prog-fill" style="width:${planPctDif.toFixed(1)}%;background:var(--accent)"></div>
           <div class="exec-prog-target" style="left:${Math.min((maxAD/params.tDif)*100,99).toFixed(1)}%"></div>
         </div>
         <span class="exec-prog-pct" style="color:${behindDif?'var(--red)':'var(--green)'}">${planPctDif.toFixed(0)}%</span>
-        <span class="exec-prog-eta" style="color:${behindDif?'var(--red)':'var(--muted)'}">ETA: ${fmtD(addM(startD,maxAD))} ${behindDif?'⚠':''}</span>
+        <span class="exec-prog-eta" style="color:${behindDif?'var(--red)':'var(--muted)'}">ETA: ${fmtD(addM(startD,maxAD))} ${behindDif?'⚠ ÎNTÂRZIERE':''}</span>
       </div>
       <div class="exec-prog-row">
-        <span class="exec-prog-label">🔵 Rețea PM totală</span>
+        <span class="exec-prog-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-right:6px;vertical-align:middle"></span>Rețea PM totală</span>
         <div class="exec-prog-outer">
-          <div class="exec-prog-fill" style="width:${planPctPM.toFixed(1)}%;background:${behindPM?'var(--yellow)':'var(--blue)'}"></div>
+          <div class="exec-prog-fill" style="width:${planPctPM.toFixed(1)}%;background:var(--blue)"></div>
           <div class="exec-prog-target" style="left:${Math.min((maxAP/params.tPM)*100,99).toFixed(1)}%"></div>
         </div>
         <span class="exec-prog-pct" style="color:${behindPM?'var(--yellow)':'var(--green)'}">${planPctPM.toFixed(0)}%</span>
-        <span class="exec-prog-eta" style="color:var(--muted)">ETA: ${fmtD(addM(startD,maxAP))}</span>
+        <span class="exec-prog-eta" style="color:${behindPM?'var(--yellow)':'var(--muted)'}">ETA: ${fmtD(addM(startD,maxAP))} ${behindPM?'⚠ ÎNTÂRZIERE':''}</span>
       </div>
-      <div style="font-size:9px;color:var(--muted);margin-top:4px;font-family:var(--mono)">Bara = timp scurs din target · Linie galbenă = ETA estimat</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;font-family:var(--mono);display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span>Bara colorată = timp scurs din target</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:2px;background:rgba(255,200,50,.8);border-radius:1px"></span>Linie = ETA estimat</span><span style="display:inline-flex;align-items:center;gap:4px;color:var(--red)">⚠ = în întârziere</span></div>
     </div>
 
     <div class="exec-two-col">
