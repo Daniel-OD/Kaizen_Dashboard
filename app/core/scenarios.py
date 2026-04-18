@@ -1,8 +1,14 @@
-"""Reusable scenario calculations (worst / medium / best)."""
+"""Reusable scenario calculations (worst / medium / best).
+
+When a group has nr_echipe == 0, its ETA is ``inf`` (blocked).
+The scenario output clamps blocked values to ``-1`` for JSON safety.
+"""
 
 from __future__ import annotations
 
-from app.core.calculations import nr_echipe, ore_an, ore_necesare, luni_eta
+import math
+
+from app.core.calculations import nr_echipe, ore_an, ore_necesare, luni_eta, BLOCKED_ETA_JSON
 from app.core.validators import clamp_positive
 
 
@@ -48,9 +54,11 @@ def compute_scenarios(groups: list[dict], params: dict) -> list[dict]:
     out: list[dict] = []
     for rate, _label in [(v_min, "worst"), (v_med, "medium"), (v_max, "best")]:
         dif_m, pm_m = _max_eta(groups, params, rate)
+        dif_y = BLOCKED_ETA_JSON if not math.isfinite(dif_m) else round(dif_m / 12.0, 4)
+        pm_y = BLOCKED_ETA_JSON if not math.isfinite(pm_m) else round(pm_m / 12.0, 4)
         out.append({
             "rate": round(rate, 4),
-            "max_eta_dif_years": round(dif_m / 12.0, 4),
-            "max_eta_pm_years": round(pm_m / 12.0, 4),
+            "max_eta_dif_years": dif_y,
+            "max_eta_pm_years": pm_y,
         })
     return out

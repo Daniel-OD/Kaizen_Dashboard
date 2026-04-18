@@ -1,14 +1,21 @@
 (function(){
   const API_BASE = '/api';
 
+  // ---------------------------------------------------------------------------
+  // In-memory dashboard state — the single source of truth for the API payload.
+  // The HTML table (#tPlan) is a *rendering target*, NOT a data source.
+  // ---------------------------------------------------------------------------
+  const _state = { params: null, groups: [] };
+
   function num(x){
     if(!x) return 0;
     const t = String(x).replace(/[^0-9.,-]/g,'').replace(',','.');
     return parseFloat(t)||0;
   }
 
-  function snapshot(){
-    const params = {
+  /** Read global parameters from the input fields. */
+  function readParams(){
+    return {
       vMin: num(document.getElementById('vMin')?.value),
       vMax: num(document.getElementById('vMax')?.value),
       oreSapt: num(document.getElementById('oreSapt')?.value),
@@ -18,41 +25,78 @@
       pctFOL: num(document.getElementById('pctFOL')?.value),
       factorC: num(document.getElementById('factorC')?.value) || 1
     };
+  }
 
+  /** Read groups from the rendered table (fallback / sync helper). */
+  function readGroupsFromTable(){
     const rows = document.querySelectorAll('#tPlan tbody tr');
     const groups = [];
-
     rows.forEach(r=>{
       if(r.classList.contains('tot')) return;
       const tds = r.querySelectorAll('td');
       if(tds.length < 11) return;
-
-      const name = tds[0].textContent.trim();
-      const gis = num(tds[1].textContent);
-      const rasr = num(tds[2].textContent);
-      const fol = num(tds[3].textContent);
-
       groups.push({
-        name,
+        name: tds[0].textContent.trim(),
         difKm: num(tds[6].textContent),
         pmKm: num(tds[10].textContent),
-        comp: {gis: gis||1, rasr: rasr||1, fol: fol||0}
+        comp: {
+          gis: num(tds[1].textContent),
+          rasr: num(tds[2].textContent),
+          fol: num(tds[3].textContent)
+        }
       });
     });
-
-    return {params, groups};
+    return groups;
   }
 
+  /**
+   * Build the API payload from in-memory state.
+   * If the dashboard has exposed a state object (window.__dashboardGroups),
+   * prefer that; otherwise fall back to reading the DOM table once.
+   */
+  function snapshot(){
+    _state.params = readParams();
+
+    if(window.__dashboardGroups && Array.isArray(window.__dashboardGroups)){
+      _state.groups = window.__dashboardGroups;
+    } else {
+      _state.groups = readGroupsFromTable();
+    }
+
+    return { params: _state.params, groups: _state.groups };
+  }
+
+  // Expose state for debugging / future integration
+  window.__bridgeState = _state;
+
+  // ---------------------------------------------------------------------------
+  // API communication with robust error handling
+  // ---------------------------------------------------------------------------
+
   async function callAPI(){
+    let res;
     try{
-      const res = await fetch(API_BASE + '/calculate',{
+      res = await fetch(API_BASE + '/calculate',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify(snapshot())
       });
+    }catch(networkErr){
+      console.error('[bridge] Network error calling /api/calculate:', networkErr);
+      return { _error: 'Network error — API unreachable' };
+    }
+
+    if(!res.ok){
+      const text = await res.text().catch(()=>'(no body)');
+      console.error(`[bridge] /api/calculate returned HTTP ${res.status}:`, text);
+      return { _error: `HTTP ${res.status} — ${text.slice(0,120)}` };
+    }
+
+    try{
       return await res.json();
-    }catch(e){
-      return null;
+    }catch(jsonErr){
+      console.error('[bridge] Invalid JSON from /api/calculate:', jsonErr);
+      return { _error: 'Invalid JSON response from API' };
     }
   }
 
@@ -70,22 +114,41 @@
     return el;
   }
 
+  /** Format an ETA value — handles the blocked sentinel (-1). */
+  function fmtEta(v){
+    if(v === -1 || v === null || v === undefined) return '∞';
+    return v.toFixed(1);
+  }
+
   function render(data){
     const el = ensurePanel().querySelector('#pyContent');
-    if(!data){ el.innerHTML = '<span style="color:var(--red)">⚠ API unavailable</span>'; return; }
+
+    if(!data){
+      el.innerHTML = '<span style="color:var(--red)">⚠ API unavailable</span>';
+      return;
+    }
+
+    if(data._error){
+      el.innerHTML = '<span style="color:var(--red)">⚠ Python API error</span>' +
+        '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + data._error + '</div>';
+      return;
+    }
 
     const rows = (data.groups||[]).map(r=>{
-      const color = r.ok_dif ? 'var(--green)' : 'var(--red)';
-      const icon = r.ok_dif ? '✓' : '✗';
+      const blocked = r.luni_dif === -1 || r.luni_pm === -1;
+      const color = blocked ? 'var(--muted)' : (r.ok_dif ? 'var(--green)' : 'var(--red)');
+      const icon = blocked ? '⏸' : (r.ok_dif ? '✓' : '✗');
       return `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border)">
         <span>${r.name}</span>
-        <span style="color:${color}">${icon} ${r.luni_dif?.toFixed(1)||'-'} luni dif · ${r.luni_pm?.toFixed(1)||'-'} luni PM</span>
+        <span style="color:${color}">${icon} ${fmtEta(r.luni_dif)} luni dif · ${fmtEta(r.luni_pm)} luni PM</span>
       </div>`;
     }).join('');
 
-    const scenarios = (data.scenarios||[]).map(s=>
-      `<span style="margin-right:12px">${s.rate} km/h → dif ${(s.max_eta_dif_years*12).toFixed(1)}l · PM ${(s.max_eta_pm_years*12).toFixed(1)}l</span>`
-    ).join('');
+    const scenarios = (data.scenarios||[]).map(s=>{
+      const dM = s.max_eta_dif_years === -1 ? '∞' : (s.max_eta_dif_years*12).toFixed(1);
+      const pM = s.max_eta_pm_years === -1 ? '∞' : (s.max_eta_pm_years*12).toFixed(1);
+      return `<span style="margin-right:12px">${s.rate} km/h → dif ${dM}l · PM ${pM}l</span>`;
+    }).join('');
 
     el.innerHTML = rows +
       `<div style="margin-top:6px;font-size:9px;color:var(--muted)">Scenarii: ${scenarios}</div>` +
