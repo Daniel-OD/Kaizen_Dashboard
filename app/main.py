@@ -107,7 +107,13 @@ def login(request: Request):
     url = get_auth_url(state=state)
     resp = RedirectResponse(url)
     # Store state in a short-lived cookie for CSRF validation
-    resp.set_cookie("_auth_state", state, httponly=True, samesite="lax", max_age=600)
+    resp.set_cookie(
+        "_auth_state", state,
+        httponly=True,
+        samesite="lax",
+        secure=request.url.scheme == "https",
+        max_age=600,
+    )
     return resp
 
 
