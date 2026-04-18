@@ -31,7 +31,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
 .stats{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
 .stat{background:var(--llblue);border:1px solid rgba(26,95,168,.15);border-radius:var(--rsm);padding:8px 14px;text-align:center;min-width:85px;}
 .stat .v{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--navy);display:block;}
-.stat .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.stat .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
 .tabs{display:flex;border-bottom:1px solid var(--border);background:#fff;padding:0 24px;overflow-x:auto;gap:4px;box-shadow:var(--shadow-sm);}
 .tab{padding:9px 15px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);white-space:nowrap;letter-spacing:.01em;}
 .tab:hover{color:var(--text);}.tab.active{color:var(--navy);border-bottom-color:var(--navy);font-weight:600;}
@@ -40,7 +40,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:13
 .note::before{content:'ℹ';font-size:12px;flex-shrink:0;}
 .tw{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);}
 table{width:100%;border-collapse:collapse;font-size:11.5px;background:#fff;}
-th{background:var(--bg3);color:var(--muted);padding:7px 10px;text-align:left;font-weight:600;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:none;border-bottom:2px solid var(--border);}
+th{background:var(--bg3);color:var(--muted);padding:7px 10px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:none;border-bottom:2px solid var(--border);}
 th.c,td.c{text-align:center;}
 td{padding:7px 10px;border:none;border-bottom:1px solid var(--border);vertical-align:middle;}
 tr:nth-child(even) td{background:var(--bg3);}tr:nth-child(odd) td{background:#fff;}tr:hover td{background:var(--llblue)!important;transition:background .12s;}
@@ -54,7 +54,7 @@ td.n{font-family:var(--mono);text-align:right;}
 .pb-bg{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:45px;}
 .pb-fill{height:100%;border-radius:3px;transition:width .4s;}
 .pb-txt{font-family:var(--mono);font-size:10px;width:44px;text-align:right;}
-.badge{display:inline-block;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:99px;font-family:var(--mono);}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;font-family:var(--mono);}
 .bm{background:var(--llblue);color:var(--navy);border:1px solid rgba(26,95,168,.2);font-weight:600;}.bs{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
 .role-pill{display:inline-block;font-size:8px;font-weight:600;padding:1px 5px;border-radius:3px;font-family:var(--mono);}
 .rp-gis{background:var(--llblue);color:var(--navy);border:1px solid rgba(26,95,168,.2);}
@@ -75,7 +75,7 @@ td.n{font-family:var(--mono);text-align:right;}
 .kpi-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;border-right:1px solid var(--border);min-width:0;transition:var(--transition);cursor:default;}
 .kpi-item:last-child{border-right:none;}.kpi-item:hover{background:var(--llblue);}
 .kpi-val{font-family:var(--mono);font-size:17px;font-weight:600;line-height:1;white-space:nowrap;}
-.kpi-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;text-align:center;}
+.kpi-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;text-align:center;}
 .blockers-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin:12px 24px 0 24px;padding:14px 18px;box-shadow:var(--shadow-sm);}
 .blockers-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .blockers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
@@ -83,7 +83,7 @@ td.n{font-family:var(--mono);text-align:right;}
 .blocker-item:hover{transform:translateY(-2px);background:var(--llblue);}
 .blocker-rank{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1;}
 .blocker-name{font-weight:600;font-size:12px;margin:4px 0 2px;}
-.blocker-detail{font-size:9px;color:var(--muted);font-family:var(--mono);}
+.blocker-detail{font-size:10px;color:var(--muted);font-family:var(--mono);}
 .blocker-critical{border-left-color:var(--red);}.blocker-warning{border-left-color:var(--yellow);}.blocker-ok{border-left-color:var(--green);}
 .probability-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin:12px 24px 0 24px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;box-shadow:var(--shadow-sm);}
 .probability-title{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;}
@@ -98,7 +98,7 @@ td.n{font-family:var(--mono);text-align:right;}
 .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--bg3);border-radius:22px;transition:.3s;}
 .toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:2px;bottom:2px;background-color:var(--accent);border-radius:50%;transition:.3s;}
 input:checked+.toggle-slider:before{transform:translateX(22px);}
-.toggle-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.toggle-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
 .executive-mode .content .tw,.executive-mode .content table,.executive-mode .plan-grid,.executive-mode .tl-wrap,.executive-mode #tProj,.executive-mode .note{display:none!important;}
 .executive-mode .content.pad{padding:12px 24px;}
 .executive-mode .pg{display:grid;grid-template-columns:repeat(4,1fr);}
@@ -114,7 +114,7 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .whatif-result{background:var(--llblue);border-radius:0 var(--rsm) var(--rsm) 0;padding:10px 14px;margin-top:12px;font-size:11px;border-left:3px solid var(--navy);color:#0d3d6b;}
 .whatif-impact{color:var(--green);font-weight:600;}
 .alert-strip{background:var(--bg3);border-bottom:1px solid var(--border);padding:6px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.alert-strip-lbl{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.alert-strip-lbl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
 .ag{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:4px;cursor:pointer;transition:var(--transition);}
 .ag:hover{opacity:.8;transform:translateY(-1px);}
 .ag-ok{background:#d4eddf;color:#1a5f35;border:1px solid rgba(45,122,79,.25);}
@@ -159,7 +159,7 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .pl{color:var(--muted);font-size:11px;flex:1;}
 .pi{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);color:var(--navy);font-family:var(--mono);font-size:13px;font-weight:600;padding:4px 8px;width:76px;min-width:60px;text-align:right;outline:none;flex-shrink:0;}
 .pi:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,95,168,.12);}
-.pu{color:var(--muted);font-size:10px;width:48px;flex-shrink:0;}
+.pu{color:var(--muted);font-size:11px;width:48px;flex-shrink:0;}
 .tgt{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 11px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
 .td2{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .tl2{flex:1;font-size:10px;color:var(--muted);}
@@ -175,7 +175,7 @@ input:checked+.toggle-slider:before{transform:translateX(22px);}
 .gin.gis{color:#58a6ff;}.gin.gis:focus{border-color:#58a6ff;}
 .gin.rasr{color:#f0c060;}.gin.rasr:focus{border-color:#f0c060;}
 .gin.fol{color:#3fb950;}.gin.fol:focus{border-color:#3fb950;}
-.gl{font-size:8px;color:var(--muted);text-align:center;line-height:1.2;}
+.gl{font-size:10px;color:var(--muted);text-align:center;line-height:1.2;}
 .comp-hdr{display:flex;gap:4px;justify-content:flex-end;padding-bottom:4px;margin-bottom:1px;}
 .comp-hdr span{font-size:8px;font-weight:600;width:33px;text-align:center;letter-spacing:.5px;text-transform:uppercase;}
 .pg{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px;}
@@ -339,9 +339,93 @@ body.exec-print-mode #tab-executive { display: block !important; }
 .kzErr.show{display:block;}
 .kzFoot{margin-top:20px;font-size:9px;color:#9a9890;}
 
+/* ── DARK MODE ── */
+body.dark{--bg:#141518;--bg2:#1e2024;--bg3:#25272c;--border:rgba(255,255,255,.1);--text:#e4e2de;--muted:#9a9890;--llblue:rgba(26,95,168,.15);--lblue:rgba(26,95,168,.25);--shadow-sm:0 1px 3px rgba(0,0,0,.25);--shadow-md:0 4px 16px rgba(0,0,0,.35);}
+body.dark{background:var(--bg);color:var(--text);}
+body.dark .header,body.dark .tabs,body.dark .kpi-bar,body.dark .toolbar,body.dark .upload-bar,body.dark .alert-strip,body.dark .prog-wrap,body.dark .executive-toggle{background:var(--bg2);border-color:var(--border);}
+body.dark .panel,body.dark .pc,body.dark .tl-wrap,body.dark .blockers-card,body.dark .probability-card,body.dark .whatif-card,body.dark .exec-card,body.dark .exec-progress-card,body.dark .exec-kpi{background:var(--bg2);border-color:var(--border);}
+body.dark table{background:var(--bg2);}
+body.dark th{background:var(--bg3);color:var(--muted);}
+body.dark tr:nth-child(even) td{background:var(--bg3);}
+body.dark tr:nth-child(odd) td{background:var(--bg2);}
+body.dark tr:hover td{background:rgba(26,95,168,.15)!important;}
+body.dark tr.tot td{background:var(--navy)!important;color:#fff;}
+body.dark .kpi-item:hover{background:rgba(26,95,168,.15);}
+body.dark .pi,body.dark .ti,body.dark .gin,body.dark .whatif-select,body.dark .tb-date{background:var(--bg3);border-color:var(--border);color:var(--text);}
+body.dark .note{background:rgba(26,95,168,.15);border-color:rgba(26,95,168,.3);color:#7db3e0;}
+body.dark .notif-panel{background:var(--bg2);border-color:var(--border);}
+body.dark .notif-item{background:var(--bg3);}
+body.dark .tw{border-color:var(--border);}
+body.dark .stat{background:rgba(26,95,168,.12);border-color:rgba(26,95,168,.2);}
+body.dark .tab{color:var(--muted);}body.dark .tab:hover{color:var(--text);}body.dark .tab.active{color:#5ba3e6;}
+body.dark .tb-btn{background:var(--bg3);border-color:var(--border);color:var(--text);}
+body.dark .tb-btn:hover{background:rgba(26,95,168,.2);color:#5ba3e6;}
+body.dark .upload-btn{background:var(--navy);}
+body.dark .ag-ok{background:rgba(45,122,79,.2);color:#6fcf97;}
+body.dark .ag-warn{background:rgba(232,160,0,.15);color:#f0c060;}
+body.dark .ag-nok{background:rgba(192,57,43,.15);color:#f08070;}
+body.dark .whatif-result{background:rgba(26,95,168,.15);color:#7db3e0;border-color:var(--navy);}
+body.dark .blocker-item{background:var(--bg3);}
+body.dark .blocker-item:hover{background:rgba(26,95,168,.15);}
+body.dark .exec-hero{box-shadow:0 4px 20px rgba(0,0,0,.5);}
+body.dark .exec-kpi:hover{box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.dark-toggle-wrap{display:flex;align-items:center;gap:6px;margin-left:8px;}
+.dark-toggle-btn{background:none;border:1px solid var(--border);border-radius:var(--rsm);padding:4px 10px;cursor:pointer;font-size:14px;line-height:1;transition:var(--transition);color:var(--text);}
+.dark-toggle-btn:hover{background:var(--llblue);border-color:var(--accent);}
+
+/* ── MOBILE RESPONSIVENESS ── */
+@media(max-width:600px){
+  .kpi-bar{flex-wrap:wrap;}.kpi-item{flex:1 1 calc(33.33% - 1px);min-width:0;padding:6px 4px;}
+  .kpi-val{font-size:14px;}.kpi-lbl{font-size:9px;}
+  .blockers-grid{grid-template-columns:1fr!important;}
+  .plan-grid{grid-template-columns:1fr!important;}
+  .pg{grid-template-columns:1fr!important;}
+  .exec-kpi-row{grid-template-columns:1fr!important;}
+  .exec-two-col{grid-template-columns:1fr!important;}
+  .exec-hero{flex-direction:column;padding:18px;}
+  .exec-verdict{width:100%;}
+  .header{padding:12px 16px;}
+  .pad{padding:12px 16px;}
+  .toolbar{padding:6px 16px;}
+  .upload-bar{padding:8px 16px;}
+  .alert-strip{padding:4px 16px;}
+  .blockers-card,.probability-card,.whatif-card{margin:8px 16px;}
+}
+@media(max-width:400px){
+  .kpi-item{flex:1 1 50%;}
+  .header h1{font-size:15px;}
+  .stats{gap:6px;}.stat{padding:6px 8px;min-width:70px;}
+  .stat .v{font-size:14px;}
+}
+/* Table horizontal scroll indicator */
+.tw{position:relative;}
+.tw::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:linear-gradient(to right,transparent,rgba(0,0,0,.04));pointer-events:none;opacity:0;transition:opacity .2s;}
+.tw.has-scroll::after{opacity:1;}
+body.dark .tw::after{background:linear-gradient(to right,transparent,rgba(0,0,0,.2));}
+
+/* ── TABLE SORTING ── */
+th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:18px;}
+th.sortable:hover{color:var(--accent);background:var(--llblue);}
+th.sortable::after{content:'⇅';position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:9px;opacity:.4;}
+th.sortable.sort-asc::after{content:'▲';opacity:.8;color:var(--accent);}
+th.sortable.sort-desc::after{content:'▼';opacity:.8;color:var(--accent);}
+
+/* ── CHART CONTAINERS ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+@media(max-width:700px){.chart-row{grid-template-columns:1fr;}}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);}
+body.dark .chart-card{background:var(--bg2);border-color:var(--border);}
+.chart-card h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.chart-canvas-wrap{position:relative;height:240px;}
+
+/* ── UPDATE TOAST ── */
+.update-toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:8px 16px;border-radius:var(--rsm);font-size:11px;font-weight:600;z-index:300;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-md);}
+.update-toast.show{opacity:1;transform:translateY(0);}
+
 </style>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -399,7 +483,7 @@ body.exec-print-mode #tab-executive { display: block !important; }
 
 <div class="executive-toggle">
   <label class="toggle-switch">
-    <input type="checkbox" id="executiveModeToggle">
+    <input type="checkbox" id="executiveModeToggle" aria-label="Activează modul executiv">
     <span class="toggle-slider"></span>
   </label>
   <span class="toggle-label">🎯 EXECUTIVE MODE</span>
@@ -427,15 +511,15 @@ body.exec-print-mode #tab-executive { display: block !important; }
 <div class="whatif-card" id="whatifCard">
   <div class="whatif-title">⚡ SIMULATOR — Impact decizii în timp real</div>
   <div class="whatif-controls">
-    <div class="whatif-group"><label>Grup afectat</label><select class="whatif-select" id="whatifGroup"></select></div>
+    <div class="whatif-group"><label>Grup afectat</label><select class="whatif-select" id="whatifGroup" aria-label="Selectează grup pentru simulare"></select></div>
     <div class="whatif-group">
       <label>➕ Persoane adăugate (GIS+RASR, din 2 în 2)</label>
-      <input type="range" class="whatif-slider" id="whatifPeople" min="0" max="10" step="2" value="0">
+      <input type="range" class="whatif-slider" id="whatifPeople" min="0" max="10" step="2" value="0" aria-label="Persoane adăugate">
       <div class="whatif-value" id="whatifPeopleValue">+0 persoane</div>
     </div>
     <div class="whatif-group">
       <label>⚡ Rată corelare absolută (km/h)</label>
-      <input type="range" class="whatif-slider" id="whatifRate" min="0.5" max="8" step="0.25" value="2.25">
+      <input type="range" class="whatif-slider" id="whatifRate" min="0.5" max="8" step="0.25" value="2.25" aria-label="Rată corelare">
       <div class="whatif-value" id="whatifRateValue">2.25 km/h</div>
     </div>
   </div>
@@ -462,6 +546,9 @@ body.exec-print-mode #tab-executive { display: block !important; }
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
     Alerte <span class="notif-badge" id="notifCount">0</span>
   </button>
+  <div class="dark-toggle-wrap">
+    <button class="dark-toggle-btn" id="darkModeBtn" title="Comută mod întunecat" aria-label="Comută mod întunecat">🌙</button>
+  </div>
 </div>
 
 <div class="alert-strip">
@@ -471,31 +558,41 @@ body.exec-print-mode #tab-executive { display: block !important; }
 
 <div class="prog-wrap" id="progWrap"></div>
 
-<div class="tabs">
-  <div class="tab" data-tab="executive" style="color:var(--accent);font-weight:600">⭐ Executive</div>
-  <div class="tab active" data-tab="retea">Date Rețea CORG</div>
-  <div class="tab" data-tab="grupuri">Centre Operaționale</div>
-  <div class="tab" data-tab="planificare">Planificare FTE</div>
-  <div class="tab" data-tab="proiectie">Proiecție Finalizare</div>
+<div class="tabs" role="tablist" aria-label="Secțiuni dashboard">
+  <div class="tab" data-tab="executive" style="color:var(--accent);font-weight:600" role="tab" tabindex="0" aria-selected="false">⭐ Executive</div>
+  <div class="tab active" data-tab="retea" role="tab" tabindex="0" aria-selected="true">Date Rețea CORG</div>
+  <div class="tab" data-tab="grupuri" role="tab" tabindex="0" aria-selected="false">Centre Operaționale</div>
+  <div class="tab" data-tab="planificare" role="tab" tabindex="0" aria-selected="false">Planificare FTE</div>
+  <div class="tab" data-tab="proiectie" role="tab" tabindex="0" aria-selected="false">Proiecție Finalizare</div>
 </div>
 
-<div class="content pad" id="tab-executive">
+<div class="content pad" id="tab-executive" role="tabpanel" aria-label="Executive">
   <div class="exec-wrap" id="execWrap">
     <!-- populated by JS -->
   </div>
+  <div class="chart-row" id="execCharts" style="max-width:1100px;margin:0 auto 18px;padding:0 24px;">
+    <div class="chart-card">
+      <h3>% Corelat per Grup</h3>
+      <div class="chart-canvas-wrap"><canvas id="chartDonut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Diferențe vs PM Total (km)</h3>
+      <div class="chart-canvas-wrap"><canvas id="chartBar"></canvas></div>
+    </div>
+  </div>
 </div>
 
-<div class="content active pad" id="tab-retea">
+<div class="content active pad" id="tab-retea" role="tabpanel" aria-label="Date Rețea CORG">
   <div class="note">Date individuale per CORG istoric (12 CORG) · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · % Corelat = Rețea_GIS/Rețea_PM · ⚡ Tab „Centre Operaționale" arată cele 8 CORG conform reorganizare</div>
   <div class="tw"><table id="tRetea"></table></div>
 </div>
 
-<div class="content pad" id="tab-grupuri">
+<div class="content pad" id="tab-grupuri" role="tabpanel" aria-label="Centre Operaționale">
   <div class="note">8 Centre Operaționale după reorganizare · Dif Totală = (|Dif_BR|+|Dif_TR|)/1000 · Formula corectă — NU include Dif Rețea</div>
   <div class="tw"><table id="tGrup"></table></div>
 </div>
 
-<div class="content pad" id="tab-planificare">
+<div class="content pad" id="tab-planificare" role="tabpanel" aria-label="Planificare FTE">
   <div class="plan-grid">
     <div class="panel">
       <h3>⚙ Parametri Globali</h3>
@@ -579,8 +676,14 @@ body.exec-print-mode #tab-executive { display: block !important; }
   </div>
 </div>
 
-<div class="content pad" id="tab-proiectie">
+<div class="content pad" id="tab-proiectie" role="tabpanel" aria-label="Proiecție Finalizare">
   <div class="pg" id="pCards"></div>
+  <div class="chart-row" style="margin-bottom:18px;">
+    <div class="chart-card" style="grid-column:1/-1;">
+      <h3>⏱ ETA Timeline per Grup — Diferențe (luni)</h3>
+      <div class="chart-canvas-wrap" style="height:280px"><canvas id="chartETA"></canvas></div>
+    </div>
+  </div>
   <div class="tl-wrap">
     <h3>⏱ Timeline — Finalizare Diferențe per Grup (la rata medie de corelare)</h3>
     <div id="tlDif"></div>
@@ -590,6 +693,8 @@ body.exec-print-mode #tab-executive { display: block !important; }
   <div class="sec">Tabel Detaliat Proiecție</div>
   <div class="tw"><table id="tProj"></table></div>
 </div>
+
+<div class="update-toast" id="updateToast">✓ Parametri actualizați</div>
 
 <div class="notif-panel" id="notifPanel">
   <div class="notif-hdr">
@@ -1243,7 +1348,9 @@ function fullUpdate(){
   rHeader();rRetea();rGrupuri();rGroupInputs();rPlanificare();rProiectie();
   rKPI();rAlerts();rProgress();rDaysInfo();rBlockers();rProbability();initWhatIf();
   document.getElementById('rataMedie').textContent=vm().toFixed(2)+' km/h';
-  rExec();
+  rExec();renderCharts();
+  const activeTab=document.querySelector('.tab.active');
+  if(activeTab&&activeTab.dataset.tab==='proiectie')renderETAChart();
   // Expose stable state for bridge.js — table is rendering target only
   const og=getOpGroups();
   window.__dashboardState={
@@ -1253,7 +1360,7 @@ function fullUpdate(){
 }
 function scheduleUpdate(){
   if(updateScheduled)return;updateScheduled=true;
-  requestAnimationFrame(()=>{fullUpdate();saveState();updateScheduled=false;});
+  requestAnimationFrame(()=>{fullUpdate();saveState();initTableSorting();showUpdateToast();updateScheduled=false;});
 }
 function updParams(){
   let vMin=parseFloat(document.getElementById('vMin').value);
@@ -1342,11 +1449,13 @@ function loadTeamCfg(){
   fullUpdate();
 }
 function swTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+  const activeTab=document.querySelector(`.tab[data-tab="${id}"]`);
+  activeTab.classList.add('active');activeTab.setAttribute('aria-selected','true');
   document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
   document.getElementById(`tab-${id}`).classList.add('active');
-  if(id==='executive')rExec();
+  if(id==='executive'){rExec();renderCharts();}
+  if(id==='proiectie')renderETAChart();
 }
 function bindEvents(){
   ['vMin','vMax','oreSapt','saptAn','tDif','tPM','pctFOL','factorC'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',updParams);});
@@ -1358,10 +1467,206 @@ function bindEvents(){
   document.getElementById('saveTeamConfigBtn').addEventListener('click',saveTeamCfg);
   document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.toggle('open'));
   document.getElementById('notifCloseBtn').addEventListener('click',()=>document.getElementById('notifPanel').classList.remove('open'));
-  document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>swTab(tab.dataset.tab)));
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click',()=>swTab(tab.dataset.tab));
+    tab.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();swTab(tab.dataset.tab);}
+      const tabs=Array.from(document.querySelectorAll('.tab'));
+      const idx=tabs.indexOf(tab);
+      if(e.key==='ArrowRight'&&idx<tabs.length-1){tabs[idx+1].focus();}
+      if(e.key==='ArrowLeft'&&idx>0){tabs[idx-1].focus();}
+    });
+  });
   document.getElementById('executiveModeToggle').addEventListener('change',e=>document.body.classList.toggle('executive-mode',e.target.checked));
+  // Dark mode
+  const darkBtn=document.getElementById('darkModeBtn');
+  if(darkBtn)darkBtn.addEventListener('click',toggleDarkMode);
+  // Table scroll indicators
+  document.querySelectorAll('.tw').forEach(tw=>{
+    const checkScroll=()=>{tw.classList.toggle('has-scroll',tw.scrollWidth>tw.clientWidth+2);};
+    checkScroll();tw.addEventListener('scroll',checkScroll);
+    new ResizeObserver(checkScroll).observe(tw);
+  });
 }
-function init(){loadState();bindEvents();fullUpdate();}
+
+// ── DARK MODE ──
+function toggleDarkMode(){
+  const isDark=document.body.classList.toggle('dark');
+  const btn=document.getElementById('darkModeBtn');
+  if(btn)btn.textContent=isDark?'☀️':'🌙';
+  try{localStorage.setItem('kaizen_dark',isDark?'1':'0');}catch(e){}
+}
+function loadDarkMode(){
+  try{
+    if(localStorage.getItem('kaizen_dark')==='1'){
+      document.body.classList.add('dark');
+      const btn=document.getElementById('darkModeBtn');if(btn)btn.textContent='☀️';
+    }
+  }catch(e){}
+}
+
+// ── UPDATE TOAST ──
+let _toastTimer=null;
+function showUpdateToast(){
+  const t=document.getElementById('updateToast');if(!t)return;
+  t.classList.add('show');
+  if(_toastTimer)clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),1200);
+}
+
+// ── CHARTS (Chart.js) ──
+let _chartDonut=null,_chartBar=null,_chartETA=null;
+function renderCharts(){
+  if(typeof Chart==='undefined')return;
+  const og=getOpGroups();
+  const isDark=document.body.classList.contains('dark');
+  const textColor=isDark?'#e4e2de':'#1a1916';
+  const gridColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)';
+
+  // Donut chart — % Corelat per group
+  const donutCtx=document.getElementById('chartDonut');
+  if(donutCtx){
+    if(_chartDonut)_chartDonut.destroy();
+    const pcts=og.map(g=>+(g.pct*100).toFixed(2));
+    const remaining=og.map(g=>+((1-g.pct)*100).toFixed(2));
+    _chartDonut=new Chart(donutCtx,{
+      type:'doughnut',
+      data:{
+        labels:og.map(g=>g.name),
+        datasets:[{
+          data:og.map(g=>g.difKm),
+          backgroundColor:['#2563a8','#a371f7','#2d7a4f','#e8a000','#c0392b','#7c3aed','#1a5fa8','#d97706'],
+          borderWidth:isDark?0:1,
+          borderColor:isDark?'transparent':'#fff'
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'right',labels:{color:textColor,font:{size:10,family:"'DM Sans',sans-serif"},padding:8,boxWidth:12}},
+          tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toFixed(1)+' km dif';}}}
+        }
+      }
+    });
+  }
+
+  // Bar chart — Dif km vs PM km per group
+  const barCtx=document.getElementById('chartBar');
+  if(barCtx){
+    if(_chartBar)_chartBar.destroy();
+    _chartBar=new Chart(barCtx,{
+      type:'bar',
+      data:{
+        labels:og.map(g=>g.name.replace(' + ','+')),
+        datasets:[
+          {label:'PM Total (km)',data:og.map(g=>+g.pmKm.toFixed(1)),backgroundColor:isDark?'rgba(37,99,168,.6)':'rgba(37,99,168,.7)',borderRadius:4},
+          {label:'Diferențe (km)',data:og.map(g=>+g.difKm.toFixed(1)),backgroundColor:isDark?'rgba(192,57,43,.6)':'rgba(192,57,43,.7)',borderRadius:4}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        scales:{
+          x:{ticks:{color:textColor,font:{size:9}},grid:{display:false}},
+          y:{ticks:{color:textColor,font:{size:9}},grid:{color:gridColor}}
+        },
+        plugins:{legend:{labels:{color:textColor,font:{size:10},boxWidth:12}}}
+      }
+    });
+  }
+}
+function renderETAChart(){
+  if(typeof Chart==='undefined')return;
+  const og=getOpGroups();
+  const v=vm(),_fc=params.factorC||1.0;
+  const isDark=document.body.classList.contains('dark');
+  const textColor=isDark?'#e4e2de':'#1a1916';
+  const gridColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)';
+
+  const etaCtx=document.getElementById('chartETA');
+  if(etaCtx){
+    if(_chartETA)_chartETA.destroy();
+    const etaDif=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.difKm/v*_fc/oa*12).toFixed(1):0;});
+    const etaPM=og.map(g=>{const oa=oreAn(g.name);return oa>0?+(g.pmKm/v*_fc/oa*12).toFixed(1):0;});
+    _chartETA=new Chart(etaCtx,{
+      type:'bar',
+      data:{
+        labels:og.map(g=>g.name.replace(' + ','+')),
+        datasets:[
+          {label:'ETA Diferențe (luni)',data:etaDif,backgroundColor:isDark?'rgba(192,57,43,.6)':'rgba(192,57,43,.7)',borderRadius:4},
+          {label:'ETA PM (luni)',data:etaPM,backgroundColor:isDark?'rgba(37,99,168,.5)':'rgba(37,99,168,.5)',borderRadius:4}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        scales:{
+          x:{ticks:{color:textColor,font:{size:9}},grid:{color:gridColor}},
+          y:{ticks:{color:textColor,font:{size:10}},grid:{display:false}}
+        },
+        plugins:{
+          legend:{labels:{color:textColor,font:{size:10},boxWidth:12}},
+          annotation:params.tDif?{annotations:{targetLine:{type:'line',xMin:params.tDif,xMax:params.tDif,borderColor:'rgba(232,160,0,.8)',borderWidth:2,borderDash:[5,3],label:{content:'Target '+params.tDif+' luni',display:true}}}}:undefined
+        }
+      }
+    });
+  }
+}
+
+// ── TABLE SORTING ──
+function enableTableSort(tableId){
+  const table=document.getElementById(tableId);
+  if(!table)return;
+  const headers=table.querySelectorAll('thead th');
+  headers.forEach((th,colIdx)=>{
+    if(colIdx===0)return; // skip name column for sorting trigger but allow it
+    th.classList.add('sortable');
+    th.addEventListener('click',()=>{
+      const tbody=table.querySelector('tbody');if(!tbody)return;
+      const rows=Array.from(tbody.querySelectorAll('tr:not(.tot)'));
+      const totRow=tbody.querySelector('tr.tot');
+      const isAsc=th.classList.contains('sort-asc');
+      headers.forEach(h=>{h.classList.remove('sort-asc','sort-desc');});
+      th.classList.add(isAsc?'sort-desc':'sort-asc');
+      rows.sort((a,b)=>{
+        const cellA=a.cells[colIdx],cellB=b.cells[colIdx];
+        if(!cellA||!cellB)return 0;
+        const vA=parseFloat(cellA.textContent.replace(/[^0-9.,-]/g,'').replace(',','.'))||0;
+        const vB=parseFloat(cellB.textContent.replace(/[^0-9.,-]/g,'').replace(',','.'))||0;
+        return isAsc?(vB-vA):(vA-vB);
+      });
+      rows.forEach(r=>tbody.appendChild(r));
+      if(totRow)tbody.appendChild(totRow);
+    });
+  });
+  // Also make first column sortable (alphabetical)
+  const firstTh=headers[0];
+  if(firstTh){
+    firstTh.classList.add('sortable');
+    firstTh.addEventListener('click',()=>{
+      const tbody=table.querySelector('tbody');if(!tbody)return;
+      const rows=Array.from(tbody.querySelectorAll('tr:not(.tot)'));
+      const totRow=tbody.querySelector('tr.tot');
+      const isAsc=firstTh.classList.contains('sort-asc');
+      headers.forEach(h=>{h.classList.remove('sort-asc','sort-desc');});
+      firstTh.classList.add(isAsc?'sort-desc':'sort-asc');
+      rows.sort((a,b)=>{
+        const tA=(a.cells[0]?.textContent||'').trim();
+        const tB=(b.cells[0]?.textContent||'').trim();
+        return isAsc?tB.localeCompare(tA,'ro'):tA.localeCompare(tB,'ro');
+      });
+      rows.forEach(r=>tbody.appendChild(r));
+      if(totRow)tbody.appendChild(totRow);
+    });
+  }
+}
+
+function initTableSorting(){
+  enableTableSort('tRetea');
+  enableTableSort('tGrup');
+  enableTableSort('tPlan');
+  enableTableSort('tProj');
+}
+
+function init(){loadState();loadDarkMode();bindEvents();fullUpdate();initTableSorting();}
 // DOMContentLoaded pentru siguranta in iframe SharePoint
 init();
 })();
